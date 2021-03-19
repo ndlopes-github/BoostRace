@@ -19,12 +19,12 @@
 
 //[ rhs_class
 /* The rhs of x' = f(x) defined as a class */
-class harm_osc {
+class speedFunc {
 
   state_type m_avg_speeds;
 
 public:
-    harm_osc( state_type avg_speeds ) : m_avg_speeds(avg_speeds) { }
+  speedFunc( state_type avg_speeds ) : m_avg_speeds(avg_speeds) { }
 
     void operator() ( const state_type &x , state_type &dxdt , const double /* t */ )
     {
@@ -84,7 +84,7 @@ int main(int /* argc */ , char** /* argv */ )
 
     //[ integration_class
     state_type avg_speeds{0.3,0.2};
-    harm_osc ho(avg_speeds);
+    speedFunc sp(avg_speeds);
     //]
 
 
