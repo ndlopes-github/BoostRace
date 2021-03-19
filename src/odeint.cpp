@@ -15,24 +15,21 @@
 #include "typedefs.h"
 
 
-//[ rhs_function
-
-const double gam = 0.15;
 
 
 //[ rhs_class
 /* The rhs of x' = f(x) defined as a class */
 class harm_osc {
 
-    double m_gam;
+  state_type m_avg_speeds;
 
 public:
-    harm_osc( double gam ) : m_gam(gam) { }
+    harm_osc( state_type avg_speeds ) : m_avg_speeds(avg_speeds) { }
 
     void operator() ( const state_type &x , state_type &dxdt , const double /* t */ )
     {
-        dxdt[0] = x[1];
-        dxdt[1] = -x[0] - m_gam*x[1];
+        dxdt[0] = m_avg_speeds[1];
+        dxdt[1] = m_avg_speeds[2];
     }
 };
 //]
@@ -86,7 +83,8 @@ int main(int /* argc */ , char** /* argv */ )
 
 
     //[ integration_class
-    harm_osc ho(0.15);
+    state_type avg_speeds{0.3,0.2};
+    harm_osc ho(avg_speeds);
     //]
 
 
