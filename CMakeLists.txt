@@ -25,8 +25,12 @@ find_package(Python COMPONENTS Interpreter Development REQUIRED)
 set(PROJECT_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/")
 
 
+set(sources ${sources}
+    ${PROJECT_SRC_DIR}/odeint.cpp
+    ${PROJECT_SRC_DIR}/outputfunctions.cpp
+)
 
-add_executable(race src/odeint.cpp)
+add_executable(race ${sources})
 
 
 #if(APPLE)
