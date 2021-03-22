@@ -15,32 +15,15 @@
 
 #include <iostream>
 #include <vector>
-#include <boost/numeric/odeint.hpp>
 #include "typedefs.h"
 #include "outputfunctions.h"
 #include "settings.h"
-
-
-//[ rhs_class
-/* The rhs of x' = f(x) defined as a class */
-class speedFunc {
-
-  dvec_i m_avg_speeds;
-
-public:
-  speedFunc( dvec_i avg_speeds ) : m_avg_speeds(avg_speeds) { }
-
-    void operator() ( const dvec_i &x , dvec_i &dxdt , const double /* t */ )
-    {
-        dxdt[0] = m_avg_speeds[0];
-        dxdt[1] = m_avg_speeds[1];
-    }
-};
-//]
+#include "dxdt.h"
+#include "odesolvers.h"
 
 
 
-
+/* Unit test for solvers */
 
 
 int main(int /* argc */ , char** /* argv */ )
@@ -58,31 +41,23 @@ int main(int /* argc */ , char** /* argv */ )
     //         x , 0.0 , 10.0 , 0.1 );
     //]
 
-
-
     //[ integration_class
     dvec_i avg_speeds{1,1.2};
-    speedFunc sp(avg_speeds);
+    dxdt f(avg_speeds);
     //]
 
 
-    //[ integrate_observ
-    std::vector<dvec_i> x_vec;
-    dvec_i times;
 
-
-    //[ define_const_stepper
-    boost::numeric::odeint::runge_kutta4< dvec_i > stepper;
-    size_t steps = boost::numeric::odeint::integrate_const( stepper , sp , x ,
+    std::pair<dvec_i,dvec_ij> t_and_x=rk4_ode_system_solver(f,x,
                                                             race::StartTime,
-                                                            race::TotalTime ,
-                                                            race::dt,
-                                                            observer( x_vec , times ));
+                                                            race::TotalTime,
+                                                            race::dt);
 
     //]
-
-    write_times_and_states(times, x_vec, "times_and_states.bin");
-    print_times_and_states(times, x_vec);
+    dvec_i times=t_and_x.first;
+    dvec_ij states=t_and_x.second;
+    write_times_and_states(times, states, "times_and_states.bin");
+    print_times_and_states(times, states);
 
 
     return 0;
