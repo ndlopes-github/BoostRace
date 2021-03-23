@@ -54,17 +54,18 @@ set_target_properties(race PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
 #endif()
 
 
-#set(pysources src/outputfunctions.cpp
-#    src/odesolvers.cpp
-#    src/dxdt.cpp
-#    src/outputfunctions.cpp
-#    src/odesolvers.cpp
-#)
+set(pysources src/outputfunctions.cpp
+    src/odesolvers.cpp
+    src/dxdt.cpp
+    src/outputfunctions.cpp
+    src/odesolvers.cpp
+)
 
-#pybind11_add_module(odesolvers  ${pysources})
-#target_link_libraries(odesolvers PRIVATE ${PROJECT_NAME})
-#set_target_properties(odesolvers PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
-#target_include_directories(odesolvers PRIVATE pybind11::embed ${PROJECT_INCLUDE_DIR})
+add_subdirectory(pybind11)
+pybind11_add_module(odesolvers  ${pysources})
+target_link_libraries(odesolvers PRIVATE ${PROJECT_NAME})
+set_target_properties(odesolvers PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
+target_include_directories(odesolvers PRIVATE ${PROJECT_INCLUDE_DIR})
 
 message("Do not forget to run the command:")
 message("$source env_config.source" )
