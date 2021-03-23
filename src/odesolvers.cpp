@@ -1,3 +1,6 @@
+//#include <pybind11/pybind11.h>
+//#include <pybind11/numpy.h>
+//#include <pybind11/stl.h>
 #include <vector>
 #include <boost/numeric/odeint.hpp>
 #include "typedefs.h"
@@ -41,3 +44,12 @@ std::pair<dvec_i,dvec_ij> rk4_ode_system_solver(dxdt f, dvec_i init_states,
                                                          observer(x_vec,times));
   return std::make_pair(times,x_vec);
 };
+
+
+
+/*
+PYBIND11_MODULE(odesolvers,m) {
+  m.def("rk4_ode_system_solver", &rk4_ode_system_solver,
+        "Runge-Kutta rk4_ode_system_solver(f,init_states,start_time,end_time,time_step) algorithm");
+}
+*/

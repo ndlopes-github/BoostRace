@@ -22,12 +22,13 @@
 #include "odesolvers.h"
 
 
-
-/* Unit test for solvers */
+/* THIS MAIN FILE WORKS ONLY Unit test for solvers */
 
 
 int main(int /* argc */ , char** /* argv */ )
 {
+
+  std::cout<<"WARNING: MAIN.CPP IS ONLY FOR TESTING THE SOLVERS"<<std::endl;
 
     //[ state_initialization with 0.0
   dvec_i x(race::NumberOfRunners,0.0);

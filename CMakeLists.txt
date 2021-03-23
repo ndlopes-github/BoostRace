@@ -20,20 +20,26 @@ IF (Boost_FOUND)
     INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
     ADD_DEFINITIONS( "-DHAS_BOOST" )
 ENDIF()
-find_package(Python COMPONENTS Interpreter Development REQUIRED)
 
 set(PROJECT_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/")
+set(PROJECT_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/")
 
+add_library(${PROJECT_NAME} STATIC
+    src/outputfunctions.cpp
+    src/odesolvers.cpp
+    src/dxdt.cpp)
+
+include_directories(include/) # FOR THE HEADER FILES
 
 set(sources ${sources}
-    ${PROJECT_SRC_DIR}/odeint.cpp
-    ${PROJECT_SRC_DIR}/outputfunctions.cpp
-    ${PROJECT_SRC_DIR}/odesolvers.cpp
-)
+    ${PROJECT_SRC_DIR}/main.cpp)
 
 add_executable(race ${sources})
+target_link_libraries(race ${PROJECT_NAME}) #LINK WITH THE LIBRARIES AND HEADERS
+set_target_properties(race PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
 
 
+#find_package(Python COMPONENTS Interpreter Development REQUIRED)
 #if(APPLE)
 #find_package(pybind11 CONFIG REQUIRED)
 #else()
@@ -43,7 +49,16 @@ add_executable(race ${sources})
 #add_subdirectory(pybind11)
 #endif()
 
-#pybind11_add_module(speedscpp  ${PROJECT_SRC_DIR}/speeds.cpp)
+
+#set(pysources
+#    ${PROJECT_SRC_DIR}/outputfunctions.cpp
+#    ${PROJECT_SRC_DIR}/odesolvers.cpp
+#)
+
+#pybind11_add_module(rk4_ode_system_solver  ${pysources})
+#set_target_properties(rk4_ode_system_solver PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
+#target_link_libraries(rk4_ode_system_solver PRIVATE ${PROJECT_NAME})
+#target_include_directories(rk4_ode_system_solver PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS})
 
 #message("Do not forget to run the command:")
-#message("$source race.source" )
+#message("$source env_config.source" )
