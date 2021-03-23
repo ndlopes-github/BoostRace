@@ -1,4 +1,4 @@
-#include <pybind11/pybind11.h>
+//#include <pybind11/pybind11.h>
 //#include <pybind11/numpy.h>
 //#include <pybind11/stl.h>
 #include <vector>
@@ -6,7 +6,7 @@
 #include "typedefs.h"
 #include "dxdt.h"
 
-using namespace pybind11;
+//using namespace pybind11;
 
 struct observer
 {
@@ -47,8 +47,9 @@ std::pair<dvec_i,dvec_ij> rk4_ode_system_solver(dxdt f, dvec_i init_states,
 
 
 
-
+/*
 PYBIND11_MODULE(odesolvers,m) {
   m.def("rk4_ode_system_solver", &rk4_ode_system_solver,
         "Runge-Kutta rk4_ode_system_solver(f,init_states,start_time,end_time,time_step) algorithm");
 }
+*/

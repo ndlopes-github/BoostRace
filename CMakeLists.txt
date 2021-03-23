@@ -43,26 +43,28 @@ target_link_libraries(race ${PROJECT_NAME}) #LINK WITH THE LIBRARIES AND HEADERS
 set_target_properties(race PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
 
 
-find_package(Python COMPONENTS Interpreter Development REQUIRED)
-if(APPLE)
-find_package(pybind11 CONFIG REQUIRED)
-else()
+#find_package(Python COMPONENTS Interpreter Development REQUIRED)
+#if(APPLE)
+#find_package(pybind11 CONFIG REQUIRED)
+#else()
 #IF ON UBUNTU
 # AFTER CLONING PYBIND11 TO THE WORKING DIR
 # THIS SOLVES LINKAGE ISSUES WITH PYBIND11
-add_subdirectory(pybind11)
-endif()
+#add_subdirectory(pybind11)
+#endif()
 
 
-set(pysources
-#    ${PROJECT_SRC_DIR}/outputfunctions.cpp
-     ${PROJECT_SRC_DIR}/odesolvers.cpp
-)
+#set(pysources src/outputfunctions.cpp
+#    src/odesolvers.cpp
+#    src/dxdt.cpp
+#    src/outputfunctions.cpp
+#    src/odesolvers.cpp
+#)
 
-pybind11_add_module(odesolvers  ${pysources})
-set_target_properties(odesolvers PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
-target_link_libraries(odesolvers PRIVATE ${PROJECT_NAME})
-target_include_directories(odesolvers PRIVATE pybind11::embed ${${PROJECT_NAME}_INCLUDE_DIRS})
+#pybind11_add_module(odesolvers  ${pysources})
+#target_link_libraries(odesolvers PRIVATE ${PROJECT_NAME})
+#set_target_properties(odesolvers PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
+#target_include_directories(odesolvers PRIVATE pybind11::embed ${PROJECT_INCLUDE_DIR})
 
 message("Do not forget to run the command:")
 message("$source env_config.source" )
