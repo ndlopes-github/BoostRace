@@ -24,41 +24,45 @@ ENDIF()
 set(PROJECT_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/")
 set(PROJECT_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/")
 
+
+#ALL THE CPP FILES SHOULD BE LISTED HERE
 add_library(${PROJECT_NAME} STATIC
     src/outputfunctions.cpp
     src/odesolvers.cpp
     src/dxdt.cpp)
 
-include_directories(include/) # FOR THE HEADER FILES
+#DIR FOR THE HEADER FILES
+include_directories(include/)
 
 set(sources ${sources}
     ${PROJECT_SRC_DIR}/main.cpp)
 
+# TESTING EXECUTABLE
 add_executable(race ${sources})
 target_link_libraries(race ${PROJECT_NAME}) #LINK WITH THE LIBRARIES AND HEADERS
 set_target_properties(race PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
 
 
-#find_package(Python COMPONENTS Interpreter Development REQUIRED)
-#if(APPLE)
-#find_package(pybind11 CONFIG REQUIRED)
-#else()
+find_package(Python COMPONENTS Interpreter Development REQUIRED)
+if(APPLE)
+find_package(pybind11 CONFIG REQUIRED)
+else()
 #IF ON UBUNTU
 # AFTER CLONING PYBIND11 TO THE WORKING DIR
 # THIS SOLVES LINKAGE ISSUES WITH PYBIND11
-#add_subdirectory(pybind11)
-#endif()
+add_subdirectory(pybind11)
+endif()
 
 
-#set(pysources
+set(pysources
 #    ${PROJECT_SRC_DIR}/outputfunctions.cpp
-#    ${PROJECT_SRC_DIR}/odesolvers.cpp
-#)
+     ${PROJECT_SRC_DIR}/odesolvers.cpp
+)
 
-#pybind11_add_module(rk4_ode_system_solver  ${pysources})
-#set_target_properties(rk4_ode_system_solver PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
-#target_link_libraries(rk4_ode_system_solver PRIVATE ${PROJECT_NAME})
-#target_include_directories(rk4_ode_system_solver PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS})
+pybind11_add_module(odesolvers  ${pysources})
+set_target_properties(odesolvers PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
+target_link_libraries(odesolvers PRIVATE ${PROJECT_NAME})
+target_include_directories(odesolvers PRIVATE pybind11::embed ${${PROJECT_NAME}_INCLUDE_DIRS})
 
-#message("Do not forget to run the command:")
-#message("$source env_config.source" )
+message("Do not forget to run the command:")
+message("$source env_config.source" )

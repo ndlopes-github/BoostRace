@@ -4,6 +4,8 @@
 
 //[ rhs_class
 /* The rhs of x' = f(x) defined as a class */
+/* HERE WE SHOULD DEFINE THE RHS OF THE ODE SYSTEM*/
+
 
 void dxdt::operator() ( const dvec_i &x , dvec_i &dxdt , const double  t )
 {
