@@ -44,14 +44,14 @@ set_target_properties(race PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
 
 
 #find_package(Python COMPONENTS Interpreter Development REQUIRED)
-#if(APPLE)
-#find_package(pybind11 CONFIG REQUIRED)
-#else()
+if(APPLE)
+find_package(pybind11 CONFIG REQUIRED)
+else()
 #IF ON UBUNTU
 # AFTER CLONING PYBIND11 TO THE WORKING DIR
 # THIS SOLVES LINKAGE ISSUES WITH PYBIND11
-#add_subdirectory(pybind11)
-#endif()
+add_subdirectory(pybind11)
+endif()
 
 
 set(pysources src/outputfunctions.cpp
@@ -61,7 +61,7 @@ set(pysources src/outputfunctions.cpp
     src/odesolvers.cpp
 )
 
-add_subdirectory(pybind11)
+
 pybind11_add_module(odesolvers  ${pysources})
 target_link_libraries(odesolvers PRIVATE ${PROJECT_NAME})
 set_target_properties(odesolvers PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
