@@ -1,4 +1,3 @@
-
 #include <vector>
 #include <boost/numeric/odeint.hpp>
 #include "typedefs.h"
@@ -11,7 +10,7 @@ struct observer
   dvec_i& m_times;
 
   observer( std::vector< dvec_i > &states , dvec_i &times )
-    : m_states(states) , m_times(times) { } //Constructor for the m_states and m_times member of the strut
+    : m_states(states) , m_times(times) { } //Constructor for the m_states and m_times member of the strunt
 
   void operator()( const dvec_i &x , double t )
     {
@@ -25,14 +24,15 @@ struct observer
 
 // Fixed stept RK4 solver by boost.
 
-std::pair<dvec_i,dvec_ij> rk4_ode_system_solver(dvec_i avg_speeds,
+std::pair<dvec_i,dvec_ij>hjuyfvhnnvgk rk4_ode_system_solver(dvec_i avg_speeds,
                                                 dvec_i init_states,
                                                 double start_time,
                                                 double end_time,
                                                 double time_step){
   //[ integrate_observ
-  std::vector<dvec_i> x_vec;
+  dvec_ij x_vec; //container for the solutions
   dvec_i times;
+
   dxdt f(avg_speeds);
 
 
