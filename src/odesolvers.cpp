@@ -1,21 +1,26 @@
 #include <vector>
 #include <boost/numeric/odeint.hpp>
+//#include <boost/timer/timer.hpp>
+#include <boost/progress.hpp>
 #include "typedefs.h"
 #include "dxdt.h"
 
 
+
 struct observer
 {
-  dvec_ij & m_states;
-  dvec_i& m_times;
+  dvec_ij &m_states;
+  dvec_i &m_times;
+  boost::progress_display &m_show_progress;
 
-  observer( std::vector< dvec_i > &states , dvec_i &times )
-    : m_states(states) , m_times(times) { } //Constructor for the m_states and m_times member of the strunt
+  observer( dvec_ij &states , dvec_i &times,boost::progress_display &show_progress )
+    : m_states(states) , m_times(times), m_show_progress(show_progress) { } //Constructor for the m_states and m_times member of the strunt
 
-  void operator()( const dvec_i &x , double t )
+  void operator()( const dvec_i &x , double t)
     {
         m_states.push_back( x );
         m_times.push_back( t );
+        ++m_show_progress;
     }
 };
 
@@ -24,23 +29,33 @@ struct observer
 
 // Fixed stept RK4 solver by boost.
 
-std::pair<dvec_i,dvec_ij>hjuyfvhnnvgk rk4_ode_system_solver(dvec_i avg_speeds,
+std::pair<dvec_i,dvec_ij> rk4_ode_system_solver(dvec_i avg_speeds,
                                                 dvec_i init_states,
                                                 double start_time,
                                                 double end_time,
                                                 double time_step){
+
+  // Timer
+  // boost::timer::auto_cpu_timer t;
+
+  std::cout <<" Starting rk4_ode_system_solver." << std::endl;;
+
   //[ integrate_observ
   dvec_ij x_vec; //container for the solutions
   dvec_i times;
 
   dxdt f(avg_speeds);
-
+  boost::progress_display show_progress(end_time);
 
   boost::numeric::odeint::runge_kutta4< dvec_i > stepper;
   size_t steps = boost::numeric::odeint::integrate_const(stepper , f , init_states ,
                                                          start_time,
                                                          end_time,
                                                          time_step,
-                                                         observer(x_vec,times));
+                                                         observer(x_vec,times,show_progress));
+
+  std::cout <<" Ending rk4_ode_system_solver. Elapsed time:" << std::endl;
+
+
   return std::make_pair(times,x_vec);
 };

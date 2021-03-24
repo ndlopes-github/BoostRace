@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+### PRE-PROCESSING ##############################################
 import argparse
 import numpy as np
 
@@ -65,13 +65,40 @@ group=runners(runnerslist)
 
 
 import odesolvers as os
-avg_speeds=np.array([1.0,1.2]).tolist()
-init_states=np.array([1.0,0]).tolist()
+avg_speeds=group.avgspeeds[:]
+init_states=group.pos[:,0]
 start_time=0.0
-end_time=5.0
 time_step=1.0
+end_time=nsteps*time_step
 
+### PROCESSING ###########################################################
+print('Start C++ Processing')
 times, positions=os.rk4_ode_system_solver(avg_speeds,init_states,
                                           start_time,end_time,time_step)
+print('End C++ Processing')
+### POST PROCESSING ######################################################
+# Each runner represents a row
+# positions are by rows so we have to transpose
+group.pos[:,:]=np.transpose(positions)
 
-print(times,positions)
+import pickle
+#save it
+with open(f'results/nsteps.pickle', 'wb') as file:
+    pickle.dump(nsteps, file)
+file.close()
+
+with open(f'results/group.pickle', 'wb') as file:
+    pickle.dump(group, file)
+file.close()
+
+with open(f'results/track.pickle', 'wb') as file:
+    pickle.dump(track, file)
+file.close()
+
+with open(f'results/runnerslist.pickle', 'wb') as file:
+    pickle.dump(runnerslist, file)
+file.close()
+
+with open(f'results/ninwaves.pickle', 'wb') as file:
+    pickle.dump(ninwaves, file)
+file.close()
