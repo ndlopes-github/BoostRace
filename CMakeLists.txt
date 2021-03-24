@@ -26,7 +26,9 @@ set(PROJECT_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/")
 
 
 #ALL THE CPP FILES SHOULD BE LISTED HERE
-add_library(${PROJECT_NAME} STATIC
+# SHARED VS STATIC. SHARED COMPILES OK IN UBUNTU
+# STATIC DOESN'T COMPILE IN UBUNTU
+add_library(${PROJECT_NAME} SHARED
     src/outputfunctions.cpp
     src/odesolvers.cpp
     src/dxdt.cpp)
