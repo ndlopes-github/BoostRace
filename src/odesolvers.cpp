@@ -1,7 +1,7 @@
 #include <vector>
 #include <boost/numeric/odeint.hpp>
-//#include <boost/timer/timer.hpp>
-#include <boost/progress.hpp>
+//#include <boost/timer/timer.hpp> //updated but not working
+#include <boost/progress.hpp> //deprecated but working
 #include "typedefs.h"
 #include "dxdt.h"
 
@@ -14,7 +14,8 @@ struct observer
   boost::progress_display &m_show_progress;
 
   observer( dvec_ij &states , dvec_i &times,boost::progress_display &show_progress )
-    : m_states(states) , m_times(times), m_show_progress(show_progress) { } //Constructor for the m_states and m_times member of the strunt
+    : m_states(states) , m_times(times), m_show_progress(show_progress) { }
+  //Constructor for the m_states and m_times member of the struct
 
   void operator()( const dvec_i &x , double t)
     {
@@ -37,7 +38,7 @@ std::pair<dvec_i,dvec_ij> rk4_ode_system_solver(dvec_i avg_speeds,
 
   // Timer
   // boost::timer::auto_cpu_timer t;
-
+  boost::progress_timer t;
   std::cout <<" Starting rk4_ode_system_solver." << std::endl;;
 
   //[ integrate_observ
