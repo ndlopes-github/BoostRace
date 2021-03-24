@@ -55,7 +55,7 @@ std::pair<dvec_i,dvec_ij> rk4_ode_system_solver(dvec_i avg_speeds,
                                                          time_step,
                                                          observer(x_vec,times,show_progress));
 
-  std::cout <<" Ending rk4_ode_system_solver. Elapsed time:" << std::endl;
+  std::cout <<"Ending rk4_ode_system_solver. Elapsed time: ";
 
 
   return std::make_pair(times,x_vec);

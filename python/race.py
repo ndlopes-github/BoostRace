@@ -80,7 +80,7 @@ print('End C++ Processing')
 # Each runner represents a row
 # positions are by rows so we have to transpose
 group.pos[:,:]=np.transpose(positions)
-
+print('Writing to files with pickle C++')
 import pickle
 #save it
 with open(f'results/nsteps.pickle', 'wb') as file:
