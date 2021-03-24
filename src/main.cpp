@@ -18,7 +18,6 @@
 #include "typedefs.h"
 #include "outputfunctions.h"
 #include "settings.h"
-#include "dxdt.h"
 #include "odesolvers.h"
 
 
@@ -44,12 +43,12 @@ int main(int /* argc */ , char** /* argv */ )
 
     //[ integration_class
     dvec_i avg_speeds{1,1.2};
-    dxdt f(avg_speeds);
     //]
 
 
 
-    std::pair<dvec_i,dvec_ij> t_and_x=rk4_ode_system_solver(f,x,
+    std::pair<dvec_i,dvec_ij> t_and_x=rk4_ode_system_solver(avg_speeds,
+                                                            x,
                                                             race::StartTime,
                                                             race::TotalTime,
                                                             race::dt);

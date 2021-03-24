@@ -25,13 +25,16 @@ struct observer
 
 // Fixed stept RK4 solver by boost.
 
-std::pair<dvec_i,dvec_ij> rk4_ode_system_solver(dxdt f, dvec_i init_states,
+std::pair<dvec_i,dvec_ij> rk4_ode_system_solver(dvec_i avg_speeds,
+                                                dvec_i init_states,
                                                 double start_time,
                                                 double end_time,
                                                 double time_step){
   //[ integrate_observ
   std::vector<dvec_i> x_vec;
   dvec_i times;
+  dxdt f(avg_speeds);
+
 
   boost::numeric::odeint::runge_kutta4< dvec_i > stepper;
   size_t steps = boost::numeric::odeint::integrate_const(stepper , f , init_states ,
