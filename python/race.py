@@ -11,7 +11,7 @@ ap.add_argument("-nr", "--nrunners",default=10000, required=False,
    help="number of runners")
 ap.add_argument("-nt", "--nsteps",default=6000, required=False,
    help="number of time steps")
-ap.add_argument("-dt", "--deltat",default=1, required=False,
+ap.add_argument("-dt", "--deltat",default=1.0, required=False,
    help="Time step in seconds")
 
 args = vars(ap.parse_args())
@@ -64,21 +64,25 @@ group=runners(runnerslist)
 #print(group.speedfunctions)
 
 
-import odesolvers as os
+# CONVERTED TO std::vector with PYBIND11
 avg_speeds=group.avgspeeds[:]
 slope_factors=group.slopefactors[:]
+wave_delays=group.wavedelays[:]
 track_x_data=track.x_data[:]
 track_diff_data=track.diff_data[:]
 init_states=group.pos[:,0]
+
 start_time=0.0
-time_step=1.0
+time_step=dt
 end_time=nsteps*time_step
 
 ### PROCESSING ###########################################################
+import odesolvers as os
 print('Start C++ Processing')
 times, positions=os.rk4_ode_system_solver(
     avg_speeds,
     slope_factors,
+    wave_delays,
     track_x_data,
     track_diff_data,
     init_states,

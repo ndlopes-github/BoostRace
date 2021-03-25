@@ -10,6 +10,7 @@ PYBIND11_MODULE(odesolvers,m) {
         "Runge-Kutta rk4_ode_system_solver(avg_speeds,init_states,start_time,end_time,time_step) algorithm",
         py::arg("avg_speeds"),
         py::arg("slope_factors"),
+        py::arg("wave_delays"),
         py::arg("track_x_data"),
         py::arg("track_diff_data"),
         py::arg("init_states"),

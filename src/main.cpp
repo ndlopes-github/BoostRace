@@ -44,6 +44,7 @@ int main(int /* argc */ , char** /* argv */ )
     //[ integration_class
     dvec_i avg_speeds{1,1.2};
     dvec_i slope_factors{0,0};
+    dvec_i wave_delays{0,0};
     dvec_i track_x_data{0,1};
     dvec_i track_diff_data{0,0};
     //]
@@ -53,6 +54,7 @@ int main(int /* argc */ , char** /* argv */ )
     std::pair<dvec_i,dvec_ij> t_and_x=rk4_ode_system_solver(
                                                             avg_speeds,
                                                             slope_factors,
+                                                            wave_delays,
                                                             track_x_data,
                                                             track_diff_data,
                                                             x,
