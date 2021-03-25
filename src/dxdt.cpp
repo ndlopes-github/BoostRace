@@ -1,7 +1,8 @@
+#include <boost/sort/spreadsort/spreadsort.hpp>
 #include "typedefs.h"
 #include "settings.h"
 #include "dxdt.h"
-#include <boost/sort/spreadsort/spreadsort.hpp>
+
 //[ rhs_class
 /* The rhs of x' = f(x) defined as a class */
 /* HERE WE SHOULD DEFINE THE RHS OF THE ODE SYSTEM*/
@@ -10,13 +11,13 @@
 //double slope
 
 
-void dxdt::operator() ( const dvec_i &x , dvec_i &dxdt , const double  t )
+void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double  t )
 {
 
 
   auto sortedpositions = dvec_i(x);
   boost::sort::spreadsort::spreadsort(sortedpositions.begin(), sortedpositions.end());
-
+  auto sortedidx=ivec_i(x.size());
 
   for(size_t idx=0;idx<dxdt.size();idx++){
     if (t>m_wave_delays[idx])
