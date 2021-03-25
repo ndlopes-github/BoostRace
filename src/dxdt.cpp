@@ -7,10 +7,13 @@
 /* HERE WE SHOULD DEFINE THE RHS OF THE ODE SYSTEM*/
 
 
+//double slope
+
+
 void dxdt::operator() ( const dvec_i &x , dvec_i &dxdt , const double  t )
 {
   for(size_t idx=0;idx<dxdt.size();idx++){
-    dxdt[idx]=m_avg_speeds[idx];
+    dxdt[idx]=m_avg_speeds[idx]+cs.deriv(1,x[idx])*m_slope_factors[idx];
   }
 };
 

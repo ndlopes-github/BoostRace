@@ -66,6 +66,9 @@ group=runners(runnerslist)
 
 import odesolvers as os
 avg_speeds=group.avgspeeds[:]
+slope_factors=group.slopefactors[:]
+track_x_data=track.x_data[:]
+track_diff_data=track.diff_data[:]
 init_states=group.pos[:,0]
 start_time=0.0
 time_step=1.0
@@ -73,8 +76,16 @@ end_time=nsteps*time_step
 
 ### PROCESSING ###########################################################
 print('Start C++ Processing')
-times, positions=os.rk4_ode_system_solver(avg_speeds,init_states,
-                                          start_time,end_time,time_step)
+times, positions=os.rk4_ode_system_solver(
+    avg_speeds,
+    slope_factors,
+    track_x_data,
+    track_diff_data,
+    init_states,
+    start_time,
+    end_time,
+    time_step)
+
 print('End C++ Processing')
 ### POST PROCESSING ######################################################
 # Each runner represents a row
