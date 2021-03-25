@@ -1,6 +1,6 @@
 #include <vector>
 #include <boost/numeric/odeint.hpp>
-//#include <boost/timer/timer.hpp> //updated but not working
+//#include <boost/timer.hpp> //updated but not working
 #include <boost/timer/progress_display.hpp> //deprecated but working
 #include "typedefs.h"
 #include "dxdt.h"
@@ -42,8 +42,8 @@ std::pair<dvec_i,dvec_ij> rk4_ode_system_solver(
                                                 double time_step){
 
   // Timer
-  //boost::timer::auto_cpu_timer t;
-  //boost::timer::progress_timer t;
+  //boost::timer::cpu_timer t;
+  // boost::timer::auto_cpu_timer t;
   std::cout <<" Starting rk4_ode_system_solver." << std::endl;;
 
   //[ integrate_observ

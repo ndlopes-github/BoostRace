@@ -13,7 +13,10 @@
 void dxdt::operator() ( const dvec_i &x , dvec_i &dxdt , const double  t )
 {
   for(size_t idx=0;idx<dxdt.size();idx++){
-    dxdt[idx]=m_avg_speeds[idx]+cs.deriv(1,x[idx])*m_slope_factors[idx];
+    if (t>m_wave_delays[idx])
+      dxdt[idx]=m_avg_speeds[idx]+cs.deriv(1,x[idx])*m_slope_factors[idx];
+    else
+      dxdt[idx]=0.0;
   }
 };
 

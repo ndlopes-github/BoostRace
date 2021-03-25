@@ -13,6 +13,12 @@ ap.add_argument("-nt", "--nsteps",default=6000, required=False,
    help="number of time steps")
 ap.add_argument("-dt", "--deltat",default=1.0, required=False,
    help="Time step in seconds")
+# ap.add_argument("-an", "--anim",default=1, required=False,
+#    help="Generate anim, -an 1")
+# ap.add_argument("-sh", "--show",default=1, required=False,
+#    help="Generate show, -sh 1")
+# ap.add_argument("-af", "--animfile",default='', required=False,
+# help="Save animation, -af file.mp4")
 
 args = vars(ap.parse_args())
 
@@ -95,6 +101,7 @@ print('End C++ Processing')
 # Each runner represents a row
 # positions are by rows so we have to transpose
 group.pos[:,:]=np.transpose(positions)
+
 print('Writing to files with pickle C++')
 import pickle
 #save it
@@ -117,3 +124,23 @@ file.close()
 with open(f'results/ninwaves.pickle', 'wb') as file:
     pickle.dump(ninwaves, file)
 file.close()
+
+'''
+from visuals import *
+DPI=150
+FPS=25  #Frames per second
+
+ANIM=int(args['anim']) # execute animation
+SHOW=0
+if ANIM:
+    SHOW=int(args['show']) #Show animation
+
+FILENAME=args['animfile']
+if(args['animfile'] == None):
+    SAVE=0
+else:
+    SAVE=1 #Save to File
+
+racevisuals(anim=ANIM,show=SHOW,save=SAVE,filename=FILENAME,nsteps=nsteps,
+            track=track,group=group,ninwaves=ninwaves,fps=FPS,dpi=DPI)
+'''
