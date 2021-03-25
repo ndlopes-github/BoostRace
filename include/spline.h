@@ -23,7 +23,7 @@
  *
  */
 
-
+#pragma once
 #ifndef TK_SPLINE_H
 #define TK_SPLINE_H
 

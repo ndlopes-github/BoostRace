@@ -1,7 +1,7 @@
 #include "typedefs.h"
 #include "settings.h"
 #include "dxdt.h"
-
+#include <boost/sort/spreadsort/spreadsort.hpp>
 //[ rhs_class
 /* The rhs of x' = f(x) defined as a class */
 /* HERE WE SHOULD DEFINE THE RHS OF THE ODE SYSTEM*/
@@ -14,8 +14,8 @@ void dxdt::operator() ( const dvec_i &x , dvec_i &dxdt , const double  t )
 {
 
 
-  //  auto sortedpositions = dvec_i(x);
-
+  auto sortedpositions = dvec_i(x);
+  boost::sort::spreadsort::spreadsort(sortedpositions.begin(), sortedpositions.end());
 
 
   for(size_t idx=0;idx<dxdt.size();idx++){
