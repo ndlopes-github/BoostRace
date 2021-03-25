@@ -3,10 +3,11 @@
 #include "typedefs.h"
 #include "settings.h"
 #include "spline.h"
+
 //[ rhs_class
 /* The rhs of x' = f(x) defined as a class */
-class dxdt{
 
+class dxdt{
   dvec_i m_avg_speeds;
   dvec_i m_slope_factors;
   dvec_i m_track_x_data;
