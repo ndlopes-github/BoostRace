@@ -58,7 +58,7 @@ std::pair<dvec_i,dvec_ij> ode_system_solver(
 
 
   //boost::numeric::odeint::runge_kutta4< dvec_i > stepper;
-  boost::numeric::odeint::adams_bashforth_moulton<5,dvec_i > stepper;
+  boost::numeric::odeint::adams_bashforth_moulton<2,dvec_i > stepper;
   std::cout<< "adams_bashforth_moulton of order "<< stepper.order() <<std::endl;
 
   boost::progress_display show_progress(end_time);
