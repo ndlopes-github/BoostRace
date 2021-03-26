@@ -9,10 +9,7 @@
 /* HERE WE SHOULD DEFINE THE RHS OF THE ODE SYSTEM*/
 
 
-//double slope
-
-
-bool positionsort ( const tri_xvi& l, const tri_xvi& r)
+bool positionsort ( const tri_xvi&l, const tri_xvi& r)
 { return std::get<0>(l) < std::get<0>(r); }
 
 
