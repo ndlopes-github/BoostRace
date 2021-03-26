@@ -65,6 +65,10 @@ std::pair<dvec_i,dvec_ij> rk4_ode_system_solver(
                                                          time_step,
                                                          observer(x_vec,times, show_progress));
 
+
+  // for( double t=0.0 ; t<end_time; t+= time_step )
+  //   stepper.do_step( f , init_states, t, time_step, observer(x_vec,times, show_progress));
+
   std::cout <<"Ending rk4_ode_system_solver. Elapsed time: ";
 
 
