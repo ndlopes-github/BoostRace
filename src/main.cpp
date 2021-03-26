@@ -51,16 +51,16 @@ int main(int /* argc */ , char** /* argv */ )
 
 
 
-    std::pair<dvec_i,dvec_ij> t_and_x=rk4_ode_system_solver(
-                                                            avg_speeds,
-                                                            slope_factors,
-                                                            wave_delays,
-                                                            track_x_data,
-                                                            track_diff_data,
-                                                            x,
-                                                            race::StartTime,
-                                                            race::TotalTime,
-                                                            race::dt);
+    std::pair<dvec_i,dvec_ij> t_and_x=ode_system_solver(
+                                                        avg_speeds,
+                                                        slope_factors,
+                                                        wave_delays,
+                                                        track_x_data,
+                                                        track_diff_data,
+                                                        x,
+                                                        race::StartTime,
+                                                        race::TotalTime,
+                                                        race::dt);
 
     //]
     dvec_i times=t_and_x.first;

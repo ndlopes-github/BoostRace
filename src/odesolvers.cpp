@@ -30,21 +30,21 @@ struct observer
 
 // Fixed stept RK4 solver by boost.
 
-std::pair<dvec_i,dvec_ij> rk4_ode_system_solver(
-                                                dvec_i avg_speeds,
-                                                dvec_i slope_factors,
-                                                dvec_i wave_delays,
-                                                dvec_i track_x_data,
-                                                dvec_i track_diff_data,
-                                                dvec_i init_states,
-                                                double start_time,
-                                                double end_time,
-                                                double time_step){
+std::pair<dvec_i,dvec_ij> ode_system_solver(
+                                            dvec_i avg_speeds,
+                                            dvec_i slope_factors,
+                                            dvec_i wave_delays,
+                                            dvec_i track_x_data,
+                                            dvec_i track_diff_data,
+                                            dvec_i init_states,
+                                            double start_time,
+                                            double end_time,
+                                            double time_step){
 
   // Timer
   boost::progress_timer t;
   // boost::timer::auto_cpu_timer t;
-  std::cout <<" Starting rk4_ode_system_solver." << std::endl;;
+  std::cout <<" Starting ode_system_solver." << std::endl;;
 
   //[ integrate_observ
   dvec_ij x_vec; //container for the solutions
@@ -56,9 +56,12 @@ std::pair<dvec_i,dvec_ij> rk4_ode_system_solver(
          track_x_data,
          track_diff_data);
 
-  boost::progress_display show_progress(end_time);
 
-  boost::numeric::odeint::runge_kutta4< dvec_i > stepper;
+  //boost::numeric::odeint::runge_kutta4< dvec_i > stepper;
+  boost::numeric::odeint::adams_bashforth_moulton<5,dvec_i > stepper;
+  std::cout<< "adams_bashforth_moulton of order "<< stepper.order() <<std::endl;
+
+  boost::progress_display show_progress(end_time);
   size_t steps = boost::numeric::odeint::integrate_const(stepper , f , init_states ,
                                                          start_time,
                                                          end_time,
@@ -69,7 +72,7 @@ std::pair<dvec_i,dvec_ij> rk4_ode_system_solver(
   // for( double t=0.0 ; t<end_time; t+= time_step )
   //   stepper.do_step( f , init_states, t, time_step, observer(x_vec,times, show_progress));
 
-  std::cout <<"Ending rk4_ode_system_solver. Elapsed time: ";
+  std::cout <<"Ending ode_system_solver. Elapsed time: ";
 
 
   return std::make_pair(times,x_vec);
