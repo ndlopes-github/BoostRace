@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <tuple>
 
 /* The type of container used to hold the state vector */
 typedef std::vector<double> dvec_i; // vector of doubles //state_type
