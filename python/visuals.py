@@ -1,74 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-
-def racescattervisuals(anim=True,show=True,save=False,filename=None,nsteps=None,
-              track=None,group=None,runnerslist=None,fps=None,dpi=None):
-
-    if anim:
-        import numpy as np
-        import matplotlib.pyplot as plt
-        from tqdm import tqdm
-        plt.rcParams['figure.figsize'] = [16, 12]
-        plt.rcParams['figure.dpi'] = dpi # 200 e.g. is really fine, but slower
-
-
-        from matplotlib import animation
-        import datetime
-
-        fig = plt.figure(figsize=(20,5))
-        x=np.linspace(track.x_data.min(), track.x_data.max(), 1000)
-        ax = plt.axes(xlim=(track.x_data.min(), track.x_data.max()), ylim=(track.cspline(x).min()-1, track.cspline(x).max()+22))
-        line, = ax.plot([], [], lw=2)
-        plt.plot(x,track.cspline(x),'-')
-        plt.plot(x,track.cspline(x)+2*track.cspline(x)+1,'-')
-        for frunner in runnerslist:
-            plt.scatter([],[],label=frunner.name,color=frunner.color)
-            #plt.legend(loc='best',ncol=5)
-            #plt.ylim(ymin=0,ymax=10)
-        time_text = ax.text(0.9, 0.1, '', transform=ax.transAxes)
-        plt.xlabel('Road -- (x)meters',fontsize=20)
-        plt.ylabel('Road -- (y) ',fontsize=20)
-
-        #normal distribution of Y along the width of the road
-        Y=np.linspace(0.2,20.8,group.size)
-        #print(Y)
-
-        # initialization function: plot the background of each frame
-
-        #scat=ax.scatter(group.pos[:,0],Y)
-        scat=ax.scatter([],[],s=3.0)
-
-        def init():
-            time_text.set_text('')
-            scat.set_color(group.colors)
-            scat.set_offsets([])
-            return scat, time_text
-
-        # animation function.  This is called sequentially
-        def animate(i):
-            time_text.set_text(datetime.timedelta(seconds =i))
-            scat.set_offsets(np.c_[group.pos[:,i],Y+track.cspline(group.pos[:,i])])
-            return scat, time_text
-
-        # call the animator.  blit=True means only re-draw the parts that have changed.
-        anim = animation.FuncAnimation(fig, animate, init_func=init,
-                                   frames=tqdm(range(nsteps)), interval=20,
-                                       blit=True,repeat=False)
-
-        # save the animation as an mp4.  This requires ffmpeg or mencoder to be
-        # installed.  The extra_args ensure that the x264 codec is used, so that
-        # the video can be embedded in html5.  You may need to adjust this for
-        # your system: for more information, see
-        # http://matplotlib.sourceforge.net/api/animation_api.html
-        if show:
-            plt.show()
-        if save:
-            writer = animation.FFMpegWriter(fps=fps)
-            #writer.setup(fig,str(FNumber)+'race_animation.mp4',-1)
-            #writer.finish()
-            anim.save(filename+'.mp4', writer=writer,dpi=dpi) #25 normal #
-
+def remap(x, in_min, in_max, out_min, out_max):
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
 def racevisuals(anim=True,show=True,save=False,filename=None,nsteps=None,
               track=None,group=None,ninwaves=None,fps=None,dpi=None):
@@ -86,10 +20,13 @@ def racevisuals(anim=True,show=True,save=False,filename=None,nsteps=None,
 
         fig = plt.figure(figsize=(20,5))
         x=np.linspace(track.x_data.min(), track.x_data.max(), 1000)
-        ax = plt.axes(xlim=(-500, 10000), ylim=(track.cspline(x).min()-1, track.cspline(x).max()+22))
+        ax = plt.axes(xlim=(-500, 10200),
+                      ylim=(track.cspline(x).min()-1,
+                            track.cspline(x).max()+2*track.cspline2(x).max()+1))
         plt.vlines(0.0,-1,22,'k')
+        plt.vlines(10200.,-1,22,'k')
         plt.plot(x,track.cspline(x),'-')
-        plt.plot(x,track.cspline(x)+21,'-')
+        plt.plot(x,track.cspline(x)+2*track.cspline2(x)+1,'-')
         plt.plot([],[],'.')
 
 
@@ -114,7 +51,8 @@ def racevisuals(anim=True,show=True,save=False,filename=None,nsteps=None,
         time_text = ax.text(0.9, 0.1, '', transform=ax.transAxes)
 
         #normal distribution of Y along the width of the road
-        Y=np.random.uniform(0.2,20.8,group.size)
+        Y=np.random.uniform(0,1,group.size)
+        Y=remap(Y,0,1,0.2,20.8)
         #print(Y)
 
         # initialization function: plot the background of each frame
@@ -135,7 +73,10 @@ def racevisuals(anim=True,show=True,save=False,filename=None,nsteps=None,
             for number,line in zip(ninwaves,lines):
                 we+=number
                 xdata=group.pos[ws:we,i]
-                ydata=Y[ws:we]+track.cspline(group.pos[ws:we,i])
+                ydata=Y[ws:we]+track.cspline(group.pos[ws:we,i])#+track.cspline2(group.pos[ws:we,i])
+                #ydata=remap(ydata,ydata.min(),ydata.max(),
+                #            track.cspline(group.pos[ws:we,i]).min(),
+                #            2*track.cspline2(group.pos[ws:we,i].max()))
                 line.set_data(xdata,ydata)
                 ws+=number
 
