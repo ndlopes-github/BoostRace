@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-def remap(x, out_min, out_max):
-    return (x) * (out_max - out_min)  + out_min
+
 
 def racevisuals(anim=True,show=True,save=False,filename=None,nsteps=None,
-              track=None,group=None,ninwaves=None,fps=None,dpi=None):
+                track=None,group=None,ninwaves=None,fps=None,dpi=None,cache_frame_data=True):
 
     if anim:
         import numpy as np
@@ -13,7 +12,6 @@ def racevisuals(anim=True,show=True,save=False,filename=None,nsteps=None,
         from tqdm import tqdm
         plt.rcParams['figure.figsize'] = [16, 12]
         plt.rcParams['figure.dpi'] = dpi # 200 e.g. is really fine, but slower
-
 
         from matplotlib import animation
         import datetime
@@ -66,6 +64,7 @@ def racevisuals(anim=True,show=True,save=False,filename=None,nsteps=None,
 
         # animation function.  This is called sequentially
         def animate(i):
+            i=i
             time_text.set_text(datetime.timedelta(seconds =i))
             ws=0
             we=0
@@ -74,10 +73,9 @@ def racevisuals(anim=True,show=True,save=False,filename=None,nsteps=None,
                 xdata=group.pos[ws:we,i]
                 ydata=np.zeros(len(Y[ws:we]))
                 for j in range(len(Y[ws:we])):
-                    ydata[j]=remap(Y[ws+j],
-                                   track.cspline(group.pos[ws+j,i]),
-                                   track.cspline(group.pos[ws+j,i])+
-                                   2*track.cspline2(group.pos[ws+j,i])+1)
+                    ymin=track.cspline(group.pos[ws+j,i])
+                    ymax=ymin+2*track.cspline2(group.pos[ws+j,i])+1
+                    ydata[j]=Y[ws+j]*(ymax-ymin)+ymin
                #ydata=Y[ws:we]+track.cspline(group.pos[ws:we,i])#+track.cspline2(group.pos[ws:we,i])
                 #ydata=remap(ydata,ydata.min(),ydata.max(),
                 #            track.cspline(group.pos[ws:we,i]).min(),
@@ -89,7 +87,7 @@ def racevisuals(anim=True,show=True,save=False,filename=None,nsteps=None,
 
         # call the animator.  blit=True means only re-draw the parts that have changed.
         anim = animation.FuncAnimation(fig, animate, init_func=init,
-                                   frames=tqdm(range(nsteps)), interval=20,
+                                   frames=tqdm(range(nsteps)), interval=1,
                                        blit=True,repeat=False)
 
         # save the animation as an mp4.  This requires ffmpeg or mencoder to be
