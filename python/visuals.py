@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-def remap(x, in_min, in_max, out_min, out_max):
-    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
+def remap(x, out_min, out_max):
+    return (x) * (out_max - out_min)  + out_min
 
 def racevisuals(anim=True,show=True,save=False,filename=None,nsteps=None,
               track=None,group=None,ninwaves=None,fps=None,dpi=None):
@@ -24,7 +24,7 @@ def racevisuals(anim=True,show=True,save=False,filename=None,nsteps=None,
                       ylim=(track.cspline(x).min()-1,
                             track.cspline(x).max()+2*track.cspline2(x).max()+1))
         plt.vlines(0.0,-1,22,'k')
-        plt.vlines(10200.,-1,22,'k')
+        plt.vlines(10000.,-1,22,'k')
         plt.plot(x,track.cspline(x),'-')
         plt.plot(x,track.cspline(x)+2*track.cspline2(x)+1,'-')
         plt.plot([],[],'.')
@@ -52,7 +52,6 @@ def racevisuals(anim=True,show=True,save=False,filename=None,nsteps=None,
 
         #normal distribution of Y along the width of the road
         Y=np.random.uniform(0,1,group.size)
-        Y=remap(Y,0,1,0.2,20.8)
         #print(Y)
 
         # initialization function: plot the background of each frame
@@ -73,7 +72,13 @@ def racevisuals(anim=True,show=True,save=False,filename=None,nsteps=None,
             for number,line in zip(ninwaves,lines):
                 we+=number
                 xdata=group.pos[ws:we,i]
-                ydata=Y[ws:we]+track.cspline(group.pos[ws:we,i])#+track.cspline2(group.pos[ws:we,i])
+                ydata=np.zeros(len(Y[ws:we]))
+                for j in range(len(Y[ws:we])):
+                    ydata[j]=remap(Y[ws+j],
+                                   track.cspline(group.pos[ws+j,i]),
+                                   track.cspline(group.pos[ws+j,i])+
+                                   2*track.cspline2(group.pos[ws+j,i])+1)
+               #ydata=Y[ws:we]+track.cspline(group.pos[ws:we,i])#+track.cspline2(group.pos[ws:we,i])
                 #ydata=remap(ydata,ydata.min(),ydata.max(),
                 #            track.cspline(group.pos[ws:we,i]).min(),
                 #            2*track.cspline2(group.pos[ws:we,i].max()))
