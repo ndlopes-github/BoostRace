@@ -76,6 +76,7 @@ slope_factors=group.slopefactors[:]
 wave_delays=group.wavedelays[:]
 track_x_data=track.x_data[:]
 track_diff_data=track.diff_data[:]
+track_width_dat=track.witdh_data[:]
 init_states=group.pos[:,0]
 
 start_time=0.0
