@@ -21,7 +21,7 @@ def racescattervisuals(anim=True,show=True,save=False,filename=None,nsteps=None,
         ax = plt.axes(xlim=(track.x_data.min(), track.x_data.max()), ylim=(track.cspline(x).min()-1, track.cspline(x).max()+22))
         line, = ax.plot([], [], lw=2)
         plt.plot(x,track.cspline(x),'-')
-        plt.plot(x,track.cspline(x)+21,'-')
+        plt.plot(x,track.cspline(x)+2*track.cspline(x)+1,'-')
         for frunner in runnerslist:
             plt.scatter([],[],label=frunner.name,color=frunner.color)
             #plt.legend(loc='best',ncol=5)

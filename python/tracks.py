@@ -15,6 +15,7 @@ class track():
         self.diff_data=data[:,1]
         self.width_data=data[:,2]
         self.cspline=CubicSpline(self.x_data,self.diff_data)
+        self.cspline2=CubicSpline(self.x_data,self.width_data)
 
     def plot(self):
         xs = np.linspace(self.x_data.min(), self.x_data.max(), 1000)
