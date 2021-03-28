@@ -17,8 +17,8 @@ class dxdt{
   dvec_i m_track_x_data;
   dvec_i m_track_diff_data;
   dvec_i m_wave_delays;
-  dvec_i m_road_z;
-  dvec_i m_road_dzdx;
+  //dvec_i m_road_z; // not required for now
+  //dvec_i m_road_dzdx; // not required for now
   dvec_i m_road_w;
   dvec_i m_foresight_area;
   tk::spline cs;
