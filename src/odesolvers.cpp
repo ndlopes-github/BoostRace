@@ -45,7 +45,7 @@ std::pair<dvec_i,dvec_ij> ode_system_solver(
   // Timer
   boost::progress_timer t;
   // boost::timer::auto_cpu_timer t;
-  std::cout <<" Starting ode_system_solver." << std::endl;;
+  std::cout <<" Starting ode_system_solver." << std::endl;
 
   //[ integrate_observ
   dvec_ij x_vec; //container for the solutions
