@@ -52,6 +52,10 @@ def racevisuals(anim=True,show=True,save=False,filename=None,nsteps=None,
         Y=np.random.uniform(0,1,group.size)
         #print(Y)
 
+        # Clean data for linear spline
+        #group.pos[:,:]=np.where(group.pos[:,:]>track.x_data.max(),track.x_data.max(),
+        #                        group.pos[:,:])
+
         # initialization function: plot the background of each frame
 
         #Pre-process roadelevation -> roadZ
@@ -80,15 +84,6 @@ def racevisuals(anim=True,show=True,save=False,filename=None,nsteps=None,
                 we+=number
                 xdata=group.pos[ws:we,i]
                 ydata=Y[ws:we]*(2*roadW[ws:we,i]+1)+roadZ[ws:we,i]
-                # ydata=np.zeros(len(Y[ws:we]))
-                # for j in range(len(Y[ws:we])):
-                #     ymin=track.cspline(group.pos[ws+j,i])
-                #     ymax=ymin+2*track.cspline2(group.pos[ws+j,i])+1
-                #     ydata[j]=Y[ws+j]*(ymax-ymin)+ymin
-               #ydata=Y[ws:we]+track.cspline(group.pos[ws:we,i])#+track.cspline2(group.pos[ws:we,i])
-                #ydata=remap(ydata,ydata.min(),ydata.max(),
-                #            track.cspline(group.pos[ws:we,i]).min(),
-                #            2*track.cspline2(group.pos[ws:we,i].max()))
                 line.set_data(xdata,ydata)
                 ws+=number
 

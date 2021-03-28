@@ -2,7 +2,7 @@
 # coding: utf-8
 
 import numpy as np
-from scipy.interpolate import CubicSpline
+from scipy.interpolate import CubicSpline,interp1d
 import matplotlib.pyplot as plt
 
 from autoclass import autorepr
@@ -16,6 +16,8 @@ class track():
         self.width_data=data[:,2]
         self.cspline=CubicSpline(self.x_data,self.diff_data)
         self.cspline2=CubicSpline(self.x_data,self.width_data)
+        self.lspline=interp1d(self.x_data,self.diff_data)
+        self.lspline2=interp1d(self.x_data,self.width_data)
 
     def plot(self):
         xs = np.linspace(self.x_data.min(), self.x_data.max(), 1000)
@@ -66,9 +68,11 @@ track2= track('imaginary2',data=np.array([[-500,0,10.],
                                           [0,0,10.],
                                           [100,0,10.],
                                           [1000,10,10.],
-                                          [2000,-10,5.0],
-                                          [2200,-10,2.0],
-                                          [2300,-10,7.0],
+                                          [2000,-2,5.0],
+                                          [2200,-2,3.0],
+                                          [2300,-1,3.0],
+                                          [2400,-1,3.0],
+                                          [2500,-1,6.0],
                                           [3000,-15.,10.0],
                                           [4000,20,10.],
                                           [5000,-7,10.],
