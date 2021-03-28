@@ -28,13 +28,16 @@ dxdt::dxdt(dvec_i avg_speeds,
   cs(track_x_data,track_diff_data),
   cs2(track_x_data,track_width_data)
 {
-  // Define the number of meters in the track
-  int Nmeter= floor(round(track_x_data[track_x_data.size()-1]-track_x_data[0]+1));
+  // Define the number of meters or blocks in the track
+  // m_road_z has  the diff elevation of the track per meter/block
+  // m_road_dxdz has the slope in each block/meter
+  size_t Nmeter= floor(round(track_x_data[track_x_data.size()-1]-track_x_data[0]+1));
   std::cout<<"Track has "<< Nmeter <<" meters"<< std::endl;
   for(size_t meter=0;meter<Nmeter;meter ++){
-    m_road_z.push_back(cs(meter));
-    m_road_dzdx.push_back(cs.deriv(1,meter));
+    //m_road_z.push_back(cs(meter));
+    //m_road_dzdx.push_back(cs.deriv(1,meter));
     m_road_w.push_back(cs2(meter));
+    // m_foresight_area.push_back(()); //make some calculations here
   };
 }
 
