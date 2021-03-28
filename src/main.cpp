@@ -47,6 +47,7 @@ int main(int /* argc */ , char** /* argv */ )
     dvec_i wave_delays{0,0};
     dvec_i track_x_data{0,1};
     dvec_i track_diff_data{0,0};
+    dvec_i track_width_data{10,10};
     //]
 
 
@@ -57,6 +58,7 @@ int main(int /* argc */ , char** /* argv */ )
                                                         wave_delays,
                                                         track_x_data,
                                                         track_diff_data,
+                                                        track_width_data,
                                                         x,
                                                         race::StartTime,
                                                         race::TotalTime,

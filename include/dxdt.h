@@ -18,6 +18,7 @@ class dxdt{
   dvec_i m_track_diff_data;
   dvec_i m_wave_delays;
   tk::spline cs;
+  tk::spline cs2;
 
 public:
 
@@ -25,13 +26,15 @@ public:
        dvec_i slope_factors,
        dvec_i wave_delays,
        dvec_i track_x_data,
-       dvec_i track_diff_data) :
+       dvec_i track_diff_data,
+       dvec_i track_width_data) :
     m_avg_speeds(avg_speeds),
     m_slope_factors(slope_factors),
     m_wave_delays(wave_delays),
     m_track_x_data( track_x_data),
     m_track_diff_data( track_diff_data),
-    cs(track_x_data,track_diff_data)
+    cs(track_x_data,track_diff_data),
+    cs2(track_x_data,track_width_data)
   {/*One can operate here*/ }
 
 

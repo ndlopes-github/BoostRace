@@ -54,6 +54,14 @@ def racevisuals(anim=True,show=True,save=False,filename=None,nsteps=None,
 
         # initialization function: plot the background of each frame
 
+        #Pre-process roadelevation -> roadZ
+        roadZ=np.zeros((group.size,nsteps))
+        #Pre-process road width-> RoadW
+        roadW=np.zeros((group.size,nsteps))
+        for i in range(nsteps):
+            roadZ[:,i]=track.cspline(group.pos[:,i])
+            roadW[:,i]=track.cspline2(group.pos[:,i])
+
         #scat=ax.scatter(group.pos[:,0],Y)
         #scat=ax.scatter([],[],s=3.0)
 
@@ -71,11 +79,12 @@ def racevisuals(anim=True,show=True,save=False,filename=None,nsteps=None,
             for number,line in zip(ninwaves,lines):
                 we+=number
                 xdata=group.pos[ws:we,i]
-                ydata=np.zeros(len(Y[ws:we]))
-                for j in range(len(Y[ws:we])):
-                    ymin=track.cspline(group.pos[ws+j,i])
-                    ymax=ymin+2*track.cspline2(group.pos[ws+j,i])+1
-                    ydata[j]=Y[ws+j]*(ymax-ymin)+ymin
+                ydata=Y[ws:we]*(2*roadW[ws:we,i]+1)+roadZ[ws:we,i]
+                # ydata=np.zeros(len(Y[ws:we]))
+                # for j in range(len(Y[ws:we])):
+                #     ymin=track.cspline(group.pos[ws+j,i])
+                #     ymax=ymin+2*track.cspline2(group.pos[ws+j,i])+1
+                #     ydata[j]=Y[ws+j]*(ymax-ymin)+ymin
                #ydata=Y[ws:we]+track.cspline(group.pos[ws:we,i])#+track.cspline2(group.pos[ws:we,i])
                 #ydata=remap(ydata,ydata.min(),ydata.max(),
                 #            track.cspline(group.pos[ws:we,i]).min(),

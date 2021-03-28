@@ -13,6 +13,7 @@ std::pair<dvec_i,dvec_ij> ode_system_solver(
                                             dvec_i wave_delays,
                                             dvec_i track_x_data,
                                             dvec_i track_diff_data,
+                                            dvec_i track_width_data,
                                             dvec_i init_states,
                                             double start_time,
                                             double end_time,

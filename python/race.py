@@ -76,7 +76,7 @@ slope_factors=group.slopefactors[:]
 wave_delays=group.wavedelays[:]
 track_x_data=track.x_data[:]
 track_diff_data=track.diff_data[:]
-track_width_dat=track.width_data[:]
+track_width_data=track.width_data[:]
 init_states=group.pos[:,0]
 
 start_time=0.0
@@ -92,6 +92,7 @@ times, positions=os.ode_system_solver(
     wave_delays,
     track_x_data,
     track_diff_data,
+    track_width_data,
     init_states,
     start_time,
     end_time,

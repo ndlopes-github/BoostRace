@@ -13,6 +13,7 @@ PYBIND11_MODULE(odesolvers,m) {
         py::arg("wave_delays"),
         py::arg("track_x_data"),
         py::arg("track_diff_data"),
+        py::arg("track_width_data"),
         py::arg("init_states"),
         py::arg("start_time"),
         py::arg("end_time"),
