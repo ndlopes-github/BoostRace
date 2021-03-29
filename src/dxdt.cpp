@@ -88,12 +88,16 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
   auto densityfactor= dvec_i(x.size(),0.0); // container for the factors that reflects
   auto VL = dvec_i(x.size(),0.0); // For VL calculation
 
-  int MINN=10; // in this case impact should be p=0.4
-  int MAXN=20;
 
   for (size_t idx=0;idx<x.size();idx++){
+    if (x[idx]>road_end) continue;
+    int xidx=floor(x[idx])-road_start;
+    //std::cout<<xidx<<std::endl;
+    int MINN=floor(1./4.*m_foresight_area[xidx]); //floor(1./4.*m_foresight_area) in this case impact should be p=0.4
+    int MAXN=2*MINN;
+
     auto frontispeeds = dvec_i();
-    if (((idx+MINN)<x.size())&&(std::get<0>(sorted_xvi[idx+MINN])-std::get<0>(sorted_xvi[idx])<4)) {
+    if (((idx+MINN)<x.size())&&(std::get<0>(sorted_xvi[idx+MINN])-std::get<0>(sorted_xvi[idx])<linear_view)) {
       densityfactor[std::get<2>(sorted_xvi[idx])]=0.4;
       /////////////////////////////////////////
       for (size_t ids=MINN;ids<MAXN;ids++){
