@@ -48,8 +48,8 @@ dt=float(args['deltat']) #[s]
 from timesgenerator import *
 
 rnum=RNUM
-ninwaves=[rnum//5,2*rnum//5,2*rnum//5]
-wavedelays=[0.0,360.0,500.0]
+ninwaves=[rnum//3,rnum//3,rnum//3+1]
+wavedelays=[0.0,360.0,720.0]
 
 FAvgTimes, _, InitPositions, WaveDelays = inversepseudosigmoid(number=rnum,
                                                                lnumber=10,
