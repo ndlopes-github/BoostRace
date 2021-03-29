@@ -11,16 +11,18 @@ struct observer
 {
   dvec_ij &m_states;
   dvec_i &m_times;
+  dvec_i &m_dxdt;
   boost::progress_display &m_show_progress;
 
-  observer( dvec_ij &states , dvec_i &times,boost::progress_display &show_progress )
-    : m_states(states) , m_times(times), m_show_progress(show_progress) { }
+  observer( dvec_ij &states , dvec_i &times,dvec_i &dxdt, boost::progress_display &show_progress )
+    : m_states(states) , m_times(times), m_dxdt(dxdt),m_show_progress(show_progress) { }
   //Constructor for the m_states and m_times member of the struct
 
   void operator()( const dvec_i &x , double t)
     {
         m_states.push_back( x );
         m_times.push_back( t );
+        //m_dxdt.push_back( dxdt );
         ++m_show_progress;
     }
 };
@@ -50,6 +52,7 @@ std::pair<dvec_i,dvec_ij> ode_system_solver(
   //[ integrate_observ
   dvec_ij x_vec; //container for the solutions
   dvec_i times;
+  dvec_i dxdt_vec;
 
   dxdt f(avg_speeds,
          slope_factors,
@@ -68,7 +71,7 @@ std::pair<dvec_i,dvec_ij> ode_system_solver(
                                                          start_time,
                                                          end_time,
                                                          time_step,
-                                                         observer(x_vec,times, show_progress));
+                                                         observer(x_vec,times,dxdt_vec, show_progress));
 
 
   // for( double t=0.0 ; t<end_time; t+= time_step )

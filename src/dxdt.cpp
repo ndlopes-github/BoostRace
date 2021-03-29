@@ -54,7 +54,7 @@ dxdt::dxdt(dvec_i avg_speeds,
     }
     else {wi=10.0; wip=10.0;}
     m_foresight_area.push_back(0.5*(wi+wip)*linear_view);
-    std::cout<<"Foresight has "<<m_foresight_area[meter] <<" squared meters at position"<< meter<< std::endl;
+    //std::cout<<"Foresight has "<<m_foresight_area[meter] <<" squared meters at position"<< meter<< std::endl;
   }
 
   // Testing Sandbox
