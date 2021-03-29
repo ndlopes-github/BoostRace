@@ -4,29 +4,30 @@
 #include <boost/progress.hpp> //deprecated but working
 #include "typedefs.h"
 #include "dxdt.h"
-
+//#include <functional>
 
 
 struct observer
 {
   dvec_ij &m_states;
   dvec_i &m_times;
-  dvec_i &m_dxdt;
+  dvec_ij &m_dxdt;
+
+
   boost::progress_display &m_show_progress;
 
-  observer( dvec_ij &states , dvec_i &times,dvec_i &dxdt, boost::progress_display &show_progress )
-    : m_states(states) , m_times(times), m_dxdt(dxdt),m_show_progress(show_progress) { }
+  observer( dvec_ij &states , dvec_i &times, dvec_ij &velocities, boost::progress_display &show_progress )
+    : m_states(states) , m_times(times), m_dxdt(velocities),m_show_progress(show_progress) { }
   //Constructor for the m_states and m_times member of the struct
 
   void operator()( const dvec_i &x , double t)
     {
         m_states.push_back( x );
         m_times.push_back( t );
-        //m_dxdt.push_back( dxdt );
+        //m_dxdt.push_back( *dxdt.velocity );
         ++m_show_progress;
     }
 };
-
 
 
 
@@ -50,16 +51,15 @@ std::pair<dvec_i,dvec_ij> ode_system_solver(
   std::cout <<" Starting ode_system_solver." << std::endl;
 
   //[ integrate_observ
-  dvec_ij x_vec; //container for the solutions
-  dvec_i times;
-  dvec_i dxdt_vec;
-
-  dxdt f(avg_speeds,
-         slope_factors,
-         wave_delays,
-         track_x_data,
-         track_diff_data,
-         track_width_data);
+  auto x_vec = dvec_ij() ; //container for the solutions
+  auto times =dvec_i();
+  auto dxdt_vec = dvec_ij();
+  auto f= dxdt(avg_speeds,
+               slope_factors,
+               wave_delays,
+               track_x_data,
+               track_diff_data,
+               track_width_data);
 
 
   //boost::numeric::odeint::runge_kutta4< dvec_i > stepper;
@@ -67,11 +67,34 @@ std::pair<dvec_i,dvec_ij> ode_system_solver(
   std::cout<< "adams_bashforth_moulton of order "<< stepper.order() <<std::endl;
 
   boost::progress_display show_progress(end_time);
+
   size_t steps = boost::numeric::odeint::integrate_const(stepper , f , init_states ,
                                                          start_time,
                                                          end_time,
                                                          time_step,
-                                                         observer(x_vec,times,dxdt_vec, show_progress));
+                                                         observer(x_vec,times,
+                                                                  dxdt_vec,
+                                                                  show_progress));
+
+
+  // std::function<void(const dvec_ij &, double)> observer =
+  //   [&x_vec, &times, &show_progress](const dvec_i &x, double t) {
+  //     x_vec.push_back(x);
+  //     times.push_back(t);
+  //     ++show_progress;
+  //     //res_rho.push_back(*(rhs_class.rho_binned));
+  //     //res_vel.push_back(*(rhs_class.velocity));
+  //     //if (t >= last_printed + 60 - 1e-13) {
+  //     //    cout << "t=" << t << endl;
+  //     //    last_printed = t;
+  //           //}
+  //   };
+
+  // size_t steps = boost::numeric::odeint::integrate_const(stepper , f , init_states ,
+  //                                                        start_time,
+  //                                                        end_time,
+  //                                                        time_step,
+  //                                                        observer);
 
 
   // for( double t=0.0 ; t<end_time; t+= time_step )
