@@ -13,6 +13,8 @@
 
 
 class dxdt{
+
+
   dvec_i m_avg_speeds;
   dvec_i m_slope_factors;
   dvec_i m_track_x_data;
@@ -28,9 +30,11 @@ class dxdt{
   dvec_i m_foresight_area;
   tk::spline cs;
   tk::spline cs2;
-  std::shared_ptr<dvec_i> velocities_instance;
 
 public:
+  std::shared_ptr<dvec_i> velocities_instance;
+
+
 
   dxdt(dvec_i avg_speeds,
        dvec_i slope_factors,

@@ -12,19 +12,20 @@ struct observer
   dvec_ij &m_states;
   dvec_i &m_times;
   dvec_ij &m_dxdt;
+  dxdt &m_f;
 
 
   boost::progress_display &m_show_progress;
 
-  observer( dvec_ij &states , dvec_i &times, dvec_ij &vels,dxtd &f, boost::progress_display &show_progress )
-    : m_states(states) , m_times(times), m_dxdt(vels),m_show_progress(show_progress) { }
+  observer( dvec_ij &states , dvec_i &times, dvec_ij &vels,dxdt &f, boost::progress_display &show_progress )
+    : m_states(states) , m_times(times), m_dxdt(vels), m_f(f), m_show_progress(show_progress) { }
   //Constructor for the m_states and m_times member of the struct
 
   void operator()( const dvec_i &x , double t)
     {
         m_states.push_back( x );
         m_times.push_back( t );
-        m_dxdt.push_back( *(dxdt.velocities_instance));
+        m_dxdt.push_back(*(m_f.velocities_instance));
         ++m_show_progress;
     }
 };
