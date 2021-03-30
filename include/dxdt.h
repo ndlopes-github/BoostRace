@@ -28,6 +28,7 @@ class dxdt{
   dvec_i m_foresight_area;
   tk::spline cs;
   tk::spline cs2;
+  std::shared_ptr<dvec_i> velocities_instance;
 
 public:
 

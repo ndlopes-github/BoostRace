@@ -29,7 +29,8 @@ dxdt::dxdt(dvec_i avg_speeds,
   road_start(floor(track_x_data[0])),
   road_end(floor(track_x_data[track_x_data.size()-1])),
   cs(track_x_data,track_diff_data),
-  cs2(track_x_data,track_width_data)
+  cs2(track_x_data,track_width_data),
+  velocities_instance(std::make_shared<dvec_i>(avg_speeds.size(),0))
 {
   std::cout <<" Constructing dxdt." << std::endl;
   boost::progress_timer t;
@@ -130,7 +131,11 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
       }
     else
       dxdt[idx]=0.0;
+
+    (*velocities_instance)[idx]=dxdt[idx];
   }
+
+
 };
 
 //]
