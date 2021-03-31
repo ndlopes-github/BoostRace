@@ -15,6 +15,16 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+
+# Add debugging option
+# Activate debug with
+# cmake -DUSE_DEBUG=ON
+option(USE_DEBUG "Enter debug mode" OFF)
+if (USE_DEBUG)
+  add_definitions(-DDEBUG)
+endif()
+
+
 find_package(Boost REQUIRED)
 IF (Boost_FOUND)
     INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})

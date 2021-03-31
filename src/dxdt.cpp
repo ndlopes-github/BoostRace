@@ -12,9 +12,6 @@
 /* HERE WE SHOULD DEFINE THE RHS OF THE ODE SYSTEM*/
 
 
-#define DEBUG
-
-
 bool positionsort ( const tri_xvi&l, const tri_xvi& r)
 { return std::get<0>(l) < std::get<0>(r); }
 
@@ -30,7 +27,7 @@ dxdt::dxdt(dvec_i avg_speeds,
   m_track_diff_data( track_diff_data),
   m_wave_delays(wave_delays),
   road_start(floor(track_x_data[0])),
-  road_end(floor(track_x_data[track_x_data.size()-1])),
+  road_end(ceil(track_x_data[track_x_data.size()-1])),
   cs(track_x_data,track_diff_data),
   cs2(track_x_data,track_width_data),
   velocities_instance(std::make_shared<dvec_i>(avg_speeds.size(),0))
@@ -61,6 +58,8 @@ dxdt::dxdt(dvec_i avg_speeds,
     //std::cout<<"Foresight has "<<m_foresight_area[meter] <<" squared meters at position"<< meter<< std::endl;
   }
 
+
+#ifdef DEBUG
   // Testing Sandbox
   //road_begin = std::make_shared<dvec_i>(m_road_w);
   std::cout<<"Testing Track has "<< road_end-road_start <<" meters"<< std::endl;
@@ -71,77 +70,128 @@ dxdt::dxdt(dvec_i avg_speeds,
   std::cout<<"Track vector has "<< *(m_road_w.begin()-road_start+road_pos) <<" meters"<< std::endl;
   road_pos=1996;
   std::cout<<"Foresight has "<< *(m_foresight_area.begin()-road_start+road_pos) <<" squared meters"<<  std::endl;
-
+#endif
 
   std::cout <<"Ending constructor of dxdt. Elapsed time: ";
-
 }
-
 
 void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double  t )
 {
 
-  auto sorted_xvi = std::vector<tri_xvi>(x.size());
+  //**** sort all the runners by position ********************
+  // generate a tuple with position, velocity, index
 
+  auto sorted_xvi = std::vector<tri_xvi>(x.size());
   for (size_t idx=0; idx<x.size(); idx++){
     // Tuple with (position, instant speed, index)
-    sorted_xvi[idx]=std::make_tuple(x[idx],dxdt[idx],idx);
+    sorted_xvi[idx]=std::make_tuple(x[idx],(*velocities_instance)[idx],idx);
+    // Shouldn't  (*velocities_instance)[idx] and dxdt[idx] be equal at this step ?
+    // (*velocities_instance)  velocities to be keept by the observer at each time step
+    // while dxdt[idx] is update by the intermidiate steps of the stepper/solver.
+
+
+    #ifdef DEBUG
+    if(std::fabs((*velocities_instance)[idx]-dxdt[idx])>1.e-6)
+      std::cout<< std::fabs((*velocities_instance)[idx]-dxdt[idx])<< " error"<<std::endl;
+    #endif
   }
   std::sort(sorted_xvi.begin(),sorted_xvi.end(),positionsort);
+  // end sorting
 
-  auto densityfactor= dvec_i(x.size(),0.0); // container for the factors that reflects
-  auto VL = dvec_i(x.size(),0.0); // For VL calculation
+  // Create a density container for each runner foresight
+  auto rho= dvec_i(x.size(),0.0); // rho for density factor. container for the factors that reflects the density
 
+  // Create a container for the average velocities of the 5 runners in front
+  // to be used when rho !=0 for
+  auto VL = dvec_i(x.size(),0.0); // For VL calculation. average of the  slowest in front of the runner
 
-  for (size_t idx=0;idx<x.size();idx++){
-    if (x[idx]>road_end) continue;
-    int xidx=floor(x[idx])-road_start;
-    //std::cout<<xidx<<std::endl;
-    int MINN=floor(1./4.*m_foresight_area[xidx]); //floor(1./4.*m_foresight_area) in this case impact should be p=0.4
-    int MAXN=2*MINN;
+  // iterate over sorted tuples
+  for(std::vector<tri_xvi>::const_iterator i = sorted_xvi.begin(); i != sorted_xvi.end(); ++i)
+    {
+      if  (std::get<0>(*i)>road_end) continue;
+      int xidx=floor(std::get<0>(*i))-road_start;
+      //MINN is the minimum number of runners in the foresight that impacts the runners speed
+      int MINN=floor(1./4.*m_foresight_area[xidx]); //floor(1./4.*m_foresight_area) in this case impact should be p=0.4
+      int MAXN=2*MINN; //MAX is the maximum number of runners in the foresight that impacts the runners speed
+      auto frontispeeds = dvec_i(); // container for the instantaneous speeds of the runners in the foresigh area
+      if ((i+MINN)< sorted_xvi.end())
+        if(std::get<0>(*(i+MINN))-std::get<0>(*i)<linear_view)
+          {
+            rho[std::get<2>(*i)]=0.4;
+            for (size_t ids=MINN;ids<MAXN;ids++)
+                if (i+ids>=sorted_xvi.end()) continue;
+                else if (std::get<0>(*(i+ids))-std::get<0>(*i)<linear_view)
+                         rho[std::get<2>(*i)]+=(1.0/40.);
+            int ids=0;
 
-    auto frontispeeds = dvec_i();
-    if (((idx+MINN)<x.size())&&(std::get<0>(sorted_xvi[idx+MINN])-std::get<0>(sorted_xvi[idx])<linear_view)) {
-      densityfactor[std::get<2>(sorted_xvi[idx])]=0.4;
-      /////////////////////////////////////////
-      for (size_t ids=MINN;ids<MAXN;ids++){
-        if (idx+ids>=x.size()) break;
-        else if ((std::get<0>(sorted_xvi[idx+ids])-std::get<0>(sorted_xvi[idx]))<linear_view)
-          densityfactor[std::get<2>(sorted_xvi[idx])]+=(1.0/40.);
-      }
-      // Get the instantaneous speed for the guys in the impact zone
-      int ids=0;
-      while((idx+ids<x.size())&&(ids<MAXN)){
-        frontispeeds.push_back(std::get<1>(sorted_xvi[idx+ids]));
-        ids++;}
+            while((i+ids<sorted_xvi.end())&&(ids<MAXN)){
+              frontispeeds.push_back((*velocities_instance)[std::get<2>(*(i+ids))]);
+              ids++;}
 
-      std::sort(frontispeeds.begin()+1,frontispeeds.end());
+            std::sort(frontispeeds.begin()+1,frontispeeds.end());
 
-      if (frontispeeds.size()>5)
-        VL[idx]=std::min(std::accumulate(frontispeeds.begin()+1,frontispeeds.begin()+6,0.0)/5,frontispeeds[0]);
-      frontispeeds.clear();
+            if (frontispeeds.size()>5) // Runner can not speed up if the guys in front are faster than him
+              VL[std::get<2>(*i)]=std::min(std::accumulate(frontispeeds.begin()+1,frontispeeds.begin()+6,0.0)/5,frontispeeds[0]);
+
+            frontispeeds.clear();
+          }
     }
-  }
-  double p=0.0;
 
-
-
-
-  for(size_t idx=0;idx<dxdt.size();idx++){
-    if (t>m_wave_delays[idx])
-      {
-        p=densityfactor[idx];
 #ifdef DEBUG
-        p=0;
-        VL[idx]=0.0;
-#endif
-        dxdt[idx]=(1-p)*(cs.deriv(1,x[idx])*m_slope_factors[idx]+m_avg_speeds[idx])+p*VL[idx];
-      }
-    else
-      dxdt[idx]=0.0;
+  for (size_t idx=0;idx<x.size();idx++)
+    { // here we work with the sorted runners
 
-    (*velocities_instance)[idx]=dxdt[idx];
-  }
+      if (std::get<0>(sorted_xvi[idx])>road_end) continue; // jumps out of the loop with VL[idx]=0 and rho
+      // runner proceeds with its initial speed function
+
+
+      int xidx=floor(std::get<0>(sorted_xvi[idx]))-road_start; //from runner positions extract index in order to have its foresight
+
+      //MINN is the minimum number of runners in the foresight that impacts the runners speed
+      int MINN=floor(1./4.*m_foresight_area[xidx]); //floor(1./4.*m_foresight_area) in this case impact should be p=0.4
+      int MAXN=2*MINN; //MAX is the maximum number of runners in the foresight that impacts the runners speed
+
+      auto frontispeeds = dvec_i(); // container for the instantaneous speeds of the runners in the foresigh area
+
+      if (((idx+MINN)<x.size())&&(std::get<0>(sorted_xvi[idx+MINN])-std::get<0>(sorted_xvi[idx])<linear_view))
+        {
+          rho[std::get<2>(sorted_xvi[idx])]=0.4;
+          /////////////////////////////////////////
+          for (size_t ids=MINN;ids<MAXN;ids++)
+            {
+              if (idx+ids>=x.size()) continue;
+              else if ((std::get<0>(sorted_xvi[idx+ids])-std::get<0>(sorted_xvi[idx]))<linear_view)
+                rho[std::get<2>(sorted_xvi[idx])]+=(1.0/40.);
+            }
+
+          // Get the instantaneous speed for the guys in the impact zone
+          int ids=0;
+          while((idx+ids<x.size())&&(ids<MAXN)){
+            frontispeeds.push_back((*velocities_instance)[std::get<2>(sorted_xvi[idx+ids])]);//   std::get<2>(sorted_xvi[idx+ids]));
+            ids++;}
+
+          std::sort(frontispeeds.begin()+1,frontispeeds.end());
+
+          if (frontispeeds.size()>5) // Runner can not speed up if the guys in front are faster than him
+            VL[std::get<2>(sorted_xvi[idx])]=(std::min(std::accumulate(frontispeeds.begin()+1,frontispeeds.begin()+6,0.0)/5,frontispeeds[0]);
+
+          frontispeeds.clear();
+        }
+    }
+#endif
+
+  // Update the system velocities
+  for(size_t idx=0;idx<dxdt.size();idx++)
+    {
+      if (t>m_wave_delays[idx])
+        {
+          dxdt[idx]=(1-rho[idx])*(cs.deriv(1,x[idx])*m_slope_factors[idx]+m_avg_speeds[idx])+rho[idx]*VL[idx];
+        }
+      else
+        dxdt[idx]=0.0;
+      // Update the velocities to be kept by the observer
+      (*velocities_instance)[idx]=dxdt[idx];
+    }
 
 
 };
