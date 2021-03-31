@@ -86,7 +86,7 @@ end_time=nsteps*time_step
 ### PROCESSING ###########################################################
 import odesolvers as os
 print('Start C++ Processing')
-times, positions=os.ode_system_solver(
+times, positions, velocities=os.ode_system_solver(
     avg_speeds,
     slope_factors,
     wave_delays,
@@ -103,6 +103,7 @@ print('End C++ Processing')
 # Each runner represents a row
 # positions are by rows so we have to transpose
 group.pos[:,:]=np.transpose(positions)
+group.vels[:,:]=np.transpose(velocities)
 
 print('Writing to files with pickle C++')
 import pickle

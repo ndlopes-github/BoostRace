@@ -11,6 +11,7 @@ class runners():
     def __init__(self,group=None):
         self.group=group
         self.pos=np.array([runner.pos for runner in self.group])
+        self.vels=np.array([runner.vels for runner in self.group])
         self.wavedelays=np.array([runner.wavedelay for runner in self.group])
         self.avgspeeds=np.array([runner.avgspeed for runner in self.group])
         self.slopefactors=np.array([runner.slopefactor for runner in self.group])
@@ -105,6 +106,7 @@ class frunner():
 
     def init(self,nsteps,x0=0.0,sdelay=0.0):
         self.pos=np.zeros(nsteps+1)
+        self.vels=np.zeros(steps+1)
         self.pos[0]=x0
         self.rank=None
         self.frontrunners=None

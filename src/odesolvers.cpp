@@ -12,7 +12,7 @@ struct observer
   dvec_ij &m_states;
   dvec_i &m_times;
   dvec_ij &m_dxdt;
-  dxdt &m_f;
+  dxdt &m_f; // object from dxdt class to track
 
 
   boost::progress_display &m_show_progress;
@@ -53,8 +53,8 @@ std::pair<dvec_i,dvec_ij> ode_system_solver(
 
   //[ integrate_observ
   auto x_vec = dvec_ij() ; //container for the solutions
-  auto times =dvec_i();
-  auto vels = dvec_ij();
+  auto times =dvec_i();    // contanier for the times
+  auto vels = dvec_ij();   // container for the velocities
   auto f= dxdt(avg_speeds,
                slope_factors,
                wave_delays,
@@ -79,24 +79,6 @@ std::pair<dvec_i,dvec_ij> ode_system_solver(
                                                                   show_progress));
 
 
-  // std::function<void(const dvec_ij &, double)> observer =
-  //   [&x_vec, &times, &show_progress](const dvec_i &x, double t) {
-  //     x_vec.push_back(x);
-  //     times.push_back(t);
-  //     ++show_progress;
-  //     //res_rho.push_back(*(rhs_class.rho_binned));
-  //     //res_vel.push_back(*(rhs_class.velocity));
-  //     //if (t >= last_printed + 60 - 1e-13) {
-  //     //    cout << "t=" << t << endl;
-  //     //    last_printed = t;
-  //           //}
-  //   };
-
-  // size_t steps = boost::numeric::odeint::integrate_const(stepper , f , init_states ,
-  //                                                        start_time,
-  //                                                        end_time,
-  //                                                        time_step,
-  //                                                        observer);
 
 
   // for( double t=0.0 ; t<end_time; t+= time_step )
@@ -105,5 +87,5 @@ std::pair<dvec_i,dvec_ij> ode_system_solver(
   std::cout <<"Ending ode_system_solver. Elapsed time: ";
 
 
-  return std::make_pair(times,x_vec);
+  return std::make_tuple(times,x_vec,vels);
 };
