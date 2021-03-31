@@ -36,13 +36,15 @@ add_library(${PROJECT_NAME} SHARED
 #DIR FOR THE HEADER FILES
 include_directories(include/)
 
-set(sources ${sources}
-    ${PROJECT_SRC_DIR}/main.cpp)
+# UNIT TEST BINARY: race#
+# Uncomment to compile
+# set(sources ${sources}
+#    ${PROJECT_SRC_DIR}/main.cpp)
 
-# TESTING EXECUTABLE
-add_executable(race ${sources})
-target_link_libraries(race ${PROJECT_NAME}) #LINK WITH THE LIBRARIES AND HEADERS
-set_target_properties(race PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
+# # TESTING EXECUTABLE
+#add_executable(race ${sources})
+#target_link_libraries(race ${PROJECT_NAME}) #LINK WITH THE LIBRARIES AND HEADERS
+#set_target_properties(race PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
 
 
 

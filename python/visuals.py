@@ -18,7 +18,7 @@ def racevisuals(anim=True,show=True,save=False,filename=None,nsteps=None,
 
         fig = plt.figure(figsize=(20,5))
         x=np.linspace(track.x_data.min(), track.x_data.max(), 1000)
-        ax = plt.axes(xlim=(-500, 10200),
+        ax = plt.axes(xlim=(track.x_data.min(), track.x_data.max()),
                       ylim=(track.cspline(x).min()-1,
                             track.cspline(x).max()+2*track.cspline2(x).max()+1))
         plt.vlines(0.0,-1,22,'k')
@@ -152,3 +152,31 @@ print('hist anim done')
 plt.show()
 plt.clf()
 '''
+
+
+def speedsvisuals(runnerslist=None,nsteps=None,track=None,group=None,ninwaves=None,dpi=None):
+
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from tqdm import tqdm
+    plt.rcParams['figure.figsize'] = [16, 12]
+    plt.rcParams['figure.dpi'] = dpi # 200 e.g. is really fine, but slower
+
+
+
+    fig = plt.figure(figsize=(20,5))
+    t=np.linspace(0, nsteps, nsteps+1)
+    ax = plt.axes(xlim=(0, 6000),
+                  ylim=(group.vels[:,:].min(),
+                        group.vels[:,:].max()))
+
+    plt.xlabel('Time',fontsize=20)
+    plt.ylabel('Speeds (m/s)',fontsize=20)
+
+    for runner in runnerslist:
+        plt.plot(t,group.vels[runner,:],lw=0.5,label=str(runner))
+
+    if len(runnerslist)<11:
+        plt.legend()
+    plt.show()

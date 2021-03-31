@@ -106,7 +106,7 @@ class frunner():
 
     def init(self,nsteps,x0=0.0,sdelay=0.0):
         self.pos=np.zeros(nsteps+1)
-        self.vels=np.zeros(steps+1)
+        self.vels=np.zeros(nsteps+1)
         self.pos[0]=x0
         self.rank=None
         self.frontrunners=None

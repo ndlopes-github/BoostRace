@@ -34,7 +34,7 @@ struct observer
 
 // Fixed stept RK4 solver by boost.
 
-std::pair<dvec_i,dvec_ij> ode_system_solver(
+std::tuple<dvec_i,dvec_ij,dvec_ij> ode_system_solver(
                                             dvec_i avg_speeds,
                                             dvec_i slope_factors,
                                             dvec_i wave_delays,
@@ -55,6 +55,7 @@ std::pair<dvec_i,dvec_ij> ode_system_solver(
   auto x_vec = dvec_ij() ; //container for the solutions
   auto times =dvec_i();    // contanier for the times
   auto vels = dvec_ij();   // container for the velocities
+
   auto f= dxdt(avg_speeds,
                slope_factors,
                wave_delays,

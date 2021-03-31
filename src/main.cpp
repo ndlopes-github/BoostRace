@@ -52,7 +52,7 @@ int main(int /* argc */ , char** /* argv */ )
 
 
 
-    std::pair<dvec_i,dvec_ij> t_and_x=ode_system_solver(
+    std::tuple<dvec_i,dvec_ij,dvec_ij> t_and_x=ode_system_solver(
                                                         avg_speeds,
                                                         slope_factors,
                                                         wave_delays,
@@ -65,8 +65,8 @@ int main(int /* argc */ , char** /* argv */ )
                                                         race::dt);
 
     //]
-    dvec_i times=t_and_x.first;
-    dvec_ij states=t_and_x.second;
+    dvec_i times=std::get<0>(t_and_x);
+    dvec_ij states=std::get<1>(t_and_x);
     write_times_and_states(times, states, "times_and_states.bin");
     print_times_and_states(times, states);
 
