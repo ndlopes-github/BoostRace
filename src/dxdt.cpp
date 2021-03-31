@@ -143,13 +143,7 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
     {
       p=rho[idx];
       if (t<=m_wave_delays[idx]) continue;
-      //      if (t>m_wave_delays[idx])
-      //   {
-          dxdt[idx]=(1-p)*(cs.deriv(1,x[idx])*m_slope_factors[idx]+m_avg_speeds[idx])+p*VL[idx];
-          //  }
-          // else
-          // dxdt[idx]=0.0;
-      // Update the velocities to be kept by the observer
+      dxdt[idx]=(1-p)*(cs.deriv(1,x[idx])*m_slope_factors[idx]+m_avg_speeds[idx])+p*VL[idx];
       (*velocities_instance)[idx]=dxdt[idx];
     }
 
