@@ -103,7 +103,7 @@ print('End C++ Processing')
 # Each runner represents a row
 # positions are by rows so we have to transpose
 group.pos[:,:]=np.transpose(positions)
-group.vels[:,:]=velocities
+group.vels[:,:]=np.transpose(velocities)
 
 print('Writing to files with pickle C++')
 import pickle

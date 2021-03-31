@@ -12,6 +12,9 @@
 /* HERE WE SHOULD DEFINE THE RHS OF THE ODE SYSTEM*/
 
 
+#define DEBUG
+
+
 bool positionsort ( const tri_xvi&l, const tri_xvi& r)
 { return std::get<0>(l) < std::get<0>(r); }
 
@@ -123,10 +126,15 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
 
 
 
+
   for(size_t idx=0;idx<dxdt.size();idx++){
     if (t>m_wave_delays[idx])
       {
         p=densityfactor[idx];
+#ifdef DEBUG
+        p=0;
+        VL[idx]=0.0;
+#endif
         dxdt[idx]=(1-p)*(cs.deriv(1,x[idx])*m_slope_factors[idx]+m_avg_speeds[idx])+p*VL[idx];
       }
     else
