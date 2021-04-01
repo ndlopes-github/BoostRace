@@ -111,9 +111,14 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
       int MINN=floor(1./4.*m_foresight_area[xidx]); //floor(1./4.*m_foresight_area) in this case impact should be p=0.4
       int MAXN=2*MINN; //MAX is the maximum number of runners in the foresight that impacts the runners speed
       auto frontispeeds = dvec_i(); // container for the instantaneous speeds of the runners in the foresigh area
-      if (((i+MINN)> sorted_xvi.end()-1)||(std::get<0>(*(i+MINN))-std::get<0>(*i)>=linear_view)) continue;
+      // Guarding conditions for indexing
+      if ((MINN<2)|| // At the  worst case (very narrow area) the runner has at least 2 runners in the impact zone
+          ((i+MINN)> sorted_xvi.end()-1)|| //there are at leat MINN runners in front of runner i
+          (std::get<0>(*(i+MINN))-std::get<0>(*i)>=linear_view)) // the MINN runner in front is in the impact zone
+        continue;
 
       rho[std::get<2>(*i)]=0.4;
+
       for (size_t ids=MINN;ids<MAXN+1;ids++)
         if (i+ids>sorted_xvi.end()-1) continue;
         else if (std::get<0>(*(i+ids))-std::get<0>(*i)<linear_view)
@@ -129,7 +134,8 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
       std::sort(frontispeeds.begin()+1,frontispeeds.end());
 
        // Runner can not speed up if the guys in front are faster than him
-      VL[std::get<2>(*i)]=std::min(std::accumulate(frontispeeds.begin()+1,frontispeeds.begin()+6,0.0)/5,frontispeeds[0]);
+      int navg=MINN/2;
+      VL[std::get<2>(*i)]=std::min(std::accumulate(frontispeeds.begin()+1,frontispeeds.begin()+navg+1,0.0)/navg,frontispeeds[0]);
 
       frontispeeds.clear();
 
