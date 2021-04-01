@@ -72,6 +72,7 @@ dxdt::dxdt(dvec_i avg_speeds,
   std::cout <<"Ending constructor of dxdt. Elapsed time: ";
 }
 
+#ifndef DEBUG
 void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double  t )
 {
   //**** sort all the runners by position ********************
@@ -151,7 +152,20 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
       (*velocities_instance)[idx]=dxdt[idx]; // Update the velocities_instance with the dxdt values
     }
 
-
 };
+
+#endif
+
+#ifdef DEBUG
+void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double  t )
+{
+  for(size_t idx=0;idx<dxdt.size();idx++)
+    {
+      if (t<=m_wave_delays[idx]) continue;
+      dxdt[idx]=cs.deriv(1,x[idx])*m_slope_factors[idx]+m_avg_speeds[idx];
+      (*velocities_instance)[idx]=dxdt[idx]; // Update the velocities_instance with the dxdt values
+    }
+};
+#endif
 
 //]
