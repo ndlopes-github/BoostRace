@@ -38,7 +38,7 @@ NSTEPS=int(args['nsteps'])
 ###################################################
 ### RACE SIMULATION ###############################
 
-from tracks import track2 as track
+from tracks import track3 as track
 #track.slopeplot()
 
 #Race Settings

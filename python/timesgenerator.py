@@ -111,7 +111,7 @@ def inversepseudosigmoid2(number,lnumber,ldist,ninwaves,wavedelays):
         for i in range(nrunners):
             if (i+1)%lnumber==0:
                 linecounter+=1
-            InitPositions[i+itemcount]=-linecounter*ldist
+            InitPositions[i+itemcount]=-linecounter*ldist+0.30*np.random.random_sample()-0.15
             WaveDelays[i+itemcount]=wavedelays[nwave]
         itemcount+=nrunners
 
