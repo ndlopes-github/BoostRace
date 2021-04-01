@@ -49,9 +49,9 @@ from timesgenerator import *
 
 rnum=RNUM
 ninwaves=[rnum//3,rnum//3,rnum//3+1]
-wavedelays=[0.0,360.0,720.0]
+wavedelays=[0.0,300.0,600.0]
 
-FAvgTimes, _, InitPositions, WaveDelays = inversepseudosigmoid(number=rnum,
+FAvgTimes, _, InitPositions, WaveDelays = inversepseudosigmoid2(number=rnum,
                                                                lnumber=10,
                                                                ldist=0.5,
                                                                ninwaves=ninwaves,

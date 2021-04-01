@@ -23,9 +23,11 @@ RunnerDist=np.array([5,8,10,12,13,18,31,40,45,72,96,88,109,131,155,
 AcumulatedRelativeRunnerDist=np.cumsum(RunnerDist/np.sum(RunnerDist))
 
 def inversepseudosigmoid(number,lnumber,ldist,ninwaves,wavedelays):
-    RandDist=np.random.uniform(0.,1.0,size=(number,))
+
+    RandDist=np.random.uniform(0,1,size=(number,))
     AvgTimes=CubicSpline(AcumulatedRelativeRunnerDist,TimeBins)(RandDist)
     AvgTimes=np.sort(AvgTimes) # The Fastest are in the first Lines
+
     InitPositions=np.zeros(number)
     WaveDelays=np.zeros(number)
     ninwaves=np.array(ninwaves)
@@ -35,6 +37,74 @@ def inversepseudosigmoid(number,lnumber,ldist,ninwaves,wavedelays):
     assert number==ninwaves.sum(),'number of runners in waves do not match'
     nwaves=len(wavedelays)
     assert number==ninwaves.sum(), 'Sum of Waves not matching number of runners'
+
+    #Generate soft mixture of the runners thru waves
+
+
+    itemcount=0
+    for nwave,nrunners in enumerate(ninwaves):
+        linecounter=0
+        for i in range(nrunners):
+            if (i+1)%lnumber==0:
+                linecounter+=1
+            InitPositions[i+itemcount]=-linecounter*ldist
+            WaveDelays[i+itemcount]=wavedelays[nwave]
+        itemcount+=nrunners
+
+    return AvgTimes, RandDist,InitPositions, WaveDelays
+
+
+
+
+def inversepseudosigmoid2(number,lnumber,ldist,ninwaves,wavedelays):
+    assert len(ninwaves)==3, "Wrong function"
+    # w1=[0.8,0.05,0.15]
+    # w2=[0.15,0.1,0.75]
+    # w3=[0.15,0.1,0.75]
+
+
+    RD1=np.random.uniform(0,1./3.,size=(int(80*ninwaves[0]/100),))
+    RD2=np.random.uniform(1./3.,2./3,size=(int(5*ninwaves[0]/100),))
+    RD3=np.random.uniform(2./3.,1,size=(int(15*ninwaves[0]/100),))
+
+    RD4=np.random.uniform(0,1./3.,size=(int(5*ninwaves[1]/100),))
+    RD5=np.random.uniform(1./3.,2./3,size=(int(80*ninwaves[1]/100),))
+    RD6=np.random.uniform(2./3.,1,size=(int(15*ninwaves[1]/100),))
+
+    RD7=np.random.uniform(0,1./3.,size=(int(15*ninwaves[2]/100),))
+    RD8=np.random.uniform(1./3.,2./3,size=(int(10*ninwaves[2]/100),))
+    RD9=np.random.uniform(2./3.,1,size=(int(75*ninwaves[2]/100)+5,))
+
+
+    W1=np.concatenate((RD1,RD2,RD3),axis=None)
+    W1=np.random.permutation(W1)
+    W2=np.concatenate((RD4,RD5,RD6),axis=None)
+    W2=np.random.permutation(W2)
+    W3=np.concatenate((RD7,RD8,RD9),axis=None)
+    W3=np.random.permutation(W3)
+
+    RandDist=np.concatenate((W1,W2,W3),axis=None)
+
+    AvgTimes=CubicSpline(AcumulatedRelativeRunnerDist,TimeBins)(RandDist)
+    print(len(AvgTimes))
+
+
+
+    #AvgTimes=np.sort(AvgTimes) # The Fastest are in the first Lines
+
+    InitPositions=np.zeros(number)
+    WaveDelays=np.zeros(number)
+    ninwaves=np.array(ninwaves)
+    wavedelays=np.array(wavedelays)
+
+    assert len(wavedelays)==len(ninwaves),'wave delays and number of waves do not match'
+    assert number==ninwaves.sum(),'number of runners in waves do not match'
+    nwaves=len(wavedelays)
+    assert number==ninwaves.sum(), 'Sum of Waves not matching number of runners'
+
+    #Generate soft mixture of the runners thru waves
+
+
     itemcount=0
     for nwave,nrunners in enumerate(ninwaves):
         linecounter=0
@@ -57,7 +127,7 @@ if __name__== '__main__':
     plt.clf()
     plt.plot(acp,TimeBins,'ko',ms=2.)
     plt.plot(acp,CubicSpline(acp,TimeBins)(acp),'r-',lw=0.5)
-    AvgTimes,RandDist,_,_=inversepseudosigmoid(1000,10,0.5,[200,400,400],[0,360,720])
+    AvgTimes,RandDist,_,_=inversepseudosigmoid2(10000,10,0.5,[3333,3333,3334],[0,360,720])
     plt.plot(RandDist, AvgTimes,'b+')
     plt.show()
     print(AvgTimes)
