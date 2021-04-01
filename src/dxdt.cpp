@@ -12,9 +12,6 @@
 /* HERE WE SHOULD DEFINE THE RHS OF THE ODE SYSTEM*/
 
 
-bool positionsort ( const tri_xvi&l, const tri_xvi& r)
-{ return std::get<0>(l) < std::get<0>(r); }
-
 dxdt::dxdt(dvec_i avg_speeds,
            dvec_i slope_factors,
            dvec_i wave_delays,
@@ -77,25 +74,25 @@ dxdt::dxdt(dvec_i avg_speeds,
 
 void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double  t )
 {
-
   //**** sort all the runners by position ********************
   // generate a tuple with position, velocity, index
 
   auto sorted_xvi = std::vector<tri_xvi>(x.size());
   for (size_t idx=0; idx<x.size(); idx++){
     // Tuple with (position, instant speed, index)
-    sorted_xvi[idx]=std::make_tuple(x[idx],(*velocities_instance)[idx],idx);
+    sorted_xvi[idx]=std::make_tuple(x[idx],dxdt[idx],idx);
     // Shouldn't  (*velocities_instance)[idx] and dxdt[idx] be equal at this step ?
     // (*velocities_instance)  velocities to be keept by the observer at each time step
     // while dxdt[idx] is update by the intermidiate steps of the stepper/solver.
-
 
     #ifdef DEBUG
     if(std::fabs((*velocities_instance)[idx]-dxdt[idx])>1.e-6)
       std::cout<< std::fabs((*velocities_instance)[idx]-dxdt[idx])<< " error"<<std::endl;
     #endif
   }
-  std::sort(sorted_xvi.begin(),sorted_xvi.end(),positionsort);
+  // Using lambda function for position sort
+  std::sort(sorted_xvi.begin(),sorted_xvi.end(),
+            []( const tri_xvi&l, const tri_xvi& r){ return std::get<0>(l) < std::get<0>(r);});
   // end sorting
 
   // Create a density container for each runner foresight
@@ -109,32 +106,33 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
   for(std::vector<tri_xvi>::const_iterator i = sorted_xvi.begin(); i != sorted_xvi.end(); ++i)
     {
       if  (std::get<0>(*i)>road_end) continue;
-      int xidx=floor(std::get<0>(*i))-road_start;
+      int xidx=floor(std::get<0>(*i))-road_start; //
       //MINN is the minimum number of runners in the foresight that impacts the runners speed
       int MINN=floor(1./4.*m_foresight_area[xidx]); //floor(1./4.*m_foresight_area) in this case impact should be p=0.4
       int MAXN=2*MINN; //MAX is the maximum number of runners in the foresight that impacts the runners speed
       auto frontispeeds = dvec_i(); // container for the instantaneous speeds of the runners in the foresigh area
-      if ((i+MINN)< sorted_xvi.end())
-        if(std::get<0>(*(i+MINN))-std::get<0>(*i)<linear_view)
-          {
-            rho[std::get<2>(*i)]=0.4;
-            for (size_t ids=MINN;ids<MAXN;ids++)
-                if (i+ids>=sorted_xvi.end()) continue;
-                else if (std::get<0>(*(i+ids))-std::get<0>(*i)<linear_view)
-                         rho[std::get<2>(*i)]+=(1.0/40.);
-            int ids=0;
+      if (((i+MINN)> sorted_xvi.end()-1)||(std::get<0>(*(i+MINN))-std::get<0>(*i)>=linear_view)) continue;
 
-            while((i+ids<sorted_xvi.end())&&(ids<MAXN)){
-              frontispeeds.push_back((*velocities_instance)[std::get<2>(*(i+ids))]);
-              ids++;}
+      rho[std::get<2>(*i)]=0.4;
+      for (size_t ids=MINN;ids<MAXN+1;ids++)
+        if (i+ids>sorted_xvi.end()-1) continue;
+        else if (std::get<0>(*(i+ids))-std::get<0>(*i)<linear_view)
+          rho[std::get<2>(*i)]+=(1.0/40.);
 
-            std::sort(frontispeeds.begin()+1,frontispeeds.end());
+      int ids=0;
+      while((i+ids<sorted_xvi.end())&&(ids<MAXN+1)){
+        // Note that when ids=0 the runner speed is keept in the first position of the frontispeeds container
+        frontispeeds.push_back((*velocities_instance)[std::get<2>(*(i+ids))]);
+        ids++;}
 
-            if (frontispeeds.size()>5) // Runner can not speed up if the guys in front are faster than him
-              VL[std::get<2>(*i)]=std::min(std::accumulate(frontispeeds.begin()+1,frontispeeds.begin()+6,0.0)/5,frontispeeds[0]);
+      // Sort the speeds of the runners in the impact zone
+      std::sort(frontispeeds.begin()+1,frontispeeds.end());
 
-            frontispeeds.clear();
-          }
+       // Runner can not speed up if the guys in front are faster than him
+      VL[std::get<2>(*i)]=std::min(std::accumulate(frontispeeds.begin()+1,frontispeeds.begin()+6,0.0)/5,frontispeeds[0]);
+
+      frontispeeds.clear();
+
     }
 
   // Update the system velocities
@@ -144,7 +142,7 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
       p=rho[idx];
       if (t<=m_wave_delays[idx]) continue;
       dxdt[idx]=(1-p)*(cs.deriv(1,x[idx])*m_slope_factors[idx]+m_avg_speeds[idx])+p*VL[idx];
-      (*velocities_instance)[idx]=dxdt[idx];
+      (*velocities_instance)[idx]=dxdt[idx]; // Update the velocities_instance with the dxdt values
     }
 
 
