@@ -105,7 +105,7 @@ print('End C++ Processing')
 group.pos[:,:]=np.transpose(positions)
 group.vels[:,:]=np.transpose(velocities)
 
-print('Writing to files with pickle C++')
+print('Writing to files with pickle')
 import pickle
 #save it
 with open(f'results/nsteps.pickle', 'wb') as file:
