@@ -180,3 +180,31 @@ def speedsvisuals(runnerslist=None,nsteps=None,track=None,group=None,ninwaves=No
     if len(runnerslist)<11:
         plt.legend()
     plt.show()
+
+def rhossvisuals(runnerslist=None,nsteps=None,track=None,group=None,ninwaves=None,dpi=None):
+
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from tqdm import tqdm
+    plt.rcParams['figure.figsize'] = [16, 12]
+    plt.rcParams['figure.dpi'] = dpi # 200 e.g. is really fine, but slower
+
+
+
+    fig = plt.figure(figsize=(20,5))
+    t=np.linspace(0, nsteps, nsteps+1)
+    ax = plt.axes(xlim=(0, 6000),
+                  ylim=(group.rhos[:,:].min(),
+                        group.rhos[:,:].max()))
+    print(group.rhos[:,:].max())
+
+    plt.xlabel('Time',fontsize=20)
+    plt.ylabel('weight p',fontsize=20)
+
+    for runner in runnerslist:
+        plt.plot(t,group.rhos[runner,:],lw=0.25,label=str(runner))
+
+    if len(runnerslist)<11:
+        plt.legend()
+    plt.show()

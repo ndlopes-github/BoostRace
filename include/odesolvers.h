@@ -7,7 +7,7 @@
 
 
 // Runge-Kutta fourth order. Constant time_step
-std::tuple<dvec_i,dvec_ij,dvec_ij> ode_system_solver(
+std::tuple<dvec_i,dvec_ij,dvec_ij,dvec_ij> ode_system_solver(
                                             dvec_i avg_speeds,
                                             dvec_i slopes_factors,
                                             dvec_i wave_delays,

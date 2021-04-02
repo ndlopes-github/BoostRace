@@ -38,7 +38,7 @@ NSTEPS=int(args['nsteps'])
 ###################################################
 ### RACE SIMULATION ###############################
 
-from tracks import track3 as track
+from tracks import track2 as track
 #track.slopeplot()
 
 #Race Settings
@@ -86,7 +86,7 @@ end_time=nsteps*time_step
 ### PROCESSING ###########################################################
 import odesolvers as os
 print('Start C++ Processing')
-times, positions, velocities=os.ode_system_solver(
+times, positions, velocities, rhos=os.ode_system_solver(
     avg_speeds,
     slope_factors,
     wave_delays,
@@ -104,6 +104,7 @@ print('End C++ Processing')
 # positions are by rows so we have to transpose
 group.pos[:,:]=np.transpose(positions)
 group.vels[:,:]=np.transpose(velocities)
+group.rhos[:,:]=np.transpose(rhos)
 
 print('Writing to files with pickle')
 import pickle
@@ -127,23 +128,3 @@ file.close()
 with open(f'results/ninwaves.pickle', 'wb') as file:
     pickle.dump(ninwaves, file)
 file.close()
-
-'''
-from visuals import *
-DPI=150
-FPS=25  #Frames per second
-
-ANIM=int(args['anim']) # execute animation
-SHOW=0
-if ANIM:
-    SHOW=int(args['show']) #Show animation
-
-FILENAME=args['animfile']
-if(args['animfile'] == None):
-    SAVE=0
-else:
-    SAVE=1 #Save to File
-
-racevisuals(anim=ANIM,show=SHOW,save=SAVE,filename=FILENAME,nsteps=nsteps,
-            track=track,group=group,ninwaves=ninwaves,fps=FPS,dpi=DPI)
-'''

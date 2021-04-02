@@ -27,7 +27,8 @@ dxdt::dxdt(dvec_i avg_speeds,
   road_end(ceil(track_x_data[track_x_data.size()-1])),
   cs(track_x_data,track_diff_data),
   cs2(track_x_data,track_width_data),
-  velocities_instance(std::make_shared<dvec_i>(avg_speeds.size(),0))
+  velocities_instance(std::make_shared<dvec_i>(avg_speeds.size(),0)),
+  rhos_instance(std::make_shared<dvec_i>(avg_speeds.size(),0))
 {
   std::cout <<" Constructing dxdt." << std::endl;
   boost::progress_timer t;
@@ -113,8 +114,8 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
       int MAXN=2*MINN; //MAX is the maximum number of runners in the foresight that impacts the runners speed
       auto frontispeeds = dvec_i(); // container for the instantaneous speeds of the runners in the foresigh area
       // Guarding conditions for indexing
-      if ((MINN<2)|| // At the  worst case (very narrow area) the runner has at least 2 runners in the impact zone
-          ((i+MINN)> sorted_xvi.end()-1)|| //there are at leat MINN runners in front of runner i
+      if ((MINN<3)|| // At the  worst case (very narrow area) the runner has at least 3 runners in the impact zone
+          ((i+MINN)> sorted_xvi.end()-1)|| //there are at least MINN runners in front of runner i
           (std::get<0>(*(i+MINN))-std::get<0>(*i)>=linear_view)) // the MINN runner in front is in the impact zone
         continue;
 
@@ -128,7 +129,7 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
       int ids=0;
       while((i+ids<sorted_xvi.end())&&(ids<MAXN+1)){
         // Note that when ids=0 the runner speed is keept in the first position of the frontispeeds container
-        frontispeeds.push_back((*velocities_instance)[std::get<2>(*(i+ids))]);
+        frontispeeds.push_back(dxdt[std::get<2>(*(i+ids))]);
         ids++;}
 
       // Sort the speeds of the runners in the impact zone
@@ -149,7 +150,8 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
       p=rho[idx];
       if (t<=m_wave_delays[idx]) continue;
       dxdt[idx]=(1-p)*(cs.deriv(1,x[idx])*m_slope_factors[idx]+m_avg_speeds[idx])+p*VL[idx];
-      (*velocities_instance)[idx]=dxdt[idx]; // Update the velocities_instance with the dxdt values
+      (*velocities_instance)[idx]=dxdt[idx];// Update the velocities_instance with the dxdt values
+      (*rhos_instance)[idx]=rho[idx];
     }
 
 };

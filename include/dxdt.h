@@ -33,7 +33,7 @@ class dxdt{
 
 public:
   std::shared_ptr<dvec_i> velocities_instance;
-
+  std::shared_ptr<dvec_i> rho_instance;
 
 
   dxdt(dvec_i avg_speeds,

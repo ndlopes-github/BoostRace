@@ -12,13 +12,22 @@ struct observer
   dvec_ij &m_states;
   dvec_i &m_times;
   dvec_ij &m_dxdt;
+  dvec_ij &m_rho;
   dxdt &m_f; // object from dxdt class to track
 
 
   boost::progress_display &m_show_progress;
 
-  observer( dvec_ij &states , dvec_i &times, dvec_ij &vels,dxdt &f, boost::progress_display &show_progress )
-    : m_states(states) , m_times(times), m_dxdt(vels), m_f(f), m_show_progress(show_progress) { }
+  observer( dvec_ij &states , dvec_i &times,
+            dvec_ij &vels,
+            dvec_ij &rho,
+            dxdt &f,
+            boost::progress_display &show_progress )
+    : m_states(states) , m_times(times),
+      m_dxdt(vels),
+      m_rho(rho),
+      m_f(f),
+      m_show_progress(show_progress) { }
   //Constructor for the m_states and m_times member of the struct
 
   void operator()( const dvec_i &x , double t)
@@ -26,6 +35,7 @@ struct observer
         m_states.push_back( x );
         m_times.push_back( t );
         m_dxdt.push_back(*(m_f.velocities_instance));
+        m_rho.push_back(*(m_f.rho_instance));
         ++m_show_progress;
     }
 };
@@ -34,7 +44,7 @@ struct observer
 
 // Fixed stept RK4 solver by boost.
 
-std::tuple<dvec_i,dvec_ij,dvec_ij> ode_system_solver(
+std::tuple<dvec_i,dvec_ij,dvec_ij,dvec_ij> ode_system_solver(
                                             dvec_i avg_speeds,
                                             dvec_i slope_factors,
                                             dvec_i wave_delays,
@@ -55,6 +65,7 @@ std::tuple<dvec_i,dvec_ij,dvec_ij> ode_system_solver(
   auto x_vec = dvec_ij() ; //container for the solutions
   auto times =dvec_i();    // contanier for the times
   auto vels = dvec_ij();   // container for the velocities
+  auto rhos = dvec_ij();   // container for the rhos
 
   auto f= dxdt(avg_speeds,
                slope_factors,
@@ -76,6 +87,7 @@ std::tuple<dvec_i,dvec_ij,dvec_ij> ode_system_solver(
                                                          time_step,
                                                          observer(x_vec,times,
                                                                   vels,
+                                                                  rhos,
                                                                   f,
                                                                   show_progress));
 
@@ -88,5 +100,5 @@ std::tuple<dvec_i,dvec_ij,dvec_ij> ode_system_solver(
   std::cout <<"Ending ode_system_solver. Elapsed time: ";
 
 
-  return std::make_tuple(times,x_vec,vels);
+  return std::make_tuple(times,x_vec,vels,rhos);
 };
