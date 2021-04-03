@@ -215,10 +215,10 @@ def histvisuals(nsteps=None,group=None):
     import matplotlib.pyplot as plt
     from matplotlib import animation
     frames=nsteps//2
-    nums=np.zeros((frames,10000))
+    nums=np.zeros((frames,5000))
 
     for i in range(0,frames):
-        nums[i],bins = np.histogram(group.pos[:,i*2],10000, density=False, range=(0,10000))
+        nums[i],bins = np.histogram(group.pos[:,i*2],5000, density=False, range=(0,10000))
         print('hist step=',i)
 
 
