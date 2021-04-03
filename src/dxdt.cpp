@@ -55,23 +55,13 @@ dxdt::dxdt(dvec_i avg_speeds,
     m_foresight_area.push_back(0.5*(wi+wip)*linear_view);
     //std::cout<<"Foresight has "<<m_foresight_area[meter] <<" squared meters at position"<< meter<< std::endl;
   }
-
-
-#ifdef DEBUG
-  // Testing Sandbox
-  //road_begin = std::make_shared<dvec_i>(m_road_w);
-  std::cout<<"Testing Track has "<< road_end-road_start <<" meters"<< std::endl;
-  //std::cout<<"Testing Track has "<< (*road_begin)[2500] <<" meters"<< std::endl;
-  std::cout<<"Track vector has "<< *(m_road_w.begin()-road_start+road_end) <<" meters"<< std::endl;
-
-  int road_pos=2000;
-  std::cout<<"Track vector has "<< *(m_road_w.begin()-road_start+road_pos) <<" meters"<< std::endl;
-  road_pos=1996;
-  std::cout<<"Foresight has "<< *(m_foresight_area.begin()-road_start+road_pos) <<" squared meters"<<  std::endl;
-#endif
-
   std::cout <<"Ending constructor of dxdt. Elapsed time: ";
 }
+
+
+
+
+
 
 #ifndef DEBUG
 void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double  t )
@@ -99,7 +89,6 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
 
   // Create a density container for each runner foresight
   auto rho= dvec_i(x.size(),0.0); // rho for density factor. container for the factors that reflects the density
-
   // Create a container for the average velocities of the 5 runners in front
   // to be used when rho !=0 for
   auto VL = dvec_i(x.size(),0.0); // For VL calculation. average of the  slowest in front of the runner
@@ -124,7 +113,7 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
       for (size_t ids=MINN;ids<MAXN+1;ids++)
         if (i+ids>sorted_xvi.end()-1) continue;
         else if (std::get<0>(*(i+ids))-std::get<0>(*i)<linear_view)
-          rho[std::get<2>(*i)]+=(1.0/40.);
+          rho[std::get<2>(*i)]+=(1.0/(2*MAXN)); // This one should be fixed it was 1.0/40.0.
 
       int ids=0;
       while((i+ids<sorted_xvi.end())&&(ids<MAXN+1)){
@@ -150,6 +139,7 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
       p=rho[idx];
       if (t<=m_wave_delays[idx]) continue;
       dxdt[idx]=(1-p)*(cs.deriv(1,x[idx])*m_slope_factors[idx]+m_avg_speeds[idx])+p*VL[idx];
+
       (*velocities_instance)[idx]=dxdt[idx];// Update the velocities_instance with the dxdt values
       (*rhos_instance)[idx]=rho[idx];
     }
@@ -157,6 +147,20 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
 };
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #ifdef DEBUG
 void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double  t )

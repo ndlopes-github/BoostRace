@@ -35,7 +35,7 @@ struct observer
         m_states.push_back( x );
         m_times.push_back( t );
         m_dxdt.push_back(*(m_f.velocities_instance));
-        m_rho.push_back(*(m_f.rho_instance));
+        m_rho.push_back(*(m_f.rhos_instance));
         ++m_show_progress;
     }
 };
