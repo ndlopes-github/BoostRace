@@ -208,3 +208,52 @@ def rhossvisuals(runnerslist=None,nsteps=None,track=None,group=None,ninwaves=Non
     if len(runnerslist)<11:
         plt.legend()
     plt.show()
+
+
+def histvisuals(nsteps=None,group=None):
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from matplotlib import animation
+    frames=nsteps//2
+    nums=np.zeros((frames,10000))
+
+    for i in range(0,frames):
+        nums[i],bins = np.histogram(group.pos[:,i*2],10000, density=False, range=(0,10000))
+        print('hist step=',i)
+
+
+        # First set up the figure, the axis, and the plot element we want to animate
+    fig = plt.figure()
+    ax = plt.axes(xlim=(0, 10000), ylim=(0, 13))
+    line, = ax.plot([], [], lw=2)
+    x=np.linspace(0,10000,10000)
+    # plt.plot(x,Estrada(x),'-')
+    plt.ylim(ymin=0,ymax=30)
+    plt.xlabel('Road -- meters',fontsize=20)
+    plt.ylabel('Runners per meter',fontsize=20)
+
+    # initialization function: plot the background of each frame
+    def init():
+        line.set_data([], [])
+        return line,
+
+    # animation function.  This is called sequentially
+    def animate(i):
+        x = bins[0:len(bins)-1]
+        y = nums[i]
+        line.set_data(x, y)
+        return line,
+
+
+    # call the animator.  blit=True means only re-draw the parts that have changed.
+    anim = animation.FuncAnimation(fig, animate, init_func=init,
+                                   frames=frames, interval=20, blit=True)
+
+    # save the animation as an mp4.  This requires ffmpeg or mencoder to be
+    # installed.  The extra_args ensure that the x264 codec is used, so that
+    # the video can be embedded in html5.  You may need to adjust this for
+    # your system: for more information, see
+    # http://matplotlib.sourceforge.net/api/animation_api.html
+    # anim.save('hist_animation.mp4', fps=30, extra_args=['-vcodec', 'libx264'])
+    print('hist anim done')
+    plt.show()
