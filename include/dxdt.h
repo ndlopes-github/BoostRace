@@ -21,11 +21,11 @@ class dxdt{
   dvec_i m_track_diff_data;
   dvec_i m_wave_delays;
   //std::shared_ptr<dvec_i> road_begin;
-  //dvec_i m_road_z; // not required for now
-  //dvec_i m_road_dzdx; // not required for now
   int road_start;
   int road_end;
   int linear_view=4; //linear impact zone for velocity perturbation, maybe passed as arg
+  // dvec_i m_road_z; // not required for now
+  // dvec_i m_road_dzdx; // not required for now
   dvec_i m_road_w;
   dvec_i m_foresight_area;
   tk::spline cs;

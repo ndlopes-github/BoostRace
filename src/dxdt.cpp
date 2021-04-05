@@ -41,18 +41,18 @@ dxdt::dxdt(dvec_i avg_speeds,
   double wi=0.0;
   double wip=0.0;
   for(size_t meter=0;meter<Wsize;meter ++){
-    //m_road_z.push_back(cs(meter));
-    //m_road_dzdx.push_back(cs.deriv(1,meter));
+    // m_road_z.push_back(cs(meter));
+    // m_road_dzdx.push_back(cs.deriv(1,meter));
     m_road_w.push_back(cs2(meter));
    }
 
-  for(size_t meter=0;meter<Wsize;meter ++){
-    if(meter<Wsize-linear_view){
-      wi=m_road_w[meter];
-      wip=m_road_w[meter+linear_view];
-    }
-    else {wi=10.0; wip=10.0;}
-    m_foresight_area.push_back(0.5*(wi+wip)*linear_view);
+  for(size_t meter=0;meter<Wsize;meter++){
+    double area=0.0;
+    if(meter<Wsize-linear_view)
+      for (size_t i=0; i<linear_view; i++)
+        area+=m_road_w[meter];
+    else area=40;
+    m_foresight_area.push_back(area);
     //std::cout<<"Foresight has "<<m_foresight_area[meter] <<" squared meters at position"<< meter<< std::endl;
   }
   std::cout <<"Ending constructor of dxdt. Elapsed time: ";
@@ -139,6 +139,7 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
       p=rho[idx];
       if (t<=m_wave_delays[idx]) continue;
       dxdt[idx]=(1-p)*(cs.deriv(1,x[idx])*m_slope_factors[idx]+m_avg_speeds[idx])+p*VL[idx];
+      //dxdt[idx]=(1-p)*(m_road_dzdx[floor(x[idx])-road_start]*m_slope_factors[idx]+m_avg_speeds[idx])+p*VL[idx];
 
       (*velocities_instance)[idx]=dxdt[idx];// Update the velocities_instance with the dxdt values
       (*rhos_instance)[idx]=rho[idx];
