@@ -11,7 +11,7 @@ def racevisuals(anim=True,show=True,save=False,filename=None,nsteps=None,
                 track=None,group=None,ninwaves=None,fps=None,dpi=None,cache_frame_data=True):
 
     if anim:
-        plt.rcParams['figure.figsize'] = [16, 12]
+        plt.rcParams['figure.figsize'] = [8, 6]
         plt.rcParams['figure.dpi'] = dpi # 200 e.g. is really fine, but slower
 
         from matplotlib import animation
@@ -67,8 +67,6 @@ def racevisuals(anim=True,show=True,save=False,filename=None,nsteps=None,
             roadZ[:,i]=track.cspline(group.pos[:,i])
             roadW[:,i]=track.cspline2(group.pos[:,i])
 
-        #scat=ax.scatter(group.pos[:,0],Y)
-        #scat=ax.scatter([],[],s=3.0)
 
         def init():
             for line in lines:
@@ -206,5 +204,5 @@ def histvisuals(nsteps=None,group=None):
     # http://matplotlib.sourceforge.net/api/animation_api.html
     # anim.save('hist_animation.mp4', fps=30, extra_args=['-vcodec', 'libx264'])
     print('hist anim done')
-    plt.legend( )
     plt.show()
+    plt.clf()
