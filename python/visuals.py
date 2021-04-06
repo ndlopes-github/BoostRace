@@ -165,11 +165,11 @@ def histvisuals(nsteps=None,group=None):
     plt.rcParams['figure.figsize'] = [12, 6]
     plt.rcParams['figure.dpi'] = 100 # 200 e.g. is really fine, but slower
 
-    frames=nsteps//2
-    nums=np.zeros((frames,2500))
+    frames=nsteps
+    nums=np.zeros((frames,10000))
 
     for i in range(0,frames):
-        nums[i],bins = np.histogram(group.pos[:,i*2],2500, density=False, range=(0,10000))
+        nums[i],bins = np.histogram(group.pos[:,i],10000, density=False, range=(0,10000))
 
 
         # First set up the figure, the axis, and the plot element we want to animate
@@ -206,4 +206,5 @@ def histvisuals(nsteps=None,group=None):
     # http://matplotlib.sourceforge.net/api/animation_api.html
     # anim.save('hist_animation.mp4', fps=30, extra_args=['-vcodec', 'libx264'])
     print('hist anim done')
+    plt.legend( )
     plt.show()

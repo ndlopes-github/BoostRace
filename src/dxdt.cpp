@@ -127,22 +127,23 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
        // Runner can not speed up if the guys in front are faster than him
       int navg=MINN/2;
       VL[std::get<2>(*i)]=std::min(std::accumulate(frontispeeds.begin()+1,frontispeeds.begin()+navg+1,0.0)/navg,frontispeeds[0]);
-
       frontispeeds.clear();
 
     }
 
   // Update the system velocities
-  double p=0;
+  double p=0.0;
+  double aux=0.0;
   for(size_t idx=0;idx<dxdt.size();idx++)
     {
       p=rho[idx];
       if (t<=m_wave_delays[idx]) continue;
-      dxdt[idx]=(1-p)*(cs.deriv(1,x[idx])*m_slope_factors[idx]+m_avg_speeds[idx])+p*VL[idx];
+      if (fabs(dxdt[idx]-VL[idx])<1.e-5)  aux=0.0; else aux=p;
+      dxdt[idx]=(1-aux)*(cs.deriv(1,x[idx])*m_slope_factors[idx]+m_avg_speeds[idx])+aux*VL[idx];
       //dxdt[idx]=(1-p)*(m_road_dzdx[floor(x[idx])-road_start]*m_slope_factors[idx]+m_avg_speeds[idx])+p*VL[idx];
 
       (*velocities_instance)[idx]=dxdt[idx];// Update the velocities_instance with the dxdt values
-      (*rhos_instance)[idx]=rho[idx];
+      (*rhos_instance)[idx]=aux;//rho[idx];
     }
 
 };
