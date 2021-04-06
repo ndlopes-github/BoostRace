@@ -1,4 +1,1 @@
 export PYTHONPATH=./build/:./python/:$PYTHONPATH
-
-#IF ON UBUNTU/MATHMOULD
-export MPLBACKEND=TkAgg
