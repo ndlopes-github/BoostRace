@@ -204,7 +204,7 @@ def histvisuals(nsteps=None,group=None):
 
 
 def timesvisuals(times=None,group=None):
-    print(times)
+   #print(times)
 
     starttimes=np.zeros(group.size)
     endtimes=np.zeros(group.size)
@@ -213,7 +213,17 @@ def timesvisuals(times=None,group=None):
         tsidx=np.min(np.where(group.pos[runner,:]>0))
         teidx=np.min(np.where(group.pos[runner,:]>10000))
         starttimes[runner]=times[tsidx]
-        #endtimes[runner]=times[teidx]
+        endtimes[runner]=times[teidx]
 
     runnertimes=endtimes-starttimes
-    print(runnertimes)
+    rnt=[]
+    for rt in runnertimes:
+        rnt.append(datetime.timedelta(seconds =rt))
+
+    print(rnt)
+    #print(runnertimes)
+    plt.plot(runnertimes,'o',ms=0.5)
+   # plt.yticks(np.arange())
+    plt.ylabel("Time in seconds")
+    plt.xlabel("Runner index")
+    plt.show()
