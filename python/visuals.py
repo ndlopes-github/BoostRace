@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import animation
 from tqdm import tqdm
+import datetime
 
 
 
@@ -14,8 +15,6 @@ def racevisuals(anim=True,show=True,save=False,filename=None,nsteps=None,
         plt.rcParams['figure.figsize'] = [8, 6]
         plt.rcParams['figure.dpi'] = dpi # 200 e.g. is really fine, but slower
 
-        from matplotlib import animation
-        import datetime
 
         fig = plt.figure(figsize=(20,5))
         x=np.linspace(track.x_data.min(), track.x_data.max(), 1000)
@@ -132,10 +131,6 @@ def speedsvisuals(runnerslist=None,nsteps=None,track=None,group=None,ninwaves=No
 
 def rhossvisuals(runnerslist=None,nsteps=None,track=None,group=None,ninwaves=None,dpi=None):
 
-
-    import numpy as np
-    import matplotlib.pyplot as plt
-    from tqdm import tqdm
     plt.rcParams['figure.figsize'] = [16, 12]
     plt.rcParams['figure.dpi'] = dpi # 200 e.g. is really fine, but slower
 
@@ -206,3 +201,8 @@ def histvisuals(nsteps=None,group=None):
     print('hist anim done')
     plt.show()
     plt.clf()
+
+
+def timesvisuals(times=None,group=None):
+    times=np.zeros(group.size)
+    print(len(times))

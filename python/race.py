@@ -113,6 +113,11 @@ with open(f'results/nsteps.pickle', 'wb') as file:
     pickle.dump(nsteps, file)
 file.close()
 
+with open(f'results/times.pickle', 'wb') as file:
+    pickle.dump(times, file)
+file.close()
+
+
 with open(f'results/group.pickle', 'wb') as file:
     pickle.dump(group, file)
 file.close()

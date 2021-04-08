@@ -169,7 +169,7 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
 {
   for(size_t idx=0;idx<dxdt.size();idx++)
     {
-      if (t<=m_wave_delays[idx]) continue;
+      if ( t <= m_wave_delays[idx]) continue;
       dxdt[idx]=cs.deriv(1,x[idx])*m_slope_factors[idx]+m_avg_speeds[idx];
       (*velocities_instance)[idx]=dxdt[idx]; // Update the velocities_instance with the dxdt values
     }
