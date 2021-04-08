@@ -16,4 +16,13 @@ with open(f'results/times.pickle', 'rb') as file:
     times = pickle.load(file)
 file.close()
 
-timesvisuals(times=times,group=group)
+
+with open(f'results_free/group.pickle', 'rb') as file:
+    group_free = pickle.load(file)
+file.close()
+
+with open(f'results_free/times.pickle', 'rb') as file:
+    times_free = pickle.load(file)
+file.close()
+
+timesvisuals(times=times,times_free=times_free,group=group,group_free=group_free)

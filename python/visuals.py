@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from matplotlib import animation
 from tqdm import tqdm
 import datetime
-
+np.random.seed(2875620985)
 
 
 def racevisuals(anim=True,show=True,save=False,filename=None,nsteps=None,
@@ -203,7 +203,7 @@ def histvisuals(nsteps=None,group=None):
     plt.clf()
 
 
-def timesvisuals(times=None,group=None):
+def timesvisuals(times=None,times_free=None,group=None,group_free=None):
    #print(times)
 
     starttimes=np.zeros(group.size)
@@ -216,14 +216,36 @@ def timesvisuals(times=None,group=None):
         endtimes[runner]=times[teidx]
 
     runnertimes=endtimes-starttimes
-    rnt=[]
-    for rt in runnertimes:
-        rnt.append(datetime.timedelta(seconds =rt))
 
-    print(rnt)
+    starttimes_free=np.zeros(group_free.size)
+    endtimes_free=np.zeros(group_free.size)
+
+    for runner in range(group_free.size):
+        tsidx=np.min(np.where(group_free.pos[runner,:]>0))
+        teidx=np.min(np.where(group_free.pos[runner,:]>10000))
+        starttimes[runner]=times[tsidx]
+        endtimes[runner]=times[teidx]
+
+    runnertimes_free=endtimes-starttimes
+
+
+
+    # rnt=[]
+    # for rt in runnertimes:
+    #     rnt.append(datetime.timedelta(seconds =rt))
+
+    # print(rnt)
     #print(runnertimes)
-    plt.plot(runnertimes,'o',ms=0.5)
+    plt.plot(runnertimes,'o',ms=0.5,label='Race')
+    plt.plot(runnertimes_free,'o',ms=0.5,label='Alone')
    # plt.yticks(np.arange())
     plt.ylabel("Time in seconds")
     plt.xlabel("Runner index")
+    plt.legend()
+    plt.show()
+
+    plt.plot(runnertimes-runnertimes_free,'o',ms=0.5,label='Errors')
+    plt.ylabel("Time in seconds")
+    plt.xlabel("Runner index")
+    plt.legend()
     plt.show()

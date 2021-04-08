@@ -86,7 +86,7 @@ end_time=nsteps*time_step
 ### PROCESSING ###########################################################
 import odesolvers as os
 print('Start C++ Processing')
-times, positions, velocities, rhos=os.ode_system_solver(
+times, positions, velocities,rhos=os.ode_system_solver(
     avg_speeds,
     slope_factors,
     wave_delays,
