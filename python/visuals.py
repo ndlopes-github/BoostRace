@@ -204,5 +204,16 @@ def histvisuals(nsteps=None,group=None):
 
 
 def timesvisuals(times=None,group=None):
-    times=np.zeros(group.size)
-    print(len(times))
+    print(times)
+
+    starttimes=np.zeros(group.size)
+    endtimes=np.zeros(group.size)
+
+    for runner in range(group.size):
+        tsidx=np.min(np.where(group.pos[runner,:]>0))
+        teidx=np.min(np.where(group.pos[runner,:]>10000))
+        starttimes[runner]=times[tsidx]
+        #endtimes[runner]=times[teidx]
+
+    runnertimes=endtimes-starttimes
+    print(runnertimes)
