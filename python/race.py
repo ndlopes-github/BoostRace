@@ -9,7 +9,7 @@ ap = argparse.ArgumentParser()
 
 ap.add_argument("-nr", "--nrunners",default=10000, required=False,
    help="number of runners")
-ap.add_argument("-nt", "--nsteps",default=7200, required=False,
+ap.add_argument("-nt", "--nsteps",default=9000, required=False,
    help="number of time steps")
 ap.add_argument("-dt", "--deltat",default=1.0, required=False,
    help="Time step in seconds")
@@ -49,7 +49,7 @@ from timesgenerator import *
 
 rnum=RNUM
 ninwaves=[rnum//3,rnum//3,rnum//3+1]
-wavedelays=[0.0,300.0,600.0]
+wavedelays=[0.0,360.0,720.0]
 
 FAvgTimes, _, InitPositions, WaveDelays = inversepseudosigmoid2(number=rnum,
                                                                lnumber=10,

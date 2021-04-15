@@ -6,6 +6,7 @@ np.random.seed(993869)
 
 ######### Histogram data
 TimeBins=np.arange(start=30, stop=101, step=1)
+ReactionLineTime=.5
 
 RunnerDist=np.array([15,18,20,17,18,18,31,40,45,72,96,88,109,131,155,192,207,270,281,263,326,298,268,240,309,296,346,
                      313,323,347,286,325,281,274,291,252,285,220,220,207,213,180,172,145,140,151,112,145,96,85,85,87,85,73,42,47,
@@ -48,7 +49,7 @@ def inversepseudosigmoid(number,lnumber,ldist,ninwaves,wavedelays):
             if (i+1)%lnumber==0:
                 linecounter+=1
             InitPositions[i+itemcount]=-linecounter*ldist
-            WaveDelays[i+itemcount]=wavedelays[nwave]
+            WaveDelays[i+itemcount]=wavedelays[nwave]+linecounter*ReactionLineTime
         itemcount+=nrunners
 
     return AvgTimes, RandDist,InitPositions, WaveDelays
@@ -112,7 +113,7 @@ def inversepseudosigmoid2(number,lnumber,ldist,ninwaves,wavedelays):
             if (i+1)%lnumber==0:
                 linecounter+=1
             InitPositions[i+itemcount]=-linecounter*ldist+0.30*np.random.random_sample()-0.15
-            WaveDelays[i+itemcount]=wavedelays[nwave]
+            WaveDelays[i+itemcount]=wavedelays[nwave]+linecounter*ReactionLineTime
         itemcount+=nrunners
 
     return AvgTimes, RandDist,InitPositions, WaveDelays

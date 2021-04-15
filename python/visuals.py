@@ -243,9 +243,10 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     plt.xlabel("Runner index")
     plt.legend()
     plt.show()
-
-    plt.plot(runnertimes-runnertimes_free,'o',ms=0.5,label='Errors')
+    errors=runnertimes-runnertimes_free
+    plt.plot(errors,'o',ms=0.5,label='Errors')
     plt.ylabel("Time in seconds")
     plt.xlabel("Runner index")
+    plt.text(0,400,'l2 norm='+str(np.linalg.norm(errors)))
     plt.legend()
     plt.show()
