@@ -13,8 +13,6 @@
 
 
 class dxdt{
-
-
   dvec_i m_avg_speeds;
   dvec_i m_slope_factors;
   dvec_i m_track_x_data;

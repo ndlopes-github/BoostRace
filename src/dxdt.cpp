@@ -102,8 +102,8 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
       if  (std::get<0>(*i)>road_end) continue;
       int xidx=floor(std::get<0>(*i))-road_start; //
       //MINN is the minimum number of runners in the foresight that impacts the runners speed
-      int MINN=floor(1./4.*m_foresight_area[xidx]); //floor(1./4.*m_foresight_area) in this case impact should be p=0.4
-      int MAXN=2*MINN; //MAX is the maximum number of runners in the foresight that impacts the runners speed
+      int MINN=floor(15./40.*m_foresight_area[xidx]); //floor(1./4.*m_foresight_area) in this case impact should be p=0.4
+      int MAXN=floor(25./40.*m_foresight_area[xidx]); //MAX is the maximum number of runners in the foresight that impacts the runners speed
       auto frontispeeds = dvec_i(); // container for the instantaneous speeds of the runners in the foresigh area
       // Guarding conditions for indexing
       if ((MINN<3)|| // At the  worst case (very narrow area) the runner has at least 3 runners in the impact zone

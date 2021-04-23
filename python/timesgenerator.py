@@ -118,7 +118,7 @@ def inversepseudosigmoid2(number,lnumber,ldist,ninwaves,wavedelays,waveinitspeed
                 linecounter+=1
             InitPositions[i+itemcount]=-linecounter*ldist+0.30*np.random.random_sample()-0.15
             WaveDelays[i+itemcount]=wavedelays[nwave]+linecounter*ReactionLineTime
-            WaveInitSpeeds[i+itemcount]=WaveInitSpeeds[nwave]
+            WaveInitSpeeds[i+itemcount]=waveinitspeeds[nwave]
         itemcount+=nrunners
 
     return AvgTimes, RandDist,InitPositions, WaveDelays,WaveInitSpeeds
