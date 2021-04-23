@@ -57,7 +57,7 @@ def inversepseudosigmoid(number,lnumber,ldist,ninwaves,wavedelays):
 
 
 
-def inversepseudosigmoid2(number,lnumber,ldist,ninwaves,wavedelays):
+def inversepseudosigmoid2(number,lnumber,ldist,ninwaves,wavedelays,waveinitspeeds):
     assert len(ninwaves)==3, "Wrong function"
     # w1=[0.8,0.05,0.15]
     # w2=[0.15,0.1,0.75]
@@ -95,10 +95,14 @@ def inversepseudosigmoid2(number,lnumber,ldist,ninwaves,wavedelays):
 
     InitPositions=np.zeros(number)
     WaveDelays=np.zeros(number)
+    WaveInitSpeeds=np.zeros(number)
     ninwaves=np.array(ninwaves)
     wavedelays=np.array(wavedelays)
 
     assert len(wavedelays)==len(ninwaves),'wave delays and number of waves do not match'
+
+    assert len(waveinitspeeds)==len(ninwaves),'wave speeds and number of waves do not match'
+
     assert number==ninwaves.sum(),'number of runners in waves do not match'
     nwaves=len(wavedelays)
     assert number==ninwaves.sum(), 'Sum of Waves not matching number of runners'
@@ -114,9 +118,10 @@ def inversepseudosigmoid2(number,lnumber,ldist,ninwaves,wavedelays):
                 linecounter+=1
             InitPositions[i+itemcount]=-linecounter*ldist+0.30*np.random.random_sample()-0.15
             WaveDelays[i+itemcount]=wavedelays[nwave]+linecounter*ReactionLineTime
+            WaveInitSpeeds[i+itemcount]=WaveInitSpeeds[nwave]
         itemcount+=nrunners
 
-    return AvgTimes, RandDist,InitPositions, WaveDelays
+    return AvgTimes, RandDist,InitPositions, WaveDelays,WaveInitSpeeds
 
 
 

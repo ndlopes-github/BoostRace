@@ -14,6 +14,7 @@ class runners():
         self.vels=np.array([runner.vels for runner in self.group])
         self.rhos=np.array([runner.rhos for runner in self.group])
         self.wavedelays=np.array([runner.wavedelay for runner in self.group])
+        self.waveinitspeeds=np.array([runner.waveinitspeed for runner in self.group])
         self.avgspeeds=np.array([runner.avgspeed for runner in self.group])
         self.slopefactors=np.array([runner.slopefactor for runner in self.group])
         self.speedfunctions=np.array([runner.poly1dspeed2 for runner in self.group])
@@ -94,9 +95,10 @@ def V(positions,speedfunctions,track):
 
 @autorepr
 class frunner():
-    def __init__(self,time,wavedelay=0.0,wavecolor='b'):
+    def __init__(self,time,wavedelay=0.0,waveinitspeed=0.0,wavecolor='b'):
         self.time=time
         self.wavedelay=wavedelay
+        self.waveinitspeed=waveinitspeed
         self.avgspeed=10000/(self.time*60)
         self.color=wavecolor
         self.slopefactor=np.random.uniform(-13.0,-3.0)

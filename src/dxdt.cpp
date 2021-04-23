@@ -15,6 +15,7 @@
 dxdt::dxdt(dvec_i avg_speeds,
            dvec_i slope_factors,
            dvec_i wave_delays,
+           dvec_i wave_init_speeds,
            dvec_i track_x_data,
            dvec_i track_diff_data,
            dvec_i track_width_data):
@@ -23,6 +24,7 @@ dxdt::dxdt(dvec_i avg_speeds,
   m_track_x_data( track_x_data),
   m_track_diff_data( track_diff_data),
   m_wave_delays(wave_delays),
+  m_wave_init_speeds(wave_init_speeds),
   road_start(floor(track_x_data[0])),
   road_end(ceil(track_x_data[track_x_data.size()-1])),
   cs(track_x_data,track_diff_data),
@@ -140,7 +142,7 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
       p=rho[idx];
       if (t<=m_wave_delays[idx]) dxdt[idx]=0.0;
 
-      else if  (x[idx]<0)  dxdt[idx]=2.5;
+      else if  (x[idx]<0)  dxdt[idx]=std::min(m_wave_init_speeds[idx],m_avg_speeds[idx]);
 
       else {
         if (fabs(dxdt[idx]-VL[idx])<1.e-5)  aux=0.0; else aux=p;

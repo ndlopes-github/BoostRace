@@ -20,6 +20,7 @@ class dxdt{
   dvec_i m_track_x_data;
   dvec_i m_track_diff_data;
   dvec_i m_wave_delays;
+  dvec_i m_wave_init_speeds;
   //std::shared_ptr<dvec_i> road_begin;
   int road_start;
   int road_end;
@@ -39,6 +40,7 @@ public:
   dxdt(dvec_i avg_speeds,
        dvec_i slope_factors,
        dvec_i wave_delays,
+       dvec_i wave_init_speeds,
        dvec_i track_x_data,
        dvec_i track_diff_data,
        dvec_i track_width_data);

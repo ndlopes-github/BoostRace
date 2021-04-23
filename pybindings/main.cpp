@@ -11,6 +11,7 @@ PYBIND11_MODULE(odesolvers,m) {
         py::arg("avg_speeds"),
         py::arg("slope_factors"),
         py::arg("wave_delays"),
+        py::arg("wave_init_speeds"),
         py::arg("track_x_data"),
         py::arg("track_diff_data"),
         py::arg("track_width_data"),

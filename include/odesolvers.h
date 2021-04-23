@@ -11,6 +11,7 @@ std::tuple<dvec_i,dvec_ij,dvec_ij,dvec_ij> ode_system_solver(
                                             dvec_i avg_speeds,
                                             dvec_i slopes_factors,
                                             dvec_i wave_delays,
+                                            dvec_i wave_init_speeds,
                                             dvec_i track_x_data,
                                             dvec_i track_diff_data,
                                             dvec_i track_width_data,

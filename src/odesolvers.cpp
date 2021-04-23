@@ -48,6 +48,7 @@ std::tuple<dvec_i,dvec_ij,dvec_ij,dvec_ij> ode_system_solver(
                                             dvec_i avg_speeds,
                                             dvec_i slope_factors,
                                             dvec_i wave_delays,
+                                            dvec_i wave_init_speeds,
                                             dvec_i track_x_data,
                                             dvec_i track_diff_data,
                                             dvec_i track_width_data,
@@ -70,6 +71,7 @@ std::tuple<dvec_i,dvec_ij,dvec_ij,dvec_ij> ode_system_solver(
   auto f= dxdt(avg_speeds,
                slope_factors,
                wave_delays,
+               wave_init_speeds,
                track_x_data,
                track_diff_data,
                track_width_data);
