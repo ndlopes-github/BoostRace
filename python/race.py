@@ -1,39 +1,18 @@
 # -*- coding: utf-8 -*-
 ### PRE-PROCESSING ##############################################
-import argparse
 import numpy as np
-
-# Construct the argument parser
-ap = argparse.ArgumentParser()
-
-
-ap.add_argument("-nr", "--nrunners",default=10000, required=False,
-   help="number of runners")
-ap.add_argument("-nt", "--nsteps",default=7200, required=False,
-   help="number of time steps")
-ap.add_argument("-dt", "--deltat",default=1.0, required=False,
-   help="Time step in seconds")
-# ap.add_argument("-an", "--anim",default=1, required=False,
-#    help="Generate anim, -an 1")
-# ap.add_argument("-sh", "--show",default=1, required=False,
-#    help="Generate show, -sh 1")
-# ap.add_argument("-af", "--animfile",default='', required=False,
-# help="Save animation, -af file.mp4")
-
-args = vars(ap.parse_args())
-
-
 from frunnerclass import frunner, runners, V # As contas estÃ£o aqui
+from settings import parameters
+
+# Load the settings
+par=parameters()
 
 ############## PARAMS ###############################################
-RNUM=int(args['nrunners'])
-NSTEPS=int(args['nsteps'])
-
-
+RNUM=par.nrunners
+NSTEPS=par.simtime
+dt=par.observerstep
 
 ######################################################################
-
-
 # # Next step: simulations #
 ###################################################
 ### RACE SIMULATION ###############################
@@ -43,13 +22,13 @@ from tracks import track2 as track
 
 #Race Settings
 nsteps=NSTEPS
-dt=float(args['deltat']) #[s]
+dt=DT
 
 from timesgenerator import *
 
 rnum=RNUM
-ninwaves=[rnum//3,rnum//3,rnum//3+1]
-wavedelays=[0.0,360.0,720.0]
+ninwaves=par.waves[:,0]
+wavedelays=par.waves[:,1]
 
 FAvgTimes, _, InitPositions, WaveDelays = inversepseudosigmoid2(number=rnum,
                                                                lnumber=10,
