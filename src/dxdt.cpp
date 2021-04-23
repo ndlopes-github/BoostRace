@@ -94,7 +94,7 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
   // Create a container for the average velocities of the 5 runners in front
   // to be used when rho !=0 for
   auto VL = dvec_i(x.size(),0.0); // For VL calculation. average of the  slowest in front of the runner
-  auto VM = dvec_i(x.size(),0.0); // container for the naural speed of the runner VM
+  auto VN = dvec_i(x.size(),0.0); // container for the natural speed of the runner VN
 
   // iterate over sorted tuples
   for(std::vector<tri_xvi>::const_iterator i = sorted_xvi.begin(); i != sorted_xvi.end(); ++i)
@@ -146,8 +146,8 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
 
       else {
         if (fabs(dxdt[idx]-VL[idx])<1.e-5)  aux=0.0; else aux=p;
-        VM[idx]=cs.deriv(1,x[idx])*m_slope_factors[idx]+m_avg_speeds[idx];
-        dxdt[idx]=(1-aux)*VM[idx]+aux*VL[idx];
+        VN[idx]=cs.deriv(1,x[idx])*m_slope_factors[idx]+m_avg_speeds[idx];
+        dxdt[idx]=(1-aux)*VN[idx]+aux*VL[idx];
       }
 
       (*velocities_instance)[idx]=dxdt[idx];// Update the velocities_instance with the dxdt values
