@@ -11,7 +11,7 @@ par=parameters()
 
 ############## PARAMS ###############################################
 rnum=par.nrunners
-nsteps=par.simtime
+nsteps=par.nsteps
 dt=par.observerstep
 ninwaves=par.waves[:,0].astype(int)
 wavedelays=par.waves[:,1]

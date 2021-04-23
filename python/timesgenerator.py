@@ -58,7 +58,7 @@ def inversepseudosigmoid(number,lnumber,ldist,ninwaves,wavedelays):
 
 
 def inversepseudosigmoid2(number,lnumber,ldist,ninwaves,wavedelays,waveinitspeeds):
-    assert len(ninwaves)==3, "Wrong function"
+    assert len(ninwaves)==3, 'Wrong function'
     # w1=[0.8,0.05,0.15]
     # w2=[0.15,0.1,0.75]
     # w3=[0.15,0.1,0.75]
@@ -74,7 +74,7 @@ def inversepseudosigmoid2(number,lnumber,ldist,ninwaves,wavedelays,waveinitspeed
 
     RD7=np.random.uniform(0,1./3.,size=(int(15*ninwaves[2]/100),))
     RD8=np.random.uniform(1./3.,2./3,size=(int(10*ninwaves[2]/100),))
-    RD9=np.random.uniform(2./3.,1,size=(int(75*ninwaves[2]/100)+5,))
+    RD9=np.random.uniform(2./3.,1,size=(int(75*ninwaves[2]/100),))
 
 
     W1=np.concatenate((RD1,RD2,RD3),axis=None)

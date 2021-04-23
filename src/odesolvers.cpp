@@ -82,7 +82,8 @@ std::tuple<dvec_i,dvec_ij,dvec_ij,dvec_ij> ode_system_solver(
   std::cout<< "adams_bashforth_moulton of order "<< stepper.order() <<std::endl;
 
   boost::progress_display show_progress(end_time);
-
+  ## check how to use integrate_times
+  ## https://fossies.org/linux/boost/libs/numeric/odeint/examples/integrate_times.cpp
   size_t steps = boost::numeric::odeint::integrate_const(stepper , f , init_states ,
                                                          start_time,
                                                          end_time,

@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from matplotlib import animation
 from tqdm import tqdm
 import datetime
+from settings import parameters
 np.random.seed(2875620985)
 
 
@@ -205,7 +206,6 @@ def histvisuals(nsteps=None,group=None):
 
 def timesvisuals(times=None,times_free=None,group=None,group_free=None):
    #print(times)
-
     starttimes=np.zeros(group.size)
     endtimes=np.zeros(group.size)
 
@@ -247,6 +247,10 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     plt.plot(errors,'o',ms=0.5,label='Errors')
     plt.ylabel("Time in seconds")
     plt.xlabel("Runner index")
-    plt.text(0,400,'l2 norm='+str(np.linalg.norm(errors)))
+    plt.text(0,450,'l2 norm='+str(np.linalg.norm(errors)))
+    par=parameters()
     plt.legend()
+    plt.text(0,400,'waves ='+str(par.waves[:,0]))
+    plt.text(0,350,'delays ='+str(par.waves[:,1]))
+    plt.text(0,300,'speeds_0 ='+str(par.waves[:,2]))
     plt.show()
