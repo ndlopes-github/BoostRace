@@ -87,7 +87,7 @@ def inversepseudosigmoid2(number,lnumber,ldist,ninwaves,wavedelays,waveinitspeed
     RandDist=np.concatenate((W1,W2,W3),axis=None)
 
     AvgTimes=CubicSpline(AcumulatedRelativeRunnerDist,TimeBins)(RandDist)
-    print(len(AvgTimes))
+    print('Control: number of runners',len(AvgTimes))
 
 
 
