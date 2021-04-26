@@ -7,7 +7,7 @@ namespace py=pybind11;
 
 PYBIND11_MODULE(odesolvers,m) {
   m.def("ode_system_solver", &ode_system_solver,
-        "ode_system_solver(avg_speeds,init_states,start_time,end_time,time_step) algorithm",
+        "ode_system_solver(avg_speeds,init_states,start_time,end_time,time_step,linear_view) algorithm",
         py::arg("avg_speeds"),
         py::arg("slope_factors"),
         py::arg("wave_delays"),
@@ -18,5 +18,6 @@ PYBIND11_MODULE(odesolvers,m) {
         py::arg("init_states"),
         py::arg("start_time"),
         py::arg("end_time"),
-        py::arg("time_step"));
+        py::arg("time_step"),
+        py::arg("linear_view"));
 }

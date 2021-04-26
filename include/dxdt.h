@@ -22,7 +22,7 @@ class dxdt{
   //std::shared_ptr<dvec_i> road_begin;
   int road_start;
   int road_end;
-  int linear_view=4; //linear impact zone for velocity perturbation, maybe passed as arg
+  int m_linear_view; //linear impact zone for velocity perturbation, maybe passed as arg
   // dvec_i m_road_z; // not required for now
   // dvec_i m_road_dzdx; // not required for now
   dvec_i m_road_w;
@@ -41,7 +41,8 @@ public:
        dvec_i wave_init_speeds,
        dvec_i track_x_data,
        dvec_i track_diff_data,
-       dvec_i track_width_data);
+       dvec_i track_width_data,
+       double linear_view);
 
 
   void operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double  t );

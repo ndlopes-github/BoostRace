@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ### PRE-PROCESSING ##############################################
 import numpy as np
-from frunnerclass import frunner, runners, V # As contas estÃ£o aqui
+from frunnerclass import frunner, runners # As contas estÃ£o aqui
 from settings import parameters
 from timesgenerator import *
 from tracks import track2 as track
@@ -18,7 +18,7 @@ observerdt=par.observertimestep
 ninwaves=par.waves[:,0].astype(int)
 wavedelays=par.waves[:,1]
 waveinitspeeds=par.waves[:,2]
-
+linear_view=par.linearfrontview
 
 
 
@@ -68,7 +68,8 @@ times, positions, velocities,rhos=os.ode_system_solver(
     init_states,
     observer_number_steps,
     observer_time_step,
-    time_step)
+    time_step,
+    linear_view)
 
 print('End C++ Processing')
 ### POST PROCESSING ######################################################

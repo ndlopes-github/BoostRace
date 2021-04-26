@@ -18,7 +18,8 @@ dxdt::dxdt(dvec_i avg_speeds,
            dvec_i wave_init_speeds,
            dvec_i track_x_data,
            dvec_i track_diff_data,
-           dvec_i track_width_data):
+           dvec_i track_width_data,
+           double linear_view):
   m_avg_speeds(avg_speeds),
   m_slope_factors(slope_factors),
   m_track_x_data( track_x_data),
@@ -27,6 +28,7 @@ dxdt::dxdt(dvec_i avg_speeds,
   m_wave_init_speeds(wave_init_speeds),
   road_start(floor(track_x_data[0])),
   road_end(ceil(track_x_data[track_x_data.size()-1])),
+  m_linear_view(linear_view),
   cs(track_x_data,track_diff_data),
   cs2(track_x_data,track_width_data),
   velocities_instance(std::make_shared<dvec_i>(avg_speeds.size(),0)),
@@ -50,8 +52,8 @@ dxdt::dxdt(dvec_i avg_speeds,
 
   for(size_t meter=0;meter<Wsize;meter++){
     double area=0.0;
-    if(meter<Wsize-linear_view)
-      for (size_t i=0; i<linear_view; i++)
+    if(meter<Wsize-m_linear_view)
+      for (size_t i=0; i<m_linear_view; i++)
         area+=m_road_w[meter];
     else area=40;
     m_foresight_area.push_back(area);
@@ -108,14 +110,14 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
       // Guarding conditions for indexing
       if ((MINN<3)|| // At the  worst case (very narrow area) the runner has at least 3 runners in the impact zone
           ((i+MINN)> sorted_xvi.end()-1)|| //there are at least MINN runners in front of runner i
-          (std::get<0>(*(i+MINN))-std::get<0>(*i)>=linear_view)) // the MINN runner in front is in the impact zone
+          (std::get<0>(*(i+MINN))-std::get<0>(*i)>=m_linear_view)) // the MINN runner in front is in the impact zone
         continue;
 
       rho[std::get<2>(*i)]=0.4;
 
       for (size_t ids=MINN;ids<MAXN+1;ids++)
         if (i+ids>sorted_xvi.end()-1) continue;
-        else if (std::get<0>(*(i+ids))-std::get<0>(*i)<linear_view)
+        else if (std::get<0>(*(i+ids))-std::get<0>(*i)<m_linear_view)
           rho[std::get<2>(*i)]+=(1.0/(2*MAXN)); // This one should be fixed it was 1.0/40.0.
 
       int ids=0;

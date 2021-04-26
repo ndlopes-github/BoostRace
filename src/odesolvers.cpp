@@ -55,7 +55,8 @@ std::tuple<dvec_i,dvec_ij,dvec_ij,dvec_ij> ode_system_solver(
                                             dvec_i init_states,
                                             int observer_number_steps,
                                             double observer_time_step,
-                                            double time_step){
+                                            double time_step,
+                                            double linear_view){
 
   // Timer
   boost::progress_timer t;
@@ -74,7 +75,8 @@ std::tuple<dvec_i,dvec_ij,dvec_ij,dvec_ij> ode_system_solver(
                wave_init_speeds,
                track_x_data,
                track_diff_data,
-               track_width_data);
+               track_width_data,
+               linear_view);
 
 
   //boost::numeric::odeint::runge_kutta4< dvec_i > stepper;
