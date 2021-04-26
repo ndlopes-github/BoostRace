@@ -78,13 +78,13 @@ std::tuple<dvec_i,dvec_ij,dvec_ij,dvec_ij> ode_system_solver(
 
 
   //boost::numeric::odeint::runge_kutta4< dvec_i > stepper;
-  auto stepper =  boost::numeric::odeint::adams_bashforth_moulton<2,dvec_i >{};
-  std::cout<< "adams_bashforth_moulton of order "<< stepper.order() <<std::endl;
+  //  auto stepper =  boost::numeric::odeint::adams_bashforth_moulton<2,dvec_i >{};
+  // std::cout<< "adams_bashforth_moulton of order "<< stepper.order() <<std::endl;
 
   // Variable time step solver
   typedef  boost::numeric::odeint::runge_kutta_dopri5< dvec_i > stepper_type;
   auto stepper = boost::numeric::odeint::make_controlled( 1.0e-1, 1.0e-3 , stepper_type());
-  std::cout<< "Variable controlled time step of order "<< stepper.order() <<std::endl;
+  std::cout<< "Variable controlled time step of order runge_kutta_dopri5" <<std::endl;
 
   boost::progress_display show_progress(observer_number_steps);
 

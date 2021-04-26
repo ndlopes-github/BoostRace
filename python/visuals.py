@@ -130,6 +130,31 @@ def speedsvisuals(runnerslist=None,nsteps=None,track=None,group=None,ninwaves=No
         plt.legend()
     plt.show()
 
+
+def phasevisuals(runnerslist=None,nsteps=None,track=None,group=None,ninwaves=None,dpi=None):
+
+    plt.rcParams['figure.figsize'] = [16, 12]
+    plt.rcParams['figure.dpi'] = dpi # 200 e.g. is really fine, but slower
+
+
+
+    fig = plt.figure(figsize=(20,5))
+    t=np.linspace(0, nsteps, nsteps+1)
+    ax = plt.axes(xlim=(group.pos[:,:].min(),
+                        10010),
+                  ylim=(group.vels[:,:].min(),
+                        group.vels[:,:].max()))
+
+    plt.xlabel('Positions (m)',fontsize=20)
+    plt.ylabel('Speeds (m/s)',fontsize=20)
+
+    for runner in runnerslist:
+        plt.plot(group.pos[runner,:],group.vels[runner,:],lw=0.5,label=str(runner))
+
+    if len(runnerslist)<11:
+        plt.legend()
+    plt.show()
+
 def rhossvisuals(runnerslist=None,nsteps=None,track=None,group=None,ninwaves=None,dpi=None):
 
     plt.rcParams['figure.figsize'] = [16, 12]
@@ -211,7 +236,7 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
 
     for runner in range(group.size):
         tsidx=np.min(np.where(group.pos[runner,:]>0))
-        teidx=np.min(np.where(group.pos[runner,:]>10000))
+        teidx=np.min(np.where(group.pos[runner,:]>500))
         starttimes[runner]=times[tsidx]
         endtimes[runner]=times[teidx]
 
@@ -222,7 +247,7 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
 
     for runner in range(group_free.size):
         tsidx=np.min(np.where(group_free.pos[runner,:]>0))
-        teidx=np.min(np.where(group_free.pos[runner,:]>10000))
+        teidx=np.min(np.where(group_free.pos[runner,:]>500))
         #print(runner,' ',tsidx, teidx)
         starttimes[runner]=times[tsidx]
         endtimes[runner]=times[teidx]
@@ -253,7 +278,7 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     plt.text(0,450,'l2 norm='+str(np.linalg.norm(errors)))
     par=parameters()
     plt.legend()
-    plt.text(0,400,'waves ='+str(par.waves[:,0]))
-    plt.text(0,350,'delays ='+str(par.waves[:,1]))
-    plt.text(0,300,'speeds_0 ='+str(par.waves[:,2]))
+    plt.text(0,55,'waves ='+str(par.waves[:,0]))
+    plt.text(0,50,'delays ='+str(par.waves[:,1]))
+    plt.text(0,45,'speeds_0 ='+str(par.waves[:,2]))
     plt.show()
