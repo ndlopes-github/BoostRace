@@ -223,6 +223,7 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     for runner in range(group_free.size):
         tsidx=np.min(np.where(group_free.pos[runner,:]>0))
         teidx=np.min(np.where(group_free.pos[runner,:]>10000))
+        #print(runner,' ',tsidx, teidx)
         starttimes[runner]=times[tsidx]
         endtimes[runner]=times[teidx]
 
@@ -236,6 +237,7 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
 
     # print(rnt)
     #print(runnertimes)
+    #print(len(runnertimes))
     plt.plot(runnertimes,'o',ms=0.5,label='Race')
     plt.plot(runnertimes_free,'o',ms=0.5,label='Alone')
    # plt.yticks(np.arange())
@@ -244,6 +246,7 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     plt.legend()
     plt.show()
     errors=runnertimes-runnertimes_free
+    #print(len(errors))
     plt.plot(errors,'o',ms=0.5,label='Errors')
     plt.ylabel("Time in seconds")
     plt.xlabel("Runner index")

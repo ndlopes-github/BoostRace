@@ -16,6 +16,6 @@ std::tuple<dvec_i,dvec_ij,dvec_ij,dvec_ij> ode_system_solver(
                                             dvec_i track_diff_data,
                                             dvec_i track_width_data,
                                             dvec_i init_states,
-                                            double start_time,
-                                            double end_time,
+                                            int observer_number_steps,
+                                            double observer_time_step,
                                             double time_step);

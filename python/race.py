@@ -11,11 +11,16 @@ par=parameters()
 
 ############## PARAMS ###############################################
 rnum=par.nrunners
-nsteps=par.nsteps
-dt=par.observerstep
+observer_number_steps=par.observernsteps
+time_step=par.timestep
+observer_time_step=par.observertimestep
+observerdt=par.observertimestep
 ninwaves=par.waves[:,0].astype(int)
 wavedelays=par.waves[:,1]
 waveinitspeeds=par.waves[:,2]
+
+
+
 
 ### Initial distribution ###
 FAvgTimes, _, InitPositions, WaveDelays,WaveInitSpeeds =\
@@ -31,7 +36,7 @@ for time,wavedelay,waveinitspeed in zip(FAvgTimes,WaveDelays,WaveInitSpeeds):
     runnerslist.append(frunner(time=time,wavedelay=wavedelay,waveinitspeed=waveinitspeed))
 
 for frunner,initpos in zip(runnerslist,InitPositions):
-    frunner.init(nsteps=nsteps,x0=initpos)
+    frunner.init(nsteps=observer_number_steps,x0=initpos)
 
 group=runners(runnerslist)
 
@@ -48,9 +53,6 @@ track_diff_data=track.diff_data[:]
 track_width_data=track.width_data[:]
 init_states=group.pos[:,0]
 
-start_time=0.0
-time_step=dt
-end_time=nsteps*time_step
 
 ### PROCESSING ###########################################################
 import odesolvers as os
@@ -64,8 +66,8 @@ times, positions, velocities,rhos=os.ode_system_solver(
     track_diff_data,
     track_width_data,
     init_states,
-    start_time,
-    end_time,
+    observer_number_steps,
+    observer_time_step,
     time_step)
 
 print('End C++ Processing')
@@ -80,7 +82,7 @@ print('Writing to files with pickle')
 import pickle
 #save it
 with open(f'results/nsteps.pickle', 'wb') as file:
-    pickle.dump(nsteps, file)
+    pickle.dump(observer_number_steps, file)
 file.close()
 
 with open(f'results/times.pickle', 'wb') as file:
