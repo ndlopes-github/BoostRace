@@ -236,7 +236,7 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
 
     for runner in range(group.size):
         tsidx=np.min(np.where(group.pos[runner,:]>0))
-        teidx=np.min(np.where(group.pos[runner,:]>500))
+        teidx=np.min(np.where(group.pos[runner,:]>10000))
         starttimes[runner]=times[tsidx]
         endtimes[runner]=times[teidx]
 
@@ -247,7 +247,7 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
 
     for runner in range(group_free.size):
         tsidx=np.min(np.where(group_free.pos[runner,:]>0))
-        teidx=np.min(np.where(group_free.pos[runner,:]>500))
+        teidx=np.min(np.where(group_free.pos[runner,:]>10000))
         #print(runner,' ',tsidx, teidx)
         starttimes[runner]=times[tsidx]
         endtimes[runner]=times[teidx]
@@ -271,14 +271,39 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     plt.legend()
     plt.show()
     errors=runnertimes-runnertimes_free
+
+    par=parameters()
+    t1=par.posweights[0,1]
+    t2=par.posweights[1,1]
+    t3=par.posweights[2,1]
+    t4=par.posweights[3,1]
+    w1=par.posweights[0,0]
+    w2=par.posweights[1,0]
+    w3=par.posweights[2,0]
+    w4=par.posweights[3,0]
+
+
+    errorspen=np.zeros(len(errors))
+    for idx,error in enumerate(errors):
+        if error <= t1:
+            errorspen[idx]=error*w1
+        elif error <= t2:
+            errorspen[idx]=w1*t1+(error-t1)*w2
+        elif error <= t3 :
+            errorspen[idx]=w1*t1+(t2-t1)*w2+(error-t2)*w3
+        else :
+            errorspen[idx]=w1*t1+(t2-t1)*w2+(t3-t2)*w3+(error-t3)
+
+
     #print(len(errors))
     plt.plot(errors,'o',ms=0.5,label='Errors')
+    plt.plot(errorspen,'o',ms=0.5,label='Penalized Errors')
     plt.ylabel("Time in seconds")
     plt.xlabel("Runner index")
-    plt.text(0,450,'l2 norm='+str(np.linalg.norm(errors)))
-    par=parameters()
+    plt.text(0,500,'l1 norm='+str(np.linalg.norm(errors,ord=1)))
+    plt.text(0,450,'metric ='+str(np.sum(errorspen)))
+    plt.text(0,400,'waves ='+str(par.waves[:,0]))
+    plt.text(0,350,'delays ='+str(par.waves[:,1]))
+    plt.text(0,300,'speeds_0 ='+str(par.waves[:,2]))
     plt.legend()
-    plt.text(0,55,'waves ='+str(par.waves[:,0]))
-    plt.text(0,50,'delays ='+str(par.waves[:,1]))
-    plt.text(0,45,'speeds_0 ='+str(par.waves[:,2]))
     plt.show()
