@@ -12,9 +12,10 @@ class parameters():
                  linearfrontview=4,
                  minratio= 15./40.,
                  maxratio= 25./40.,
-                minrho=0.4,
+                 minrho=0.4,
                  maxrho=0.8,
-                stepper=2
+                 stepper=2,
+                 posweights=np.array([2.0,1.5,1.25,1.0])
     ):
         self.timestep=timestep # Initial time step for solver 0.4
         self.observertimestep=observertimestep #observer time step in seconds
@@ -34,3 +35,4 @@ class parameters():
         self.maxrho=maxrho #max weight of the VL speed
 
         self.stepper=stepper # '2 : abm2', '3 : abm3', '4 : abm4', '5 : abm5' , # To be implemented '6: rkd5'
+        self.posweights=posweights # Weights for race Metrics Post-Processing
