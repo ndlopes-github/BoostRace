@@ -15,7 +15,7 @@ class parameters():
                  minrho=0.4,
                  maxrho=0.8,
                  stepper=2,
-                 posweights=np.array([[2.0,30],[1.5,60],[1.25,120],[1.0,100000]])
+                 posweights=np.array([[0.2,0],[2.0,30],[1.5,60],[1.25,120],[1.0,100000]])
     ):
         self.timestep=timestep # Initial time step for solver 0.4
         self.observertimestep=observertimestep #observer time step in seconds

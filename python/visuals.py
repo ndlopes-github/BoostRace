@@ -273,14 +273,16 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     errors=runnertimes-runnertimes_free
 
     par=parameters()
-    t1=par.posweights[0,1]
-    t2=par.posweights[1,1]
-    t3=par.posweights[2,1]
-    t4=par.posweights[3,1]
-    w1=par.posweights[0,0]
-    w2=par.posweights[1,0]
-    w3=par.posweights[2,0]
-    w4=par.posweights[3,0]
+    t1=par.posweights[1,1]
+    t2=par.posweights[2,1]
+    t3=par.posweights[3,1]
+    t4=par.posweights[4,1]
+
+    w0=par.posweights[0,0]
+    w1=par.posweights[1,0]
+    w2=par.posweights[2,0]
+    w3=par.posweights[3,0]
+    w4=par.posweights[4,0]
 
 
     errorspen=np.zeros(len(errors))
@@ -292,7 +294,8 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
         elif error <= t3 :
             errorspen[idx]=w1*t1+(t2-t1)*w2+(error-t2)*w3
         else :
-            errorspen[idx]=w1*t1+(t2-t1)*w2+(t3-t2)*w3+(error-t3)
+            errorspen[idx]=w1*t1+(t2-t1)*w2+(t3-t2)*w3+(error-t3)*w4
+    errorspen+=starttimes*w0
 
 
     #print(len(errors))
@@ -300,10 +303,10 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     plt.plot(errorspen,'o',ms=0.5,label='Penalized Errors')
     plt.ylabel("Time in seconds")
     plt.xlabel("Runner index")
-    plt.text(0,500,'l1 norm='+str(np.linalg.norm(errors,ord=1)))
-    plt.text(0,450,'metric ='+str(np.sum(errorspen)))
-    plt.text(0,400,'waves ='+str(par.waves[:,0]))
-    plt.text(0,350,'delays ='+str(par.waves[:,1]))
-    plt.text(0,300,'speeds_0 ='+str(par.waves[:,2]))
+    plt.text(0,600,'l1 norm='+str(np.linalg.norm(errors,ord=1)))
+    plt.text(0,550,'metric ='+str(np.sum(errorspen)))
+    plt.text(0,500,'waves ='+str(par.waves[:,0]))
+    plt.text(0,450,'delays ='+str(par.waves[:,1]))
+    plt.text(0,400,'speeds_0 ='+str(par.waves[:,2]))
     plt.legend()
     plt.show()
