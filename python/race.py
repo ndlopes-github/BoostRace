@@ -8,7 +8,7 @@ from tracks import track2 as track
 
 # Load the settings
 par=parameters()
-
+print(par)
 ############## PARAMS ###############################################
 rnum=par.nrunners
 observer_number_steps=par.observernsteps
@@ -19,6 +19,11 @@ ninwaves=par.waves[:,0].astype(int)
 wavedelays=par.waves[:,1]
 waveinitspeeds=par.waves[:,2]
 linear_view=par.linearfrontview
+min_ratio=par.minratio
+max_ratio=par.maxratio
+min_rho=par.minrho
+max_rho=par.maxrho
+stepper_switch=par.stepper
 
 
 
@@ -69,7 +74,12 @@ times, positions, velocities,rhos=os.ode_system_solver(
     observer_number_steps,
     observer_time_step,
     time_step,
-    linear_view)
+    linear_view,
+    min_ratio,
+    max_ratio,
+    min_rho,
+    max_rho,
+    stepper_switch)
 
 print('End C++ Processing')
 ### POST PROCESSING ######################################################

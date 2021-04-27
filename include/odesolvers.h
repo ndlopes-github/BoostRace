@@ -19,4 +19,9 @@ std::tuple<dvec_i,dvec_ij,dvec_ij,dvec_ij> ode_system_solver(
                                             int observer_number_steps,
                                             double observer_time_step,
                                             double time_step,
-                                            double linear_view);
+                                            double linear_view,
+                                            double min_ratio,
+                                            double max_ratio,
+                                            double min_rho,
+                                            double max_rho,
+                                            int stepper_switch);

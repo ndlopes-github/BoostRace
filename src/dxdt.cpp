@@ -19,7 +19,11 @@ dxdt::dxdt(dvec_i avg_speeds,
            dvec_i track_x_data,
            dvec_i track_diff_data,
            dvec_i track_width_data,
-           double linear_view):
+           double linear_view,
+           double min_ratio,
+           double max_ratio,
+           double min_rho,
+           double max_rho):
   m_avg_speeds(avg_speeds),
   m_slope_factors(slope_factors),
   m_track_x_data( track_x_data),
@@ -29,6 +33,10 @@ dxdt::dxdt(dvec_i avg_speeds,
   road_start(floor(track_x_data[0])),
   road_end(ceil(track_x_data[track_x_data.size()-1])),
   m_linear_view(linear_view),
+  m_min_ratio(min_ratio),
+  m_max_ratio(max_ratio),
+  m_min_rho(min_rho),
+  m_max_rho(max_rho),
   cs(track_x_data,track_diff_data),
   cs2(track_x_data,track_width_data),
   velocities_instance(std::make_shared<dvec_i>(avg_speeds.size(),0)),
@@ -104,8 +112,8 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
       if  (std::get<0>(*i)>road_end) continue;
       int xidx=floor(std::get<0>(*i))-road_start; //
       //MINN is the minimum number of runners in the foresight that impacts the runners speed
-      int MINN=floor(15./40.*m_foresight_area[xidx]); //floor(1./4.*m_foresight_area) in this case impact should be p=0.4
-      int MAXN=floor(25./40.*m_foresight_area[xidx]); //MAX is the maximum number of runners in the foresight that impacts the runners speed
+      int MINN=floor(m_min_ratio*m_foresight_area[xidx]); //floor(1./4.*m_foresight_area) in this case impact should be p=0.4
+      int MAXN=floor(m_max_ratio*m_foresight_area[xidx]); //MAX is the maximum number of runners in the foresight that impacts the runners speed
       auto frontispeeds = dvec_i(); // container for the instantaneous speeds of the runners in the foresigh area
       // Guarding conditions for indexing
       if ((MINN<3)|| // At the  worst case (very narrow area) the runner has at least 3 runners in the impact zone
@@ -113,12 +121,16 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
           (std::get<0>(*(i+MINN))-std::get<0>(*i)>=m_linear_view)) // the MINN runner in front is in the impact zone
         continue;
 
-      rho[std::get<2>(*i)]=0.4;
+      double rhoaux=m_min_rho;
+      rho[std::get<2>(*i)]=rhoaux;
 
       for (size_t ids=MINN;ids<MAXN+1;ids++)
         if (i+ids>sorted_xvi.end()-1) continue;
         else if (std::get<0>(*(i+ids))-std::get<0>(*i)<m_linear_view)
-          rho[std::get<2>(*i)]+=(1.0/(2*MAXN)); // This one should be fixed it was 1.0/40.0.
+          rhoaux+=(1.0/(2*MAXN)); // This one should be fixed it was 1.0/40.0.
+
+      rho[std::get<2>(*i)]=std::min(m_max_rho, rhoaux); //limit the weight rho to the max value
+
 
       int ids=0;
       while((i+ids<sorted_xvi.end())&&(ids<MAXN+1)){

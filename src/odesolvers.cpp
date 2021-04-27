@@ -56,7 +56,12 @@ std::tuple<dvec_i,dvec_ij,dvec_ij,dvec_ij> ode_system_solver(
                                             int observer_number_steps,
                                             double observer_time_step,
                                             double time_step,
-                                            double linear_view){
+                                            double linear_view,
+                                            double min_ratio,
+                                            double max_ratio,
+                                            double min_rho,
+                                            double max_rho,
+                                            int stepper_switch){
 
   // Timer
   boost::progress_timer t;
@@ -76,17 +81,21 @@ std::tuple<dvec_i,dvec_ij,dvec_ij,dvec_ij> ode_system_solver(
                track_x_data,
                track_diff_data,
                track_width_data,
-               linear_view);
+               linear_view,
+               min_ratio,
+               max_ratio,
+               min_rho,
+               max_rho);
 
-
-  //boost::numeric::odeint::runge_kutta4< dvec_i > stepper;
-  //  auto stepper =  boost::numeric::odeint::adams_bashforth_moulton<2,dvec_i >{};
-  // std::cout<< "adams_bashforth_moulton of order "<< stepper.order() <<std::endl;
+  auto stepper2 =  boost::numeric::odeint::adams_bashforth_moulton<2,dvec_i >{};
+  auto stepper3 =  boost::numeric::odeint::adams_bashforth_moulton<3,dvec_i >{};
+  auto stepper4 =  boost::numeric::odeint::adams_bashforth_moulton<4,dvec_i >{};
+  auto stepper5 =  boost::numeric::odeint::adams_bashforth_moulton<5,dvec_i >{};
 
   // Variable time step solver
   typedef  boost::numeric::odeint::runge_kutta_dopri5< dvec_i > stepper_type;
-  auto stepper = boost::numeric::odeint::make_controlled( 1.0e-1, 1.0e-3 , stepper_type());
-  std::cout<< "Variable controlled time step of order runge_kutta_dopri5" <<std::endl;
+  auto stepper6 = boost::numeric::odeint::make_controlled( 1.0e-1, 1.0e-3 , stepper_type());
+
 
   boost::progress_display show_progress(observer_number_steps);
 
@@ -95,15 +104,70 @@ std::tuple<dvec_i,dvec_ij,dvec_ij,dvec_ij> ode_system_solver(
   for (size_t  i=0; i<observer_times.size();i++)
     {observer_times[i]=observer_time_step*i;}
 
- size_t steps = boost::numeric::odeint::integrate_times(stepper , f , init_states ,
-                                                        observer_times,
-                                                        time_step,
-                                                        observer(x_vec,times,
-                                                                 vels,
-                                                                 rhos,
-                                                                 f,
-                                                                 show_progress));
+  size_t steps=0;
+  switch (stepper_switch)
+    {
+    case 2:
+      std::cout<< "adams_bashforth_moulton of order "<< stepper2.order() <<std::endl;
+      steps = boost::numeric::odeint::integrate_times(stepper2, f , init_states ,
+                                                      observer_times,
+                                                      time_step,
+                                                      observer(x_vec,times,
+                                                               vels,
+                                                               rhos,
+                                                               f,
+                                                               show_progress));
+      break;
 
+    case 3:
+      std::cout<< "adams_bashforth_moulton of order "<< stepper3.order() <<std::endl;
+      steps = boost::numeric::odeint::integrate_times(stepper3, f , init_states ,
+                                                      observer_times,
+                                                      time_step,
+                                                      observer(x_vec,times,
+                                                               vels,
+                                                               rhos,
+                                                               f,
+                                                               show_progress));
+      break;
+
+
+    case 4:
+      std::cout<< "adams_bashforth_moulton of order "<< stepper4.order() <<std::endl;
+      steps = boost::numeric::odeint::integrate_times(stepper4, f , init_states ,
+                                                      observer_times,
+                                                      time_step,
+                                                      observer(x_vec,times,
+                                                               vels,
+                                                               rhos,
+                                                               f,
+                                                               show_progress));
+      break;
+
+    case 5:
+      std::cout<< "adams_bashforth_moulton of order "<< stepper5.order() <<std::endl;
+      steps = boost::numeric::odeint::integrate_times(stepper5, f , init_states ,
+                                                      observer_times,
+                                                      time_step,
+                                                      observer(x_vec,times,
+                                                               vels,
+                                                               rhos,
+                                                               f,
+                                                               show_progress));
+      break;
+
+    case 6:
+      std::cout<< "Variable controlled time step of order runge_kutta_dopri5" <<std::endl;
+      steps = boost::numeric::odeint::integrate_times(stepper6, f , init_states ,
+                                                      observer_times,
+                                                      time_step,
+                                                      observer(x_vec,times,
+                                                               vels,
+                                                               rhos,
+                                                               f,
+                                                               show_progress));
+      break;
+    }
 
 
  // size_t steps = boost::numeric::odeint::integrate_const(stepper , f , init_states ,

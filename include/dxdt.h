@@ -23,6 +23,10 @@ class dxdt{
   int road_start;
   int road_end;
   int m_linear_view; //linear impact zone for velocity perturbation, maybe passed as arg
+  double m_min_ratio;
+  double m_max_ratio;
+  double m_min_rho;
+  double m_max_rho;
   // dvec_i m_road_z; // not required for now
   // dvec_i m_road_dzdx; // not required for now
   dvec_i m_road_w;
@@ -42,7 +46,11 @@ public:
        dvec_i track_x_data,
        dvec_i track_diff_data,
        dvec_i track_width_data,
-       double linear_view);
+       double linear_view,
+       double min_ratio,
+       double max_ratio,
+       double min_rho,
+       double max_rho);
 
 
   void operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double  t );
