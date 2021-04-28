@@ -234,6 +234,9 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     starttimes=np.zeros(group.size)
     endtimes=np.zeros(group.size)
 
+    print(times[1000:1010])
+    print(times_free[1000:1010])
+
     for runner in range(group.size):
         tsidx=np.min(np.where(group.pos[runner,:]>0))
         teidx=np.min(np.where(group.pos[runner,:]>10000))
@@ -249,10 +252,10 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
         tsidx=np.min(np.where(group_free.pos[runner,:]>0))
         teidx=np.min(np.where(group_free.pos[runner,:]>10000))
         #print(runner,' ',tsidx, teidx)
-        starttimes[runner]=times[tsidx]
-        endtimes[runner]=times[teidx]
+        starttimes_free[runner]=times[tsidx]
+        endtimes_free[runner]=times[teidx]
 
-    runnertimes_free=endtimes-starttimes
+    runnertimes_free=endtimes_free-starttimes_free
 
 
 
@@ -271,6 +274,14 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     plt.legend()
     plt.show()
     errors=runnertimes-runnertimes_free
+
+    print(*np.where(errors<0))
+    print('free times',runnertimes_free[np.where(errors<0)])
+    print('times',runnertimes[np.where(errors<0)])
+    print('free start',starttimes_free[np.where(errors<0)])
+    print('start',starttimes[np.where(errors<0)])
+    print('free end',endtimes_free[np.where(errors<0)])
+    print('end',endtimes[np.where(errors<0)])
 
     par=parameters()
     t1=par.posweights[1,1]
@@ -295,7 +306,13 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
             errorspen[idx]=w1*t1+(t2-t1)*w2+(error-t2)*w3
         else :
             errorspen[idx]=w1*t1+(t2-t1)*w2+(t3-t2)*w3+(error-t3)*w4
+
     errorspen+=starttimes*w0
+
+    for j in range(1,len(par.waves)):
+        errorspen[np.sum(par.waves[ : j,0]).astype(int) : np.sum(par.waves[ : j+1,0]).astype(int)]-=w0*par.waves[j,1]
+
+    print(*np.where(errorspen<0))
 
 
     #print(len(errors))
@@ -308,5 +325,5 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     plt.text(0,500,'waves ='+str(par.waves[:,0]))
     plt.text(0,450,'delays ='+str(par.waves[:,1]))
     plt.text(0,400,'speeds_0 ='+str(par.waves[:,2]))
-    plt.legend()
+    plt.legend(loc='best')
     plt.show()
