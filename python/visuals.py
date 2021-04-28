@@ -234,8 +234,6 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     starttimes=np.zeros(group.size)
     endtimes=np.zeros(group.size)
 
-    print(times[1000:1010])
-    print(times_free[1000:1010])
 
     for runner in range(group.size):
         tsidx=np.min(np.where(group.pos[runner,:]>0))
@@ -276,12 +274,15 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     errors=runnertimes-runnertimes_free
 
     print(*np.where(errors<0))
-    print('free times',runnertimes_free[np.where(errors<0)])
-    print('times',runnertimes[np.where(errors<0)])
-    print('free start',starttimes_free[np.where(errors<0)])
-    print('start',starttimes[np.where(errors<0)])
-    print('free end',endtimes_free[np.where(errors<0)])
-    print('end',endtimes[np.where(errors<0)])
+    print('Runners  affected by the velocity rule at departure')
+    print(len(*np.where(starttimes!=starttimes_free)))
+
+    # print('free times',runnertimes_free[np.where(errors<0)])
+    # print('times',runnertimes[np.where(errors<0)])
+    # print('free start',starttimes_free[np.where(errors<0)])
+    # print('start',starttimes[np.where(errors<0)])
+    # print('free end',endtimes_free[np.where(errors<0)])
+    # print('end',endtimes[np.where(errors<0)])
 
     par=parameters()
     t1=par.posweights[1,1]
