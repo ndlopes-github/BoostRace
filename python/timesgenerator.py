@@ -64,17 +64,17 @@ def inversepseudosigmoid2(number,lnumber,ldist,ninwaves,wavedelays,waveinitspeed
     # w3=[0.15,0.1,0.75]
 
 
-    RD1=np.random.uniform(0,1./3.,size=(int(80*ninwaves[0]/100),))
-    RD2=np.random.uniform(1./3.,2./3,size=(int(5*ninwaves[0]/100),))
-    RD3=np.random.uniform(2./3.,1,size=(int(15*ninwaves[0]/100),))
+    RD1=np.random.uniform(0,1./3.,size=(int(80*ninwaves[0]/100+0.5),))
+    RD2=np.random.uniform(1./3.,2./3,size=(int(5*ninwaves[0]/100+0.5),))
+    RD3=np.random.uniform(2./3.,1,size=(int(15*ninwaves[0]/100+0.5),))
 
-    RD4=np.random.uniform(0,1./3.,size=(int(5*ninwaves[1]/100),))
-    RD5=np.random.uniform(1./3.,2./3,size=(int(80*ninwaves[1]/100),))
-    RD6=np.random.uniform(2./3.,1,size=(int(15*ninwaves[1]/100),))
+    RD4=np.random.uniform(0,1./3.,size=(int(5*ninwaves[1]/100+0.5),))
+    RD5=np.random.uniform(1./3.,2./3,size=(int(80*ninwaves[1]/100+0.5),))
+    RD6=np.random.uniform(2./3.,1,size=(int(15*ninwaves[1]/100+0.5),))
 
-    RD7=np.random.uniform(0,1./3.,size=(int(15*ninwaves[2]/100),))
-    RD8=np.random.uniform(1./3.,2./3,size=(int(10*ninwaves[2]/100),))
-    RD9=np.random.uniform(2./3.,1,size=(int(75*ninwaves[2]/100),))
+    RD7=np.random.uniform(0,1./3.,size=(int(15*ninwaves[2]/100+0.5),))
+    RD8=np.random.uniform(1./3.,2./3,size=(int(10*ninwaves[2]/100+0.5),))
+    RD9=np.random.uniform(2./3.,1,size=(int(75*ninwaves[2]/100+0.5),))
 
 
     W1=np.concatenate((RD1,RD2,RD3),axis=None)
@@ -98,6 +98,8 @@ def inversepseudosigmoid2(number,lnumber,ldist,ninwaves,wavedelays,waveinitspeed
     WaveInitSpeeds=np.zeros(number)
     ninwaves=np.array(ninwaves)
     wavedelays=np.array(wavedelays)
+
+    assert len(W1) == ninwaves[0] and len(W2) == ninwaves[1] and len(W3) == ninwaves[2] , '\n wrong division for wave 1:'+str(ninwaves[0])+'!='+str( len(W1))+ '\n wrong division for wave 2:'+str(ninwaves[1])+'!='+str( len(W2))+'\nwrong division for wave 3:'+str(ninwaves[2])+'!='+str( len(W3))
 
     assert len(wavedelays)==len(ninwaves),'wave delays and number of waves do not match'
 
