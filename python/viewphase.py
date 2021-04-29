@@ -30,10 +30,6 @@ with open(f'results/group.pickle', 'rb') as file:
 file.close()
 
 
-with open(f'results/runnerslist.pickle', 'rb') as file:
-    runnerslist = pickle.load(file)
-file.close()
-
 with open(f'results/ninwaves.pickle', 'rb') as file:
     ninwaves = pickle.load(file)
 file.close()

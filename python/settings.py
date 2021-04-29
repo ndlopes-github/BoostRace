@@ -9,6 +9,7 @@ class parameters():
                  observertimestep=1.0,
                  observernsteps=7200,
                  waves=np.array([[2800,0.0,3.34],[2800,210.0,2.92],[6300,450.0,2.5]]),
+                 #waves=np.array([[2500,0.0,3.34],[2500,210.0,2.92],[5000,450.0,2.5]]),
                  linearfrontview=4,
                  minratio= 15./40.,
                  maxratio= 25./40.,
@@ -36,3 +37,9 @@ class parameters():
 
         self.stepper=stepper # '2 : abm2', '3 : abm3', '4 : abm4', '5 : abm5' , # To be implemented '6: rkd5'
         self.posweights=posweights # Weights for race Metrics Post-Processing
+
+'''
+2500/2500/5000, 0/210/450
+3333/3333/3334, 0/210/450
+3333/3333/3334, 0/300/600
+'''

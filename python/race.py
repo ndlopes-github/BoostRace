@@ -92,6 +92,7 @@ group.rhos[:,:]=np.transpose(rhos)
 print('Writing to files with pickle')
 import pickle
 #save it
+
 with open(f'results/nsteps.pickle', 'wb') as file:
     pickle.dump(observer_number_steps, file)
 file.close()
@@ -100,17 +101,12 @@ with open(f'results/times.pickle', 'wb') as file:
     pickle.dump(times, file)
 file.close()
 
-
 with open(f'results/group.pickle', 'wb') as file:
     pickle.dump(group, file)
 file.close()
 
 with open(f'results/track.pickle', 'wb') as file:
     pickle.dump(track, file)
-file.close()
-
-with open(f'results/runnerslist.pickle', 'wb') as file:
-    pickle.dump(runnerslist, file)
 file.close()
 
 with open(f'results/ninwaves.pickle', 'wb') as file:

@@ -123,7 +123,7 @@ def speedsvisuals(runnerslist=None,nsteps=None,track=None,group=None,ninwaves=No
     plt.xlabel('Time',fontsize=20)
     plt.ylabel('Speeds (m/s)',fontsize=20)
 
-    for runner in runnerslist:
+    for runner in runnerslist: #range(group.size):
         plt.plot(t,group.vels[runner,:],lw=0.5,label=str(runner))
 
     if len(runnerslist)<11:
@@ -271,8 +271,8 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     plt.xlabel("Runner index")
     plt.legend()
     plt.show()
-    errors=runnertimes-runnertimes_free
 
+    errors=runnertimes-runnertimes_free
     print(*np.where(errors<0))
     print('Runners  affected by the velocity rule at departure')
     print(len(*np.where(starttimes!=starttimes_free)))
@@ -309,16 +309,20 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
             errorspen[idx]=w1*t1+(t2-t1)*w2+(t3-t2)*w3+(error-t3)*w4
 
     errorspen+=starttimes*w0
+    print('Control negative errors:',*np.where(errorspen<0))
 
     for j in range(1,len(par.waves)):
-        errorspen[np.sum(par.waves[ : j,0]).astype(int) : np.sum(par.waves[ : j+1,0]).astype(int)]-=w0*par.waves[j,1]
+        r0=np.sum(par.waves[ : j,0]).astype(int)
+        r1=np.sum(par.waves[ : j+1,0]).astype(int)
+        errorspen[r0 : r1]-=w0*par.waves[j,1]
+        print('control',r0,' ',r1,', ',par.waves[j,1])
 
-    print(*np.where(errorspen<0))
+    print('Control negative errors:',*np.where(errorspen<0))
 
 
     #print(len(errors))
     plt.plot(errors,'o',ms=0.5,label='Errors')
-    plt.plot(errorspen,'o',ms=0.5,label='Penalized Errors')
+    plt.plot(errorspen,'o',ms=0.5,label='PErrors')
     plt.ylabel("Time in seconds")
     plt.xlabel("Runner index")
     plt.text(0,600,'l1 norm='+str(np.linalg.norm(errors,ord=1)))
@@ -326,5 +330,5 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     plt.text(0,500,'waves ='+str(par.waves[:,0]))
     plt.text(0,450,'delays ='+str(par.waves[:,1]))
     plt.text(0,400,'speeds_0 ='+str(par.waves[:,2]))
-    plt.legend(loc='best')
+    plt.legend(loc=9 )
     plt.show()

@@ -45,10 +45,6 @@ with open(f'results/track.pickle', 'rb') as file:
     track = pickle.load(file)
 file.close()
 
-with open(f'results/runnerslist.pickle', 'rb') as file:
-    runnerslist = pickle.load(file)
-file.close()
-
 with open(f'results/ninwaves.pickle', 'rb') as file:
     ninwaves = pickle.load(file)
 file.close()
