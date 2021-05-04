@@ -37,8 +37,8 @@ dxdt::dxdt(dvec_i avg_speeds,
   m_max_ratio(max_ratio),
   m_min_rho(min_rho),
   m_max_rho(max_rho),
-  cs(track_x_data,track_diff_data),
-  cs2(track_x_data,track_width_data),
+  cs(track_x_data,track_diff_data,tk::spline::spline_type::cspline),
+  cs2(track_x_data,track_width_data, tk::spline::spline_type::cspline),
   velocities_instance(std::make_shared<dvec_i>(avg_speeds.size(),0)),
   rhos_instance(std::make_shared<dvec_i>(avg_speeds.size(),0))
 {
@@ -54,7 +54,8 @@ dxdt::dxdt(dvec_i avg_speeds,
   double wip=0.0;
   for(size_t meter=0;meter<Wsize;meter ++){
     // m_road_z.push_back(cs(meter));
-    // m_road_dzdx.push_back(cs.deriv(1,meter));
+    //m_road_dzdx.push_back(cs.deriv(1,meter));
+    //m_road_dzdx[meter]=cs.deriv(1,meter);
     m_road_w.push_back(cs2(meter));
    }
 
@@ -160,6 +161,9 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
 
       else {
         if (fabs(dxdt[idx]-VL[idx])<1.e-5)  aux=0.0; else aux=p;
+        //int xidx=floor(x[idx])-road_start-1; //
+        //double slope=m_road_dzdx[xidx];
+        //VN[idx]=slope*m_slope_factors[idx]+m_avg_speeds[idx];
         VN[idx]=cs.deriv(1,x[idx])*m_slope_factors[idx]+m_avg_speeds[idx];
         dxdt[idx]=(1-aux)*VN[idx]+aux*VL[idx];
       }

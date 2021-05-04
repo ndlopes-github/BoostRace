@@ -28,7 +28,8 @@ class dxdt{
   double m_min_rho;
   double m_max_rho;
   // dvec_i m_road_z; // not required for now
-  // dvec_i m_road_dzdx; // not required for now
+  //dvec_i m_road_dzdx; // not required for now
+  //int m_road_dzdx[10701];
   dvec_i m_road_w;
   dvec_i m_foresight_area;
   tk::spline cs;
