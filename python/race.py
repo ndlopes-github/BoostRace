@@ -15,9 +15,14 @@ observer_number_steps=par.observernsteps
 time_step=par.timestep
 observer_time_step=par.observertimestep
 observerdt=par.observertimestep
-ninwaves=par.waves[:,0].astype(int)
-wavedelays=par.waves[:,1]
-waveinitspeeds=par.waves[:,2]
+nwaves=len(par.waves)
+ninwaves=par.waves[:,0:nwaves].astype(int) # TO REMOVE
+
+
+exit()
+
+wavedelays=par.waves[:,1+nwaves]
+waveinitspeeds=par.waves[:,2+nwaves]
 linear_view=par.linearfrontview
 min_ratio=par.minratio
 max_ratio=par.maxratio
@@ -28,8 +33,17 @@ stepper_switch=par.stepper
 
 
 ### Initial distribution ###
+# FAvgTimes, _, InitPositions, WaveDelays,WaveInitSpeeds =\
+#     inversepseudosigmoid2(number=rnum,
+#                           lnumber=10,
+#                           ldist=0.5,
+#                           ninwaves=ninwaves,
+#                           wavedelays=wavedelays,
+#                           waveinitspeeds=waveinitspeeds)
+
+### Initial distribution ###
 FAvgTimes, _, InitPositions, WaveDelays,WaveInitSpeeds =\
-    inversepseudosigmoid2(number=rnum,
+    inversepseudosigmoid3(number=rnum,
                           lnumber=10,
                           ldist=0.5,
                           ninwaves=ninwaves,

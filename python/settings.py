@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-from autoclass import autorepr
+from objprint import add_objprint
 
-@autorepr
+@add_objprint
 class parameters():
     def __init__(self,
                  timestep=0.4,
                  observertimestep=1.0,
                  observernsteps=7200,
                  ######waves=np.array([[2800,0.0,3.34],[2800,210.0,2.92],[6300,450.0,2.5]]),
-                 waves=np.array([[2500,0.0,3.34],[2500,210.0,2.92],[5000,450.0,2.5]]),
+                 waves=np.array([[2500,0,0,0.0,3.34],
+                                 [2500,0,0,210.0,2.92],
+                                 [5000,0,0,450.0,2.5]]),
                  #waves=np.array([[3333,0.0,3.34],[3333,210.0,2.92],[3334,450.0,2.5]]),
                  #waves=np.array([[3333,0.0,3.34],[3333,300.0,2.92],[3334,600.0,2.5]]),
                  linearfrontview=4,
@@ -28,7 +30,8 @@ class parameters():
 
         #Waves [[number,delay,init speed]]
         self.waves=waves
-        self.nrunners=np.sum(self.waves[:,0].astype(int)) #number of runners
+        self.numberofwaves=len(self.waves)
+        self.nrunners=np.sum(self.waves[:,0:self.numberofwaves].astype(int)) #number of runners
 
         self.linearfrontview=linearfrontview # linear impact zone
         self.minratio= minratio  #  15 runners per 40 m2
@@ -39,6 +42,13 @@ class parameters():
 
         self.stepper=stepper # '2 : abm2', '3 : abm3', '4 : abm4', '5 : abm5' , # To be implemented '6: rkd5'
         self.posweights=posweights # Weights for race Metrics Post-Processing
+
+    # def __str__(self):
+    #     return str(self.__class__) + ": " + str(self.__dict__)
+
+    # def info(self):
+    #     print('A readable report of all the settings')
+
 
 '''
 2500/2500/5000, 0/210/450
