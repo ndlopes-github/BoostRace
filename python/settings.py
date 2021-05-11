@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-from objprint import add_objprint
+from objprint import add_objprint # To print a readable report of the settings
 
 @add_objprint
 class parameters():
@@ -43,11 +43,6 @@ class parameters():
         self.stepper=stepper # '2 : abm2', '3 : abm3', '4 : abm4', '5 : abm5' , # To be implemented '6: rkd5'
         self.posweights=posweights # Weights for race Metrics Post-Processing
 
-    # def __str__(self):
-    #     return str(self.__class__) + ": " + str(self.__dict__)
-
-    # def info(self):
-    #     print('A readable report of all the settings')
 
 
 '''
