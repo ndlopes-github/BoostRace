@@ -127,6 +127,78 @@ def inversepseudosigmoid2(number,lnumber,ldist,ninwaves,wavedelays,waveinitspeed
 
 
 
+
+
+def inversepseudosigmoid3(number,lnumber,ldist,ninwaves,wavedelays,waveinitspeeds):
+    numberofwaves=len(ninwaves)
+    numberofparts=numberofwaves
+    print('control: number of waves', numberofwaves)
+    waves=np.zeros(number)
+
+    wb=0
+    we=0
+    for wave in range(numberofwaves):
+        parts=np.zeros(np.sum(ninwaves[wave,:numberofwaves]))
+        pb=0
+        pe=0
+        for part in range(numberofparts):
+            size=ninwaves[wave,part]
+            pe+=size
+            wavepart=np.random.uniform(part/numberofparts,(part+1)/numberofparts,
+                                       size=(size,))
+
+            parts[pb:pe]=wavepart[:]
+            pb=pe
+        we+=len(parts)
+        print(wb,we)
+        assert len(waves[wb:we])==len(parts), ' error '+ str(part)+'  '+str(wave)+' '+str(len(waves[wb:we]))+' '+str(len(parts))
+        waves[wb:we]=parts[:]
+        wb=we
+
+
+
+
+
+    RandDist=waves
+
+    AvgTimes=CubicSpline(AcumulatedRelativeRunnerDist,TimeBins)(RandDist)
+    print('Control: number of runners',len(AvgTimes))
+
+
+
+    #AvgTimes=np.sort(AvgTimes) # The Fastest are in the first Lines
+
+    InitPositions=np.zeros(number)
+    WaveDelays=np.zeros(number)
+    WaveInitSpeeds=np.zeros(number)
+    ninwaves=np.array(ninwaves)
+    wavedelays=np.array(wavedelays)
+
+
+    #Generate soft mixture of the runners thru waves
+
+    nnwaves=np.zeros(numberofwaves).astype(int)
+    for wave in range(numberofwaves):
+        nnwaves[wave]=np.sum(ninwaves[wave,:numberofwaves])
+    print(nnwaves)
+    exit()
+
+    itemcount=0
+    for nwave,nrunners in enumerate(nnwaves):
+        linecounter=0
+        for i in range(nrunners):
+            if (i+1)%lnumber==0:
+                linecounter+=1
+            InitPositions[i+itemcount]=-linecounter*ldist#+0.30*np.random.random_sample()-0.15
+            WaveDelays[i+itemcount]=wavedelays[nwave]+linecounter*ReactionLineTime
+            WaveInitSpeeds[i+itemcount]=waveinitspeeds[nwave]
+        itemcount+=nrunners
+
+    return AvgTimes, RandDist,InitPositions, WaveDelays,WaveInitSpeeds
+
+
+
+
 if __name__== '__main__':
     import matplotlib.pyplot as plt
     acp=AcumulatedRelativeRunnerDist

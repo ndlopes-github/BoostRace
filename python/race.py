@@ -15,14 +15,14 @@ observer_number_steps=par.observernsteps
 time_step=par.timestep
 observer_time_step=par.observertimestep
 observerdt=par.observertimestep
-nwaves=len(par.waves)
+nwaves=par.numberofwaves
 ninwaves=par.waves[:,0:nwaves].astype(int) # TO REMOVE
 
 
-exit()
 
-wavedelays=par.waves[:,1+nwaves]
-waveinitspeeds=par.waves[:,2+nwaves]
+
+wavedelays=par.waves[:,nwaves]
+waveinitspeeds=par.waves[:,1+nwaves]
 linear_view=par.linearfrontview
 min_ratio=par.minratio
 max_ratio=par.maxratio
