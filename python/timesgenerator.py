@@ -129,8 +129,8 @@ def inversepseudosigmoid2(number,lnumber,ldist,ninwaves,wavedelays,waveinitspeed
 
 
 
-def inversepseudosigmoid3(number,lnumber,ldist,ninwaves,wavedelays,waveinitspeeds):
-    numberofwaves=len(ninwaves)
+def inversepseudosigmoid3(number,lnumber,ldist,mixwaves,wavedelays,waveinitspeeds):
+    numberofwaves=len(mixwaves)
     numberofparts=numberofwaves
     print('control: number of waves', numberofwaves)
     waves=np.zeros(number)
@@ -138,11 +138,11 @@ def inversepseudosigmoid3(number,lnumber,ldist,ninwaves,wavedelays,waveinitspeed
     wb=0
     we=0
     for wave in range(numberofwaves):
-        parts=np.zeros(np.sum(ninwaves[wave,:numberofwaves]))
+        parts=np.zeros(np.sum(mixwaves[wave,:numberofwaves]))
         pb=0
         pe=0
         for part in range(numberofparts):
-            size=ninwaves[wave,part]
+            size=mixwaves[wave,part]
             pe+=size
             wavepart=np.random.uniform(part/numberofparts,(part+1)/numberofparts,
                                        size=(size,))
@@ -154,9 +154,6 @@ def inversepseudosigmoid3(number,lnumber,ldist,ninwaves,wavedelays,waveinitspeed
         assert len(waves[wb:we])==len(parts), ' error '+ str(part)+'  '+str(wave)+' '+str(len(waves[wb:we]))+' '+str(len(parts))
         waves[wb:we]=parts[:]
         wb=we
-
-
-
 
 
     RandDist=waves
@@ -171,20 +168,19 @@ def inversepseudosigmoid3(number,lnumber,ldist,ninwaves,wavedelays,waveinitspeed
     InitPositions=np.zeros(number)
     WaveDelays=np.zeros(number)
     WaveInitSpeeds=np.zeros(number)
-    ninwaves=np.array(ninwaves)
+    #mixwaves=np.array(mixwaves)
     wavedelays=np.array(wavedelays)
 
 
     #Generate soft mixture of the runners thru waves
 
-    nnwaves=np.zeros(numberofwaves).astype(int)
+    NinWaves=np.zeros(numberofwaves).astype(int)
     for wave in range(numberofwaves):
-        nnwaves[wave]=np.sum(ninwaves[wave,:numberofwaves])
-    print(nnwaves)
-    exit()
+        NinWaves[wave]=np.sum(mixwaves[wave,:numberofwaves])
+
 
     itemcount=0
-    for nwave,nrunners in enumerate(nnwaves):
+    for nwave,nrunners in enumerate(NinWaves):
         linecounter=0
         for i in range(nrunners):
             if (i+1)%lnumber==0:
@@ -194,7 +190,7 @@ def inversepseudosigmoid3(number,lnumber,ldist,ninwaves,wavedelays,waveinitspeed
             WaveInitSpeeds[i+itemcount]=waveinitspeeds[nwave]
         itemcount+=nrunners
 
-    return AvgTimes, RandDist,InitPositions, WaveDelays,WaveInitSpeeds
+    return AvgTimes, NinWaves,InitPositions, WaveDelays,WaveInitSpeeds
 
 
 

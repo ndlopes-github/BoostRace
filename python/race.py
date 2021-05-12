@@ -16,7 +16,7 @@ time_step=par.timestep
 observer_time_step=par.observertimestep
 observerdt=par.observertimestep
 nwaves=par.numberofwaves
-ninwaves=par.waves[:,0:nwaves].astype(int) # TO REMOVE
+mixwaves=par.waves[:,0:nwaves].astype(int) # TO REMOVE
 
 
 
@@ -42,11 +42,11 @@ stepper_switch=par.stepper
 #                           waveinitspeeds=waveinitspeeds)
 
 ### Initial distribution ###
-FAvgTimes, _, InitPositions, WaveDelays,WaveInitSpeeds =\
+FAvgTimes, NinWaves, InitPositions, WaveDelays,WaveInitSpeeds =\
     inversepseudosigmoid3(number=rnum,
                           lnumber=10,
                           ldist=0.5,
-                          ninwaves=ninwaves,
+                          mixwaves=mixwaves,
                           wavedelays=wavedelays,
                           waveinitspeeds=waveinitspeeds)
 
@@ -124,5 +124,5 @@ with open(f'results/track.pickle', 'wb') as file:
 file.close()
 
 with open(f'results/ninwaves.pickle', 'wb') as file:
-    pickle.dump(ninwaves, file)
+    pickle.dump(NinWaves, file)
 file.close()
