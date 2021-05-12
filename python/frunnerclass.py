@@ -2,11 +2,11 @@
 import numpy as np
 #import numba as nb
 
-from autoclass import autorepr
+from objprint import add_objprint # To print a readable report of the settings
 np.random.seed(2875620985)
 
 
-@autorepr
+@add_objprint
 class runners():
     def __init__(self,group=None):
         self.group=group
@@ -28,7 +28,7 @@ class runners():
 
 
 
-@autorepr
+@add_objprint
 class frunner():
     def __init__(self,time,wavedelay=0.0,waveinitspeed=0.0,wavecolor='b'):
         self.time=time

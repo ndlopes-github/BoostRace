@@ -58,6 +58,7 @@ for frunner,initpos in zip(runnerslist,InitPositions):
     frunner.init(nsteps=observer_number_steps,x0=initpos)
 
 group=runners(runnerslist)
+print(group)
 
 #print(group.speedfunctions)
 
