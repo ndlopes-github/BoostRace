@@ -270,7 +270,8 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     plt.ylabel("Time in seconds")
     plt.xlabel("Runner index")
     plt.legend()
-    plt.show()
+    plt.savefig('personaltimings.png')
+    plt.clf()
 
     errors=runnertimes-runnertimes_free
     print(*np.where(errors<0))
@@ -326,13 +327,13 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     plt.ylabel("Time in seconds")
     plt.xlabel("Runner index")
     plt.title('l1 norm='+str(np.linalg.norm(errors,ord=1))+\
-              ' metric ='+str(np.sum(errorspen))+\
-              '\n waves ='+str(par.waves[:,0])+\
-              ' delays ='+str(par.waves[:,1]))
+              '\n metric ='+str(np.sum(errorspen))+\
+              ' delays ='+str(par.waves[:,par.numberofwaves]))
     #plt.text(0,550,'l1 norm='+str(np.linalg.norm(errors,ord=1)))
     #plt.text(0,500,'metric ='+str(np.sum(errorspen)))
-    #plt.text(0,450,'waves ='+str(par.waves[:,0]))
+    plt.text(0,300,'waves ='+str(par.waves[:,0:par.numberofwaves]))
     #plt.text(0,400,'delays ='+str(par.waves[:,1]))
     #plt.text(0,350,'speeds_0 ='+str(par.waves[:,2]))
     plt.legend(loc=9 )
-    plt.show()
+    plt.savefig('errors_report.png')
+    plt.clf()

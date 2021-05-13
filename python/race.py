@@ -58,7 +58,7 @@ for frunner,initpos in zip(runnerslist,InitPositions):
     frunner.init(nsteps=observer_number_steps,x0=initpos)
 
 group=runners(runnerslist)
-print(group)
+#print(group)
 
 #print(group.speedfunctions)
 
@@ -103,6 +103,7 @@ print('End C++ Processing')
 group.pos[:,:]=np.transpose(positions)
 group.vels[:,:]=np.transpose(velocities)
 group.rhos[:,:]=np.transpose(rhos)
+
 
 print('Writing to files with pickle')
 import pickle
