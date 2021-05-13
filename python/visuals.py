@@ -243,6 +243,8 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
 
     runnertimes=endtimes-starttimes
 
+    racetime=np.max(endtimes)
+
     starttimes_free=np.zeros(group_free.size)
     endtimes_free=np.zeros(group_free.size)
 
@@ -324,7 +326,7 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     #print(len(errors))
     plt.plot(errors,'o',ms=0.5,label='Errors')
     plt.plot(errorspen,'o',ms=0.5,label='PErrors')
-    plt.ylabel("Time in seconds")
+    plt.ylabel('Time in seconds (total='+str(racetime)+')')
     plt.xlabel("Runner index")
     plt.title('l1 norm='+str(np.linalg.norm(errors,ord=1))+\
               '\n metric ='+str(np.sum(errorspen))+\
