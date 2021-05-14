@@ -328,7 +328,7 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     r1=0
     for j in range(1,len(par.waves)):
         r0+=np.sum(par.waves[:par.numberofwaves,j-1]).astype(int)
-        r1+=np.sum(par.waves[:par.numberofwaves,j]).astype(int)
+        r1=r0+np.sum(par.waves[:par.numberofwaves,j]).astype(int)
         errorspen[r0:r1]-=w0*par.waves[j,1]
         print('control',r0,' ',r1,', ',par.waves[j,1])
 
