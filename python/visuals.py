@@ -302,15 +302,28 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
 
 
     errorspen=np.zeros(len(errors))
+    count_t1=0
+    count_t2=0
+    count_t3=0
+    count_t4=0
     for idx,error in enumerate(errors):
         if error <= t1:
             errorspen[idx]=error*w1
+            count_t1+=1
         elif t1 < error <= t2:
             errorspen[idx]=w1*t1+(error-t1)*w2
+            count_t2+=1
         elif t2 < error <= t3 :
             errorspen[idx]=w1*t1+(t2-t1)*w2+(error-t2)*w3
+            count_t4+=1
         else :
             errorspen[idx]=w1*t1+(t2-t1)*w2+(t3-t2)*w3+(error-t3)*w4
+            count_t5+=1
+
+    print('control: number of runners with time loss in [0, ', t1,'] is', count_t1)
+    print('control: number of runners with time loss in ]',t1,', ' t2,'] is', count_t2)
+    print('control: number of runners with time loss in ]',t2,', ' t3,'] is', count_t3)
+    print('control: number of runners with time loss > ]',t3, ' is', count_t4)
 
     errorspen+=starttimes*w0
     print('Control negative errors:',*np.where(errorspen<0))
