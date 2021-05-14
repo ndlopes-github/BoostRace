@@ -230,7 +230,7 @@ def histvisuals(nsteps=None,group=None):
 
 
 def timesvisuals(times=None,times_free=None,group=None,group_free=None):
-   #print(times)
+
     starttimes=np.zeros(group.size)
     endtimes=np.zeros(group.size)
 
@@ -252,7 +252,6 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     for runner in range(group_free.size):
         tsidx=np.min(np.where(group_free.pos[runner,:]>0))
         teidx=np.min(np.where(group_free.pos[runner,:]>10000))
-        #print(runner,' ',tsidx, teidx)
         starttimes_free[runner]=times[tsidx]
         endtimes_free[runner]=times[teidx]
 
@@ -260,16 +259,8 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
 
 
 
-    # rnt=[]
-    # for rt in runnertimes:
-    #     rnt.append(datetime.timedelta(seconds =rt))
-
-    # print(rnt)
-    #print(runnertimes)
-    #print(len(runnertimes))
     plt.plot(runnertimes,'o',ms=0.5,label='Race')
     plt.plot(runnertimes_free,'o',ms=0.5,label='Alone')
-   # plt.yticks(np.arange())
     plt.ylabel("Time in seconds")
     plt.xlabel("Runner index")
     plt.legend()
@@ -320,13 +311,15 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
             errorspen[idx]=w1*t1+(t2-t1)*w2+(t3-t2)*w3+(error-t3)*w4
             count_t4+=1
 
-    print('control: number of runners with time loss in [0, ', t1,'] is', count_t1)
-    print('control: number of runners with time loss in ]',t1,', ', t2,'] is', count_t2)
-    print('control: number of runners with time loss in ]',t2,', ', t3,'] is', count_t3)
-    print('control: number of runners with time loss > ]',t3, ' is', count_t4)
+    print('control: number of runners with time loss in [0,', t1,'] is', count_t1)
+    print('control: number of runners with time loss in ]',t1,',', t2,'] is', count_t2)
+    print('control: number of runners with time loss in ]',t2,',', t3,'] is', count_t3)
+    print('control: number of runners with time loss >',t3, ' is', count_t4)
 
     errorspen+=starttimes*w0
-    print('Control negative errors:',*np.where(errorspen<0))
+    negerrors=*np.where(errorspen<0)
+    if len(negerrors>0):
+        print('warning: negative penalized errors:',)
 
     for j in range(1,len(par.waves)):
         r0=np.sum(par.waves[:j,0]).astype(int)
@@ -334,16 +327,20 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
         errorspen[r0:r1]-=w0*par.waves[j,1]
         print('control',r0,' ',r1,', ',par.waves[j,1])
 
-    print('Control negative errors:',*np.where(errorspen<0))
 
-
-    #print(len(errors))
     plt.plot(errors,'o',ms=0.5,label='Errors')
     plt.plot(errorspen,'o',ms=0.5,label='PErrors')
     plt.ylabel('Time in seconds (total='+str(racetime)+')')
+
+    print('control: race time is', racetime)
+    print('control: slowest racer=', slowrunners)
+
+    metricerror=np.sum(errorspen)
+    print('control: metric error=', metricerror)
+
     plt.xlabel('Runner index (slow runners= '+str(slowrunners)+')')
     plt.title('l1 norm='+str(np.linalg.norm(errors,ord=1))+\
-              '\n metric ='+str(np.sum(errorspen))+\
+              '\n metric ='+str(metricerror)+\
               ' delays ='+str(par.waves[:,par.numberofwaves]))
     #plt.text(0,550,'l1 norm='+str(np.linalg.norm(errors,ord=1)))
     #plt.text(0,500,'metric ='+str(np.sum(errorspen)))
