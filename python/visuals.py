@@ -305,9 +305,9 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     for idx,error in enumerate(errors):
         if error <= t1:
             errorspen[idx]=error*w1
-        elif error <= t2:
+        elif t1 < error <= t2:
             errorspen[idx]=w1*t1+(error-t1)*w2
-        elif error <= t3 :
+        elif t2 < error <= t3 :
             errorspen[idx]=w1*t1+(t2-t1)*w2+(error-t2)*w3
         else :
             errorspen[idx]=w1*t1+(t2-t1)*w2+(t3-t2)*w3+(error-t3)*w4
@@ -316,9 +316,9 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     print('Control negative errors:',*np.where(errorspen<0))
 
     for j in range(1,len(par.waves)):
-        r0=np.sum(par.waves[ : j,0]).astype(int)
-        r1=np.sum(par.waves[ : j+1,0]).astype(int)
-        errorspen[r0 : r1]-=w0*par.waves[j,1]
+        r0=np.sum(par.waves[:j,0]).astype(int)
+        r1=np.sum(par.waves[:j+1,0]).astype(int)
+        errorspen[r0:r1]-=w0*par.waves[j,1]
         print('control',r0,' ',r1,', ',par.waves[j,1])
 
     print('Control negative errors:',*np.where(errorspen<0))
