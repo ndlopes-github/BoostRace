@@ -315,10 +315,10 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
             count_t2+=1
         elif t2 < error <= t3 :
             errorspen[idx]=w1*t1+(t2-t1)*w2+(error-t2)*w3
-            count_t4+=1
+            count_t3+=1
         else :
             errorspen[idx]=w1*t1+(t2-t1)*w2+(t3-t2)*w3+(error-t3)*w4
-            count_t5+=1
+            count_t4+=1
 
     print('control: number of runners with time loss in [0, ', t1,'] is', count_t1)
     print('control: number of runners with time loss in ]',t1,', ', t2,'] is', count_t2)
