@@ -74,8 +74,6 @@ dxdt::dxdt(dvec_i avg_speeds,
 
 
 
-
-
 #ifndef DEBUG
 void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double  t )
 {
