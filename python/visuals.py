@@ -317,7 +317,9 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     print('control: number of runners with time loss >',t3, ' is', count_t4)
 
     errorspen+=starttimes*w0
-    negerrors=*np.where(errorspen<0)
+    negerrors=np.where(errorspen<0)
+    print(len(negerrors))
+    print(negerrors)
     if len(negerrors>0):
         print('warning: negative penalized errors:',)
 
