@@ -323,7 +323,7 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     if len(negerrors)>0:
         print('warning: negative penalized errors:',)
 
-    print('control:' par.waves)
+    print('control:', par.waves)
 
     for j in range(1,len(par.waves)):
         r0=np.sum(par.waves[:j,0]).astype(int)
