@@ -317,11 +317,13 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     print('control: number of runners with time loss >',t3, ' is', count_t4)
 
     errorspen+=starttimes*w0
-    negerrors=np.where(errorspen>10)
+    negerrors=np.where(errorspen<0)
     print(len(negerrors[0]))
     print(negerrors)
     if len(negerrors)>0:
         print('warning: negative penalized errors:',)
+
+    print('control:' par.waves)
 
     for j in range(1,len(par.waves)):
         r0=np.sum(par.waves[:j,0]).astype(int)
