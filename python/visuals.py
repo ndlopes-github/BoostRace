@@ -318,7 +318,7 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
 
     errorspen+=starttimes*w0
     negerrors=np.where(errorspen<0)
-    print(len(negerrors))
+    print(len(negerrors[0]))
     print(negerrors)
     if len(negerrors>0):
         print('warning: negative penalized errors:',)
