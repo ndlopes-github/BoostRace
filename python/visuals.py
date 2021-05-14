@@ -349,7 +349,7 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
               ' delays ='+str(par.waves[:,par.numberofwaves]))
     #plt.text(0,550,'l1 norm='+str(np.linalg.norm(errors,ord=1)))
     #plt.text(0,500,'metric ='+str(np.sum(errorspen)))
-    plt.text(0,300,'waves ='+str(par.waves[:,0:par.numberofwaves]))
+    plt.text(0,250,'waves ='+str(par.waves[:,0:par.numberofwaves]))
     #plt.text(0,400,'delays ='+str(par.waves[:,1]))
     #plt.text(0,350,'speeds_0 ='+str(par.waves[:,2]))
     plt.legend(loc=9 )
