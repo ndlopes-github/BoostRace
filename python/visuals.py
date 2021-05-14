@@ -321,8 +321,8 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
             count_t5+=1
 
     print('control: number of runners with time loss in [0, ', t1,'] is', count_t1)
-    print('control: number of runners with time loss in ]',t1,', ' t2,'] is', count_t2)
-    print('control: number of runners with time loss in ]',t2,', ' t3,'] is', count_t3)
+    print('control: number of runners with time loss in ]',t1,', ', t2,'] is', count_t2)
+    print('control: number of runners with time loss in ]',t2,', ', t3,'] is', count_t3)
     print('control: number of runners with time loss > ]',t3, ' is', count_t4)
 
     errorspen+=starttimes*w0
