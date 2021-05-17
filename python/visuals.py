@@ -245,7 +245,11 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
 
     racetime=np.max(endtimes)
     slowrunners=np.argmax(endtimes)
-    fastrunners=np.argmin(endtimes)
+
+    mintime=np.min(runnertimes)
+    worsttime=np.max(runnertimes)
+    winrunners=np.argmin(runnertimes)
+    losrunners=np.argmax(runnertimes)
 
     starttimes_free=np.zeros(group_free.size)
     endtimes_free=np.zeros(group_free.size)
@@ -340,7 +344,12 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
 
     print('control: race time is', racetime)
     print('control: slowest racer=', slowrunners)
-    print('control: winners  =', fastrunners)
+
+    print('control: best race time  =', mintime)
+    print('control: winners  =', winrunners)
+
+    print('control: worst race time is', worsttime)
+    print('control: losers  =', losrunners)
 
     metricerror=np.sum(errorspen)
     print('control: metric error=', metricerror)
