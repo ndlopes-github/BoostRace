@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 ### PRE-PROCESSING ##############################################
 import numpy as np
-from frunnerclass import frunner, runners # As contas estÃ£o aqui
+from frunnerclass import frunner, runners # As contas estão aqui
 from settings import parameters
 from timesgenerator import *
-from tracks import track4 as track
-
+from tracks import track7 as track
+print('control: track name is=', track.name)
 # Load the settings
 par=parameters()
 print(par)

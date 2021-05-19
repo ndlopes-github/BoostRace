@@ -38,8 +38,9 @@ class parameters():
 
         self.minrho=minrho #min weight of the VL speed
         self.maxrho=maxrho #max weight of the VL speed
-
+        self.stepperdict={2 : 'abm2', 3 : 'abm3', 4 : 'abm4', 5 : 'abm5'}
         self.stepper=stepper # '2 : abm2', '3 : abm3', '4 : abm4', '5 : abm5' , # To be implemented '6: rkd5'
+        self.integrator=self.stepperdict[self.stepper]
         self.posweights=posweights # Weights for race Metrics Post-Processing
 
 
