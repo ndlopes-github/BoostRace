@@ -2,9 +2,8 @@
 ### PRE-PROCESSING ##############################################
 import numpy as np
 from frunnerclass import frunner, runners # As contas estão aqui
-from settings import parameters
+from settings import parameters, track
 from timesgenerator import *
-from tracks import track7 as track
 print('control: track name is=', track.name)
 # Load the settings
 par=parameters()
@@ -71,9 +70,6 @@ print('Writing to files with pickle')
 import pickle
 #save it
 
-with open(f'results/nsteps.pickle', 'wb') as file:
-    pickle.dump(par.observernsteps, file)
-file.close()
 
 with open(f'results/times.pickle', 'wb') as file:
     pickle.dump(times, file)

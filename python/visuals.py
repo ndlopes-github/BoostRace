@@ -8,8 +8,10 @@ import datetime
 from settings import parameters
 np.random.seed(2875620985)
 
+par=parameters()
+nsteps=par.observernsteps
 
-def racevisuals(anim=True,show=True,save=False,filename=None,nsteps=None,
+def racevisuals(anim=True,show=True,save=False,filename=None,
                 track=None,group=None,ninwaves=None,fps=None,dpi=None,cache_frame_data=True):
 
     if anim:
@@ -107,7 +109,7 @@ def racevisuals(anim=True,show=True,save=False,filename=None,nsteps=None,
             anim.save(filename+'.mp4', writer=writer,dpi=dpi) #25 normal #
 
 
-def speedsvisuals(runnerslist=None,nsteps=None,track=None,group=None,ninwaves=None,dpi=None):
+def speedsvisuals(runnerslist=None,track=None,group=None,ninwaves=None,dpi=None):
 
     plt.rcParams['figure.figsize'] = [16, 12]
     plt.rcParams['figure.dpi'] = dpi # 200 e.g. is really fine, but slower
@@ -131,7 +133,7 @@ def speedsvisuals(runnerslist=None,nsteps=None,track=None,group=None,ninwaves=No
     plt.show()
 
 
-def phasevisuals(runnerslist=None,nsteps=None,track=None,group=None,ninwaves=None,dpi=None):
+def phasevisuals(runnerslist=None,track=None,group=None,ninwaves=None,dpi=None):
 
     plt.rcParams['figure.figsize'] = [16, 12]
     plt.rcParams['figure.dpi'] = dpi # 200 e.g. is really fine, but slower
@@ -155,7 +157,7 @@ def phasevisuals(runnerslist=None,nsteps=None,track=None,group=None,ninwaves=Non
         plt.legend()
     plt.show()
 
-def rhossvisuals(runnerslist=None,nsteps=None,track=None,group=None,ninwaves=None,dpi=None):
+def rhossvisuals(runnerslist=None,track=None,group=None,ninwaves=None,dpi=None):
 
     plt.rcParams['figure.figsize'] = [16, 12]
     plt.rcParams['figure.dpi'] = dpi # 200 e.g. is really fine, but slower
@@ -180,7 +182,7 @@ def rhossvisuals(runnerslist=None,nsteps=None,track=None,group=None,ninwaves=Non
     plt.show()
 
 
-def histvisuals(nsteps=None,group=None):
+def histvisuals(group=None):
     plt.rcParams['figure.figsize'] = [12, 6]
     plt.rcParams['figure.dpi'] = 100 # 200 e.g. is really fine, but slower
 
@@ -269,7 +271,7 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     plt.ylabel("Time in seconds")
     plt.xlabel("Runner index")
     plt.legend()
-    plt.savefig('personaltimings.png')
+    plt.savefig('./reports/personaltimings.png')
     plt.clf()
 
     errors=runnertimes-runnertimes_free
@@ -364,5 +366,5 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     #plt.text(0,400,'delays ='+str(par.waves[:,1]))
     #plt.text(0,350,'speeds_0 ='+str(par.waves[:,2]))
     plt.legend(loc=9 )
-    plt.savefig('errors_report.png')
+    plt.savefig('./reports/errors_report.png')
     plt.clf()

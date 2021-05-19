@@ -2,6 +2,9 @@
 import numpy as np
 from objprint import add_objprint # To print a readable report of the settings
 
+# Track to be considered
+from tracks import track7 as track
+
 @add_objprint
 class parameters():
     def __init__(self,
