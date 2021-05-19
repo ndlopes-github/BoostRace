@@ -5,9 +5,9 @@ import numpy as np
 from scipy.interpolate import CubicSpline,interp1d
 import matplotlib.pyplot as plt
 
-from autoclass import autorepr
+from objprint import add_objprint # To print a readable report of the settings
 
-@autorepr
+@add_objprint
 class track():
     def __init__(self,name='',data=None):
         self.name=name

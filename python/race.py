@@ -2,11 +2,12 @@
 ### PRE-PROCESSING ##############################################
 import numpy as np
 from frunnerclass import frunner, runners # As contas estão aqui
-from settings import parameters, track
+from settings import parameters
 from timesgenerator import *
-print('control: track name is=', track.name)
+
 # Load the settings
 par=parameters()
+print('control: track name is=', par.track.name)
 print(par)
 
 
@@ -43,9 +44,9 @@ times, positions, velocities,rhos=os.ode_system_solver(
     group.slopefactors[:],
     group.wavedelays[:],
     group.waveinitspeeds[:],
-    track.x_data[:],
-    track.diff_data[:],
-    track.width_data[:],
+    par.track.x_data[:],
+    par.track.diff_data[:],
+    par.track.width_data[:],
     group.pos[:,0],
     par.observernsteps,
     par.observertimestep,
@@ -79,9 +80,6 @@ with open(f'results/group.pickle', 'wb') as file:
     pickle.dump(group, file)
 file.close()
 
-with open(f'results/track.pickle', 'wb') as file:
-    pickle.dump(track, file)
-file.close()
 
 with open(f'results/ninwaves.pickle', 'wb') as file:
     pickle.dump(NinWaves, file)

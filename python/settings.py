@@ -22,7 +22,8 @@ class parameters():
                  minrho=0.4,
                  maxrho=0.8,
                  stepper=2,
-                 posweights=np.array([[0.2,0],[2.0,30],[1.5,60],[1.25,120],[1.0,100000]])
+                 posweights=np.array([[0.2,0],[2.0,30],[1.5,60],[1.25,120],[1.0,100000]]),
+                 track=track
     ):
         self.timestep=timestep # Initial time step for solver 0.4
         self.observertimestep=observertimestep #observer time step in seconds
@@ -45,7 +46,7 @@ class parameters():
         self.stepper=stepper # '2 : abm2', '3 : abm3', '4 : abm4', '5 : abm5' , # To be implemented '6: rkd5'
         self.integrator=self.stepperdict[self.stepper]
         self.posweights=posweights # Weights for race Metrics Post-Processing
-
+        self.track=track
 
 ## NOTES & TO DOS
 

@@ -11,8 +11,7 @@ np.random.seed(2875620985)
 par=parameters()
 nsteps=par.observernsteps
 
-def racevisuals(anim=True,show=True,save=False,filename=None,
-                track=None,group=None,ninwaves=None,fps=None,dpi=None,cache_frame_data=True):
+def racevisuals(anim=True,show=True,save=False,filename=None,group=None,ninwaves=None,fps=None,dpi=None,cache_frame_data=True):
 
     if anim:
         plt.rcParams['figure.figsize'] = [8, 6]
@@ -20,14 +19,14 @@ def racevisuals(anim=True,show=True,save=False,filename=None,
 
 
         fig = plt.figure(figsize=(20,5))
-        x=np.linspace(track.x_data.min(), track.x_data.max(), 1000)
-        ax = plt.axes(xlim=(track.x_data.min(), track.x_data.max()),
-                      ylim=(track.cspline(x).min()-1,
-                            track.cspline(x).max()+2*track.cspline2(x).max()+1))
+        x=np.linspace(par.track.x_data.min(), par.track.x_data.max(), 1000)
+        ax = plt.axes(xlim=(par.track.x_data.min(), par.track.x_data.max()),
+                      ylim=(par.track.cspline(x).min()-1,
+                            par.track.cspline(x).max()+2*par.track.cspline2(x).max()+1))
         plt.vlines(0.0,-1,22,'k')
         plt.vlines(10000.,-1,22,'k')
-        plt.plot(x,track.cspline(x),'-')
-        plt.plot(x,track.cspline(x)+2*track.cspline2(x)+1,'-')
+        plt.plot(x,par.track.cspline(x),'-')
+        plt.plot(x,par.track.cspline(x)+2*par.track.cspline2(x)+1,'-')
         plt.plot([],[],'.')
 
 
@@ -66,8 +65,8 @@ def racevisuals(anim=True,show=True,save=False,filename=None,
         #Pre-process road width-> RoadW
         roadW=np.zeros((group.size,nsteps))
         for i in range(nsteps):
-            roadZ[:,i]=track.cspline(group.pos[:,i])
-            roadW[:,i]=track.cspline2(group.pos[:,i])
+            roadZ[:,i]=par.track.cspline(group.pos[:,i])
+            roadW[:,i]=par.track.cspline2(group.pos[:,i])
 
 
         def init():
@@ -109,7 +108,7 @@ def racevisuals(anim=True,show=True,save=False,filename=None,
             anim.save(filename+'.mp4', writer=writer,dpi=dpi) #25 normal #
 
 
-def speedsvisuals(runnerslist=None,track=None,group=None,ninwaves=None,dpi=None):
+def speedsvisuals(runnerslist=None,group=None,ninwaves=None,dpi=None):
 
     plt.rcParams['figure.figsize'] = [16, 12]
     plt.rcParams['figure.dpi'] = dpi # 200 e.g. is really fine, but slower
@@ -133,7 +132,7 @@ def speedsvisuals(runnerslist=None,track=None,group=None,ninwaves=None,dpi=None)
     plt.show()
 
 
-def phasevisuals(runnerslist=None,track=None,group=None,ninwaves=None,dpi=None):
+def phasevisuals(runnerslist=None,group=None,ninwaves=None,dpi=None):
 
     plt.rcParams['figure.figsize'] = [16, 12]
     plt.rcParams['figure.dpi'] = dpi # 200 e.g. is really fine, but slower
@@ -157,7 +156,7 @@ def phasevisuals(runnerslist=None,track=None,group=None,ninwaves=None,dpi=None):
         plt.legend()
     plt.show()
 
-def rhossvisuals(runnerslist=None,track=None,group=None,ninwaves=None,dpi=None):
+def rhossvisuals(runnerslist=None,group=None,ninwaves=None,dpi=None):
 
     plt.rcParams['figure.figsize'] = [16, 12]
     plt.rcParams['figure.dpi'] = dpi # 200 e.g. is really fine, but slower
