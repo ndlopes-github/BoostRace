@@ -80,7 +80,6 @@ with open(f'results/group.pickle', 'wb') as file:
     pickle.dump(group, file)
 file.close()
 
-
 with open(f'results/ninwaves.pickle', 'wb') as file:
     pickle.dump(NinWaves, file)
 file.close()

@@ -5,28 +5,32 @@
 import os
 
 def clean():
+    print('***********start: cleanning************')
     os.system('rm -rf ./results*')
     os.system('rm -f ./reports/*')
-    print('***********cleanning*')
+    print('***********end: cleanning************')
 
 def run_free( ):
+    print('***********start: run_free************')
     os.system('cmake -DUSE_DEBUG=ON CMakeLists.txt')
     os.system('make -j8')
     os.system('mkdir results')
     os.system('python3.9 ./python/race.py')
     os.system('mv ./results ./results_free')
-    print('***********run_free*')
+    print('***********end: run_free************')
 
 def run_normal( ):
+    print('***********start: run_normal************')
     os.system('cmake -DUSE_DEBUG=OFF CMakeLists.txt')
     os.system('make -j8')
     os.system('mkdir results')
     os.system('python3.9 ./python/race.py')
-    print('***********run_normal*')
+    print('***********end: run_normal************')
 
 def reports():
+    print('***********start: reports************')
     os.system('python3.9 ./python/viewtimes.py')
-    print('***********reports*')
+    print('***********end: reports************')
 
 clean()
 run_free()
