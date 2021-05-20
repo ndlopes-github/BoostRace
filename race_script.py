@@ -7,7 +7,7 @@ import os
 def clean():
     print('***********start: cleanning************')
     os.system('rm -rf ./results*')
-    os.system('rm -f ./reports/*')
+    os.system('rm -f ./reports/*.png ./reports/*.pdf')
     print('***********end: cleanning************')
 
 def run_free( ):

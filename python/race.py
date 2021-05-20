@@ -19,7 +19,7 @@ waveinitspeeds=par.waves[:,1+nwaves]
 
 FAvgTimes, NinWaves, InitPositions, WaveDelays,WaveInitSpeeds =\
     inversepseudosigmoid3(number=par.nrunners,
-                          lnumber=10,
+                          lnumber=7, # to modify
                           ldist=0.5,
                           mixwaves=mixwaves,
                           wavedelays=wavedelays,
