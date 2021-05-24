@@ -21,12 +21,12 @@ def racevisuals(anim=True,show=True,save=False,filename=None,group=None,ninwaves
         fig = plt.figure(figsize=(20,5))
         x=np.linspace(par.track.x_data.min(), par.track.x_data.max(), 1000)
         ax = plt.axes(xlim=(par.track.x_data.min(), par.track.x_data.max()),
-                      ylim=(par.track.cspline(x).min()-1,
-                            par.track.cspline(x).max()+2*par.track.cspline2(x).max()+1))
+                      ylim=(par.track.cspline(x).min()-0.5,
+                            par.track.cspline(x).max()+par.track.cspline2(x).max()+0.5))
         plt.vlines(0.0,-1,22,'k')
         plt.vlines(10000.,-1,22,'k')
         plt.plot(x,par.track.cspline(x),'-')
-        plt.plot(x,par.track.cspline(x)+2*par.track.cspline2(x)+1,'-')
+        plt.plot(x,par.track.cspline(x)+par.track.cspline2(x),'-')
         plt.plot([],[],'.')
 
 
@@ -83,7 +83,7 @@ def racevisuals(anim=True,show=True,save=False,filename=None,group=None,ninwaves
             for number,line in zip(ninwaves,lines):
                 we+=number
                 xdata=group.pos[ws:we,i]
-                ydata=Y[ws:we]*(2*roadW[ws:we,i]+1)+roadZ[ws:we,i]
+                ydata=Y[ws:we]*(roadW[ws:we,i])+roadZ[ws:we,i]
                 line.set_data(xdata,ydata)
                 ws+=number
 

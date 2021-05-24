@@ -2,7 +2,13 @@
 
 import numpy as np
 from scipy.interpolate import CubicSpline
+from settings import parameters
+
 np.random.seed(993869)
+
+par=parameters()
+nsteps=par.observernsteps
+
 
 ######### Histogram data
 TimeBins=np.arange(start=30, stop=101, step=1)
@@ -129,7 +135,14 @@ def inversepseudosigmoid2(number,lnumber,ldist,ninwaves,wavedelays,waveinitspeed
 
 
 
-def inversepseudosigmoid3(number,lnumber,ldist,mixwaves,wavedelays,waveinitspeeds):
+def inversepseudosigmoid3( ):
+    ldist=par.ldist
+    number=par.nrunners
+    nwaves=par.numberofwaves
+    mixwaves=par.waves[:,0:nwaves].astype(int) # TO REMOVE
+    wavedelays=par.waves[:,nwaves]
+    waveinitspeeds=par.waves[:,1+nwaves]
+
     numberofwaves=len(mixwaves)
     numberofparts=numberofwaves
     print('control: number of waves', numberofwaves)
@@ -183,7 +196,7 @@ def inversepseudosigmoid3(number,lnumber,ldist,mixwaves,wavedelays,waveinitspeed
     for nwave,nrunners in enumerate(NinWaves):
         linecounter=0
         for i in range(nrunners):
-            if (i+1)%lnumber==0:
+            if (i+1)%int(par.track.cspline2(-linecounter*ldist))==0:
                 linecounter+=1
             InitPositions[i+itemcount]=-linecounter*ldist#+0.30*np.random.random_sample()-0.15
             WaveDelays[i+itemcount]=wavedelays[nwave]+linecounter*ReactionLineTime

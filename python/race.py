@@ -12,18 +12,7 @@ print(par)
 
 
 ### Initial distribution ###
-nwaves=par.numberofwaves
-mixwaves=par.waves[:,0:nwaves].astype(int) # TO REMOVE
-wavedelays=par.waves[:,nwaves]
-waveinitspeeds=par.waves[:,1+nwaves]
-
-FAvgTimes, NinWaves, InitPositions, WaveDelays,WaveInitSpeeds =\
-    inversepseudosigmoid3(number=par.nrunners,
-                          lnumber=7, # to modify
-                          ldist=0.5,
-                          mixwaves=mixwaves,
-                          wavedelays=wavedelays,
-                          waveinitspeeds=waveinitspeeds)
+FAvgTimes, NinWaves, InitPositions, WaveDelays,WaveInitSpeeds =inversepseudosigmoid3( )
 
 runnerslist=[]
 for time,wavedelay,waveinitspeed in zip(FAvgTimes,WaveDelays,WaveInitSpeeds):

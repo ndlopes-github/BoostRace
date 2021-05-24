@@ -23,7 +23,8 @@ class parameters():
                  maxrho=0.8,
                  stepper=2,
                  posweights=np.array([[0.2,0],[2.0,30],[1.5,60],[1.25,120],[1.0,100000]]),
-                 track=track
+                 track=track,
+                 ldist=0.5
     ):
         self.timestep=timestep # Initial time step for solver 0.4
         self.observertimestep=observertimestep #observer time step in seconds
@@ -47,6 +48,7 @@ class parameters():
         self.integrator=self.stepperdict[self.stepper]
         self.posweights=posweights # Weights for race Metrics Post-Processing
         self.track=track
+        self.ldist=ldist # Line distances at startup in meter
 
 ## NOTES & TO DOS
 
