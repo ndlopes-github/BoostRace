@@ -3,7 +3,7 @@ import numpy as np
 from objprint import add_objprint # To print a readable report of the settings
 
 # Track to be considered
-from tracks import track7 as track
+from tracks import *
 
 @add_objprint
 class parameters():
@@ -12,9 +12,7 @@ class parameters():
                  observertimestep=1.0,
                  observernsteps=7200,
                  waves=np.array([
-                     [3333,0,0, 0.0,3.34],
-                     [0,3333,0, 210.0,2.92],
-                     [0,0,3334, 450.0,2.5]]
+                     [10000, 0.0,3.34]]
                  ),
                  linearfrontview=4,
                  minratio= 15./40.,
@@ -23,7 +21,7 @@ class parameters():
                  maxrho=0.8,
                  stepper=2,
                  posweights=np.array([[0.2,0],[2.0,30],[1.5,60],[1.25,120],[1.0,100000]]),
-                 track=track,
+                 track=track15,
                  ldist=0.5
     ):
         self.timestep=timestep # Initial time step for solver 0.4
@@ -64,4 +62,10 @@ waves=np.array([[3333,0.0,3.34],[3333,300.0,2.92],[3334,600.0,2.5]]),
 waves=np.array([[2500,0,0,0.0,3.34],
                                  [0,2500,0,210.0,2.92],
                                  [0,0,5000,450.0,2.5]]),
+
+
+waves=np.array([
+                     [3333,0,0, 0.0,3.34],
+                     [0,3333,0, 210.0,2.92],
+                     [0,0,3334, 450.0,2.5]]
 '''
