@@ -354,9 +354,12 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
 
     metricerror=np.sum(errorspen)
     print('control: metric error=', metricerror)
+    l1error=np.linalg.norm(errors,ord=1)
+    print('control: l1 error=', l1error)
+
 
     plt.xlabel('Runner index (slow runners= '+str(slowrunners)+')')
-    plt.title('l1 norm='+str(np.linalg.norm(errors,ord=1))+\
+    plt.title('l1 norm='+str(l1error)+\
               '\n metric ='+str(metricerror)+\
               ' delays ='+str(par.waves[:,par.numberofwaves]))
     #plt.text(0,550,'l1 norm='+str(np.linalg.norm(errors,ord=1)))

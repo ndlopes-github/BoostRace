@@ -111,57 +111,12 @@ track3= track('imaginary3',data=np.array([[-500,0,10.],
                                           [10200,0.0,10.]]))
 
 
-track15= track('flat15',data=np.array([[-500,0,15.],
-                                    [0,0,15.],
-                                    [10000,0,15.],
-                                    [10200,0.0,15.]]))
-
-track14= track('flat14',data=np.array([[-500,0,14.],
-                                    [0,0,14.],
-                                    [10000,0,14.],
-                                    [10200,0.0,14.]]))
-
-
-track13= track('flat13',data=np.array([[-500,0,13.],
-                                    [0,0,13.],
-                                    [10000,0,13.],
-                                    [10200,0.0,13.]]))
-
-
-track12= track('flat12',data=np.array([[-500,0,12.],
-                                    [0,0,12.],
-                                    [10000,0,12.],
-                                    [10200,0.0,12.]]))
-
-track11= track('flat11',data=np.array([[-500,0,11.],
-                                    [0,0,11.],
-                                    [10000,0,11.],
-                                    [10200,0.0,11.]]))
-
-track10= track('flat10',data=np.array([[-500,0,10.],
-                                    [0,0,10.],
-                                    [10000,0,10.],
-                                    [10200,0.0,10.]]))
-
-track9= track('flat9',data=np.array([[-500,0,9.],
-                                    [0,0,9.],
-                                    [10000,0,9.],
-                                    [10200,0.0,9.]]))
-
-track8= track('flat8',data=np.array([[-500,0,8.],
-                                    [0,0,8.],
-                                    [10000,0,8.],
-                                    [10200,0.0,8.]]))
-
-track7= track('flat7',data=np.array([[-500,0,7.],
-                                    [0,0,7.],
-                                    [10000,0,7.],
-                                    [10200,0.0,7.]]))
-
-track6= track('flat6',data=np.array([[-500,0,6.],
-                                    [0,0,6.],
-                                    [10000,0,6.],
-                                    [10200,0.0,6.]]))
+# For fixed width
+def track_fixed_width(width):
+    return track('flat'+str(width),data=np.array([[-500,0,width],
+                                    [0,0,width],
+                                    [10000,0,width],
+                                    [10200,0.0,width]]))
 
 #track2= track('imaginary2',data=np.array([0,10.0,-10.0,-15.0,20.0,-7.0,
 #                                              9.0,-10.0,-1.0,1.,0.]))
