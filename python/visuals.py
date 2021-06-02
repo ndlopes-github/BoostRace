@@ -11,6 +11,12 @@ np.random.seed(2875620985)
 par=parameters()
 nsteps=par.observernsteps
 
+def spystep(ws=None, we=None,step=None, group=None):
+    data=group.pos[ws:we,step]
+    print('Control: Runners position at step=', step)
+    print(data)
+    print('Control: end spy')
+
 def racevisuals(anim=True,show=True,save=False,filename=None,group=None,ninwaves=None,fps=None,dpi=None,cache_frame_data=True):
 
     if anim:
