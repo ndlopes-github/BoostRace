@@ -12,7 +12,7 @@ print(par)
 
 
 ### Initial distribution ###
-FAvgTimes, NinWaves, InitPositions, WaveDelays,WaveInitSpeeds =inversepseudosigmoid3( )
+FAvgTimes, NinWaves, InitPositions, WaveDelays,WaveInitSpeeds =inversepseudosigmoid( )
 
 runnerslist=[]
 for time,wavedelay,waveinitspeed in zip(FAvgTimes,WaveDelays,WaveInitSpeeds):
