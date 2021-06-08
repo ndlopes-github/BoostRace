@@ -140,6 +140,7 @@ def inversepseudosigmoid3( ):
     number=par.nrunners
     nwaves=par.numberofwaves
     mixwaves=par.waves[:,0:nwaves].astype(int) # TO REMOVE
+    print('control: preprocessing times: waves:', mixwaves)
     wavedelays=par.waves[:,nwaves]
     waveinitspeeds=par.waves[:,1+nwaves]
 
