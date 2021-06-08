@@ -182,7 +182,6 @@ def inversepseudosigmoid3( ):
     InitPositions=np.zeros(number)
     WaveDelays=np.zeros(number)
     WaveInitSpeeds=np.zeros(number)
-    #mixwaves=np.array(mixwaves)
     wavedelays=np.array(wavedelays)
 
 
