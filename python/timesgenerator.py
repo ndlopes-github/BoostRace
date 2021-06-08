@@ -62,6 +62,8 @@ def inversepseudosigmoid( ):
         we+=len(parts)
         print(wb,we)
         assert len(waves[wb:we])==len(parts), ' error '+ str(part)+'  '+str(wave)+' '+str(len(waves[wb:we]))+' '+str(len(parts))
+        #mix parts in each wave
+        parts=np.random.permutation(parts)
         waves[wb:we]=parts[:]
         wb=we
 
