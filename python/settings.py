@@ -11,9 +11,10 @@ class parameters():
                  timestep=0.4,
                  observertimestep=1.0,
                  observernsteps=9100,
-                 waves=np.array([
-                     [10000, 0.0,3.34]]
-                 ),
+                 waves=np.array( [
+                     [4000,1000,0.0,3.34],
+                     [1000,4000,289,2.92]
+                 ]),
                  linearfrontview=4,
                  minratio= 15./40.,
                  maxratio= 25./40.,
@@ -21,7 +22,7 @@ class parameters():
                  maxrho=0.8,
                  stepper=2,
                  posweights=np.array([[0.2,0],[2.0,30],[1.5,60],[1.25,120],[1.0,100000]]),
-                 track=track_fixed_width(19.0),
+                 track=track_fixed_width(10.0),
                  ldist=0.5
     ):
         self.timestep=timestep # Initial time step for solver 0.4
@@ -48,6 +49,7 @@ class parameters():
         self.track=track
         self.ldist=ldist # Line distances at startup in meter
 
+
 ## NOTES & TO DOS
 
 '''
@@ -59,6 +61,11 @@ waves=np.array([[2800,0.0,3.34],[2800,210.0,2.92],[6300,450.0,2.5]]),
 waves=np.array([[3333,0.0,3.34],[3333,210.0,2.92],[3334,450.0,2.5]]),
 waves=np.array([[3333,0.0,3.34],[3333,300.0,2.92],[3334,600.0,2.5]]),
 
+waves=np.array([
+                     [10000, 0.0,3.34]]
+                 ),
+
+
 waves=np.array([[2500,0,0,0.0,3.34],
                                  [0,2500,0,210.0,2.92],
                                  [0,0,5000,450.0,2.5]]),
@@ -68,4 +75,27 @@ waves=np.array([
                      [3333,0,0, 0.0,3.34],
                      [0,3333,0, 210.0,2.92],
                      [0,0,3334, 450.0,2.5]]
+
+
+com as 3 ondas, fixando a população de cada onda, podíamos testar com os gaps mínimos G1 e G2 iguais aos tempos de saída da onda anterior (por exemplo se a primeira onda demora 2 minutos a sair,
+testa-se G1=120, 180, 240, 300, se
+G2 demora 150 segundos a sair testa-se
+G2=150,
+210,
+270,
+330). Depois faz-se uma matriz de resultados de métrica e regressão na coisa
+
+yo, já experimentaste alguma coisa com as duas ondas?
+Em termos de mix tinha pensado em avaliar aqueles delays que falámos no outro dia com as versões:
+
+usando a separação no Q0.5 - 4000Q1,1000Q2/1000Q2,4000Q2 (ou seja trocam 1000), e outra com troca só de 500
+
+waves=np.array( [[5000,0,0.0,3.34],[0,5000,350,2.92]])
+
+usando a separação no Q0.25 (mais comum e assimétrica) - 2000,500/500,7000 (troca de 500) e outra com troca só de 250.
+
+Acho que com isto ficávamos com dados suficientes para avaliar as diferenças principais com 2 ondas
+
+
+
 '''

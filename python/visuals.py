@@ -237,7 +237,7 @@ def histvisuals(group=None):
 
 
 def timesvisuals(times=None,times_free=None,group=None,group_free=None):
-
+    par=parameters()
     starttimes=np.zeros(group.size)
     endtimes=np.zeros(group.size)
 
@@ -246,11 +246,28 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     #for runner in wave:
     #       pass
 
+
+
+
     for runner in range(group.size):
         tsidx=np.min(np.where(group.pos[runner,:]>0))
         teidx=np.min(np.where(group.pos[runner,:]>10000))
         starttimes[runner]=times[tsidx]
         endtimes[runner]=times[teidx]
+
+    print('control: waves description: departures computation', par.waves)
+    r0=0
+    r1=np.sum(par.waves[0, :par.numberofwaves]).astype(int)
+    wave_departure=np.max(starttimes[r0:r1])
+    print('control: departures:  wave: ',0, ' departure:',  wave_departure)
+    for j in range(1,len(par.waves)):
+        r0+=np.sum(par.waves[j-1, :par.numberofwaves]).astype(int)
+        r1=r0+np.sum(par.waves[j, :par.numberofwaves]).astype(int)
+        wave_departure=np.max(starttimes[r0:r1])
+        print('control: departures:  wave: ',j, ' departure:',  wave_departure)
+
+
+
 
     runnertimes=endtimes-starttimes
 
@@ -285,8 +302,7 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
 
     errors=runnertimes-runnertimes_free
     print('control:debug: negative errors: ',*np.where(errors<0))
-    print('control: departure: Runners  affected by the velocity rule at departure')
-    print('control:', len(*np.where(starttimes!=starttimes_free)))
+    print('control: departure: runners  affected by the velocity rule at departure', len(*np.where(starttimes!=starttimes_free)))
 
     # print('free times',runnertimes_free[np.where(errors<0)])
     # print('times',runnertimes[np.where(errors<0)])
@@ -295,7 +311,7 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     # print('free end',endtimes_free[np.where(errors<0)])
     # print('end',endtimes[np.where(errors<0)])
 
-    par=parameters()
+
     t1=par.posweights[1,1]
     t2=par.posweights[2,1]
     t3=par.posweights[3,1]
@@ -335,30 +351,30 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     errorspen+=starttimes*w0
     negerrors=np.where(errorspen<0)
     print('control: debug: warning: number of negative penalized errors:', len(negerrors[0]))
-    print('control: debug: warning: negative penalized errors:', negerrors)
+    print('control: debug: warning: runners with negative penalized errors:', *negerrors)
 
-    print('control: waves description', par.waves)
+    print('control: waves description: errors computation for metric', par.waves)
     r0=0
     r1=0
     for j in range(1,len(par.waves)):
-        r0+=np.sum(par.waves[:par.numberofwaves,j-1]).astype(int)
-        r1=r0+np.sum(par.waves[:par.numberofwaves,j]).astype(int)
+        r0+=np.sum(par.waves[j-1, :par.numberofwaves]).astype(int)
+        r1=r0+np.sum(par.waves[j, :par.numberofwaves]).astype(int)
         errorspen[r0:r1]-=w0*par.waves[j,par.numberofwaves]
-        print('control: wave start: wave_end',r0,' ',r1-1,', ',par.waves[j,par.numberofwaves])
+        print('control: wave ', j,' start: ',r0,'wave end: ',r1-1,', ',par.waves[j,par.numberofwaves])
 
 
     plt.plot(errors,'o',ms=0.5,label='Errors')
     plt.plot(errorspen,'o',ms=0.5,label='PErrors')
-    plt.ylabel('Time in seconds (total='+str(racetime)+')')
+    plt.ylabel('Time in seconds (total: '+str(racetime)+')')
 
-    print('control: race time is', racetime)
-    print('control: slowest racer=', slowrunners)
+    print('control: race time: ', racetime)
+    print('control: slowest racer: ', slowrunners)
 
-    print('control: best race time  =', mintime)
-    print('control: winners  =', winrunners)
+    print('control: best race time: ', mintime)
+    print('control: winners: ', winrunners)
 
-    print('control: worst race time is', worsttime)
-    print('control: losers  =', losrunners)
+    print('control: worst race time: ', worsttime)
+    print('control: losers: ', losrunners)
 
     metricerror=np.sum(errorspen)
     print('control: metric error:', metricerror)
