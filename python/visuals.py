@@ -241,6 +241,10 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     starttimes=np.zeros(group.size)
     endtimes=np.zeros(group.size)
 
+    #Wave departure times#
+    #for wave in waves:
+    #for runner in wave:
+    #       pass
 
     for runner in range(group.size):
         tsidx=np.min(np.where(group.pos[runner,:]>0))
@@ -280,9 +284,9 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     plt.clf()
 
     errors=runnertimes-runnertimes_free
-    print(*np.where(errors<0))
-    print('Runners  affected by the velocity rule at departure')
-    print(len(*np.where(starttimes!=starttimes_free)))
+    print('control:debug: negative errors: ',*np.where(errors<0))
+    print('control: departure: Runners  affected by the velocity rule at departure')
+    print('control:', len(*np.where(starttimes!=starttimes_free)))
 
     # print('free times',runnertimes_free[np.where(errors<0)])
     # print('times',runnertimes[np.where(errors<0)])
@@ -330,19 +334,17 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
 
     errorspen+=starttimes*w0
     negerrors=np.where(errorspen<0)
-    print(len(negerrors[0]))
-    print(negerrors)
-    if len(negerrors)>0:
-        print('warning: negative penalized errors:',)
+    print('control: debug: warning: number of negative penalized errors:', len(negerrors[0]))
+    print('control: debug: warning: negative penalized errors:', negerrors)
 
-    print('control:', par.waves)
+    print('control: waves description', par.waves)
     r0=0
     r1=0
     for j in range(1,len(par.waves)):
         r0+=np.sum(par.waves[:par.numberofwaves,j-1]).astype(int)
         r1=r0+np.sum(par.waves[:par.numberofwaves,j]).astype(int)
         errorspen[r0:r1]-=w0*par.waves[j,par.numberofwaves]
-        print('control',r0,' ',r1,', ',par.waves[j,par.numberofwaves])
+        print('control: wave start: wave_end',r0,' ',r1-1,', ',par.waves[j,par.numberofwaves])
 
 
     plt.plot(errors,'o',ms=0.5,label='Errors')
@@ -359,9 +361,9 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     print('control: losers  =', losrunners)
 
     metricerror=np.sum(errorspen)
-    print('control: metric error=', metricerror)
+    print('control: metric error:', metricerror)
     l1error=np.linalg.norm(errors,ord=1)
-    print('control: l1 error=', l1error)
+    print('control: l1 error:', l1error)
 
 
     plt.xlabel('Runner index (slow runners= '+str(slowrunners)+')')
