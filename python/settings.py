@@ -10,10 +10,10 @@ class parameters():
     def __init__(self,
                  timestep=0.4,
                  observertimestep=1.0,
-                 observernsteps=9100,
+                 observernsteps=7160,
                  waves=np.array( [
-                     [4000,1000,0.0,3.34],
-                     [1000,4000,343,2.92]
+                     [3000,2000,0.0,3.34],
+                     [2000,3000,406,2.92]
                  ]),
                  linearfrontview=4,
                  minratio= 15./40.,
