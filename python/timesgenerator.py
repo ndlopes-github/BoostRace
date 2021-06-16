@@ -33,7 +33,7 @@ AcumulatedRelativeRunnerDist=np.cumsum(RunnerDist/np.sum(RunnerDist))
 
 def inversepseudosigmoid( ):
     ldist=par.ldist
-    number=par.nrunners
+    nrunners=par.nrunners
     nwaves=par.numberofwaves
     mixwaves=par.waves[:,0:nwaves].astype(int) # TO REMOVE
     print('control: preprocessing times: waves:', mixwaves)
@@ -43,7 +43,7 @@ def inversepseudosigmoid( ):
     numberofwaves=len(mixwaves)
     numberofparts=numberofwaves
     print('control: number of waves', numberofwaves)
-    waves=np.zeros(number)
+    waves=np.zeros(nrunners)
 
     wb=0
     we=0
@@ -54,9 +54,11 @@ def inversepseudosigmoid( ):
         for part in range(numberofparts):
             size=mixwaves[wave,part]
             pe+=size
-            wavepart=np.random.uniform(part/numberofparts,(part+1)/numberofparts,
+            wavepart=np.random.uniform(pb/nrunners,pe/nrunners,
                                        size=(size,))
-
+           ## wavepart=np.random.uniform(part/numberofparts,(part+1)/numberofparts,
+            ##                           size=(size,))
+            print('control: uniform part begin=', part/numberofparts, 'end=', (part+1)/numberofparts)
             parts[pb:pe]=wavepart[:]
             pb=pe
         we+=len(parts)
@@ -77,9 +79,9 @@ def inversepseudosigmoid( ):
 
     #AvgTimes=np.sort(AvgTimes) # The Fastest are in the first Lines
 
-    InitPositions=np.zeros(number)
-    WaveDelays=np.zeros(number)
-    WaveInitSpeeds=np.zeros(number)
+    InitPositions=np.zeros(nrunners)
+    WaveDelays=np.zeros(nrunners)
+    WaveInitSpeeds=np.zeros(nrunners)
     wavedelays=np.array(wavedelays)
 
 
