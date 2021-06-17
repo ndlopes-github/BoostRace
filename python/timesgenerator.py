@@ -36,9 +36,10 @@ def inversepseudosigmoid( ):
     nrunners=par.nrunners
     nwaves=par.numberofwaves
     mixwaves=par.waves[:,0:nwaves].astype(int) # TO REMOVE
-    mixwavesT=np.transpose(mixwaves)
+
+
     print('control: preprocessing times: waves:', mixwaves)
-    print('control: preprocessing times: Transposed waves:', mixwavesT)
+
     wavedelays=par.waves[:,nwaves]
     waveinitspeeds=par.waves[:,1+nwaves]
 
@@ -46,7 +47,13 @@ def inversepseudosigmoid( ):
     numberofparts=numberofwaves
 
 
+    partitions=np.zeros(len(mixwaves)+1)
+    for part in range(numberofwaves):
+        partitions[part+1]=partitions[part]+np.sum(mixwaves[:,part])/nrunners
 
+
+
+    print('control: partitions', partitions)
     print('control: number of waves', numberofwaves)
     waves=np.zeros(nrunners)
 
@@ -61,10 +68,11 @@ def inversepseudosigmoid( ):
             pe+=size
             ##     wavepart=np.random.uniform(pb/nrunners,pe/nrunners,
             ##                               size=(size,))
-            wavepart=np.random.uniform(part/numberofparts,(part+1)/numberofparts,
-                                   size=(size,))
-            print('control: uniform part begin=', pb/nrunners, 'end=', pe/nrunners)
-            print('control: uniform part begin=', part/numberofparts, 'end=', (part+1)/numberofparts)
+            ##            wavepart=np.random.uniform(part/numberofparts,(part+1)/numberofparts,
+            ##                                  size=(size,))
+            wavepart=np.random.uniform(partitions[part],partitions[part+1],size=(size,))
+            #            print('control: uniform part begin=', pb/nrunners, 'end=', pe/nrunners)
+            print('control: uniform part begin=', partitions[part], 'end=', partitions[part+1])
             parts[pb:pe]=wavepart[:]
             pb=pe
         we+=len(parts)
