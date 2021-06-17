@@ -36,12 +36,17 @@ def inversepseudosigmoid( ):
     nrunners=par.nrunners
     nwaves=par.numberofwaves
     mixwaves=par.waves[:,0:nwaves].astype(int) # TO REMOVE
+    mixwavesT=np.transpose(mixwaves)
     print('control: preprocessing times: waves:', mixwaves)
+    print('control: preprocessing times: Transposed waves:', mixwavesT)
     wavedelays=par.waves[:,nwaves]
     waveinitspeeds=par.waves[:,1+nwaves]
 
     numberofwaves=len(mixwaves)
     numberofparts=numberofwaves
+
+
+
     print('control: number of waves', numberofwaves)
     waves=np.zeros(nrunners)
 
@@ -54,10 +59,11 @@ def inversepseudosigmoid( ):
         for part in range(numberofparts):
             size=mixwaves[wave,part]
             pe+=size
-            wavepart=np.random.uniform(pb/nrunners,pe/nrunners,
-                                       size=(size,))
-           ## wavepart=np.random.uniform(part/numberofparts,(part+1)/numberofparts,
-            ##                           size=(size,))
+            ##     wavepart=np.random.uniform(pb/nrunners,pe/nrunners,
+            ##                               size=(size,))
+            wavepart=np.random.uniform(part/numberofparts,(part+1)/numberofparts,
+                                   size=(size,))
+            print('control: uniform part begin=', pb/nrunners, 'end=', pe/nrunners)
             print('control: uniform part begin=', part/numberofparts, 'end=', (part+1)/numberofparts)
             parts[pb:pe]=wavepart[:]
             pb=pe
@@ -85,8 +91,8 @@ def inversepseudosigmoid( ):
     wavedelays=np.array(wavedelays)
 
 
-    #Generate soft mixture of the runners thru waves
 
+    # Position along the start line
     NinWaves=np.zeros(numberofwaves).astype(int)
     for wave in range(numberofwaves):
         NinWaves[wave]=np.sum(mixwaves[wave,:numberofwaves])
