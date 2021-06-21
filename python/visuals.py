@@ -397,16 +397,16 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
 
     logtex=open('./reports/simpletex.txt','a')
     for x in par.waves:
-        print('$&(',end='', file=logtex)
+        print('& $(',end='', file=logtex)
         for i in range(len(par.waves)):
             print('{:d}, '.format(int(x[i])), end='',file=logtex)
         i=len(par.waves)
-        print('{:.2f}, '.format(x[i]), end='',file=logtex)
+        print('{:d}, '.format(int(x[i])), end='',file=logtex)
         i=len(par.waves)+1
         print('{:.2f} '.format(x[i]), end='',file=logtex)
         print(')$',file=logtex)
 
     text='''& ${l1error:.3E}$
 & ${metricerror:.3E}$
-& ${racetime:4d}$'''.format(l1error=l1error,metricerror=metricerror,racetime=int(racetime))
+& ${racetime:4d}$ \\\\'''.format(l1error=l1error,metricerror=metricerror,racetime=int(racetime))
     print(text+'\n\n',file=logtex)

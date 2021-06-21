@@ -12,8 +12,8 @@ class parameters():
                  observertimestep=1.0,
                  observernsteps=7160,
                  waves=np.array( [
-                     [1500,1000,0.0,3.34],
-                     [1000,6500,169,2.92]
+                     [2475,25,0.0,3.34],
+                     [25,7475,455,2.92]
                  ]),
                  linearfrontview=4,
                  minratio= 15./40.,
