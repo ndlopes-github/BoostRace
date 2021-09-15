@@ -11,10 +11,14 @@ class parameters():
                  timestep=0.4,
                  observertimestep=1.0,
                  observernsteps=7160,
-                 waves=np.array( [
-                     [2475,25,0.0,3.34],
-                     [25,7475,455,2.92]
-                 ]),
+                 #waves=np.array( [
+                 #    [2475,25,0.0,3.34],
+                 #    [25,7475,455,2.92]
+                 #]),
+                 waves=np.array([
+                     [3333,0,0, 0.0,3.34],
+                     [0,3333,0, 210.0,2.92],
+                     [0,0,3334, 450.0,2.5]]),
                  linearfrontview=4,
                  minratio= 15./40.,
                  maxratio= 25./40.,
@@ -96,6 +100,15 @@ usando a separação no Q0.25 (mais comum e assimétrica) - 2000,500/500,7000 (t
 
 Acho que com isto ficávamos com dados suficientes para avaliar as diferenças principais com 2 ondas
 
+
+15/10/2021
+Testes 3 ondas:
+A- 3333,3333,3334;
+1-3000,166,167; 166,3000,167; 167,167,3000;
+2-2333,500,500; 500, 2333,500; 500, 500, 2334;
+B-2500,2500,5000;
+1-2200, 100, 200; 100, 2200,200; 200, 200,4600;
+2-1900,200,400; 200, 1900, 400; 400,400, 4200;
 
 
 '''
