@@ -266,7 +266,7 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
         wave_departure=np.max(starttimes[r0:r1])
         wave_time_gap_to_cross=np.max(starttimes[r0:r1])-np.min(starttimes[r0:r1])
         print('control: departures:  wave: ',j, ' departure:',  wave_departure)
-        print('control: departures:  wave: ',j, ' time gap to cross:',  wave_time_to_cross)
+        print('control: departures:  wave: ',j, ' time gap to cross:',  wave_time_gap_to_cross)
 
 
 
