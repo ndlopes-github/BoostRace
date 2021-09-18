@@ -259,7 +259,9 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     r0=0
     r1=np.sum(par.waves[0, :par.numberofwaves]).astype(int)
     wave_departure=np.max(starttimes[r0:r1])
+    wave_time_gap_to_cross=np.max(starttimes[r0:r1])-np.min(starttimes[r0:r1])
     print('control: departures:  wave: ',0, ' departure:',  wave_departure)
+    print('control: departures:  wave: ',0, ' time gap to cross:',  wave_time_gap_to_cross)
     for j in range(1,len(par.waves)):
         r0+=np.sum(par.waves[j-1, :par.numberofwaves]).astype(int)
         r1=r0+np.sum(par.waves[j, :par.numberofwaves]).astype(int)
