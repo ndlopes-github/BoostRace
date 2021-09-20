@@ -27,7 +27,7 @@ struct observer
       m_dxdt(vels),
       m_rho(rho),
       m_f(f),
-      m_show_progress(show_progress) {  std::cout<< "testing"<<std::endl;}
+      m_show_progress(show_progress) { }
   //Constructor for the m_states and m_times member of the struct
 
   void operator()( const dvec_i &x , double t)
@@ -37,6 +37,7 @@ struct observer
         m_dxdt.push_back(*(m_f.velocities_instance));
         m_rho.push_back(*(m_f.rhos_instance));
         ++m_show_progress;
+        std::cout<< "time:"<< t<<std::endl;
     }
 };
 
