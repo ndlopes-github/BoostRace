@@ -153,9 +153,13 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
   for(size_t idx=0;idx<dxdt.size();idx++)
     {
       p=rho[idx];
+
       if (t<=m_wave_delays[idx]) dxdt[idx]=0.0;
 
-      else if  (x[idx]<0)  dxdt[idx]=std::min(m_wave_init_speeds[idx],m_avg_speeds[idx]);
+      else if  (x[idx]<0){
+        dxdt[idx]=std::min(m_wave_init_speeds[idx],m_avg_speeds[idx]);
+        std::cout<<"runner " << idx << " not yet departed"<< std::endl;
+      }
 
       else {
         if (fabs(dxdt[idx]-VL[idx])<1.e-5)  aux=0.0; else aux=p;
@@ -169,12 +173,9 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
       (*velocities_instance)[idx]=dxdt[idx];// Update the velocities_instance with the dxdt values
       (*rhos_instance)[idx]=aux;//rho[idx];
     }
-
 };
 
 #endif
-
-
 
 
 

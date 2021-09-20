@@ -37,7 +37,7 @@ struct observer
         m_dxdt.push_back(*(m_f.velocities_instance));
         m_rho.push_back(*(m_f.rhos_instance));
         ++m_show_progress;
-        std::cout<< "time:"<< t<<std::endl;
+        //std::cout<< "time:"<< t<<std::endl;
     }
 };
 

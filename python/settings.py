@@ -13,6 +13,7 @@ class parameters():
                  timestep=0.4,
                  observertimestep=1.0,
                  observernsteps=7160,
+                 endtime=7160,
                  #waves=np.array( [
                  #    [2475,25,0.0,3.34],
                  #    [25,7475,455,2.92]
@@ -35,7 +36,7 @@ class parameters():
         self.observertimestep=observertimestep #observer time step in seconds
         self.observernsteps=observernsteps #number of steps to be saved
 
-        self.endtime=self.observernsteps*self.observertimestep
+        self.endtime=endtime
 
         #Waves [[number,delay,init speed]]
         self.waves=waves
