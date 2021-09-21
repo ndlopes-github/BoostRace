@@ -5,7 +5,7 @@ from objprint import add_objprint # To print a readable report of the settings
 # Track to be considered
 from tracks import *
 
-gap=1
+gap=2
 
 @add_objprint
 class parameters():
@@ -14,10 +14,10 @@ class parameters():
                  observertimestep=1.0,
                  observernsteps=7160,
                  endtime=7160,
-                 #waves=np.array( [
-                 #    [2475,25,0.0,3.34],
-                 #    [25,7475,455,2.92]
-                 #]),
+                 # waves=np.array( [
+                 #     [2500,0,0.0,3.34],
+                 #     [0,7500,138+gap,2.92]
+                 # ]),
                  waves=np.array( [
                      [3333, 0, 0, 0.0,3.34],
                      [ 0, 3333, 0, 185.0 +1*gap, 2.92],
