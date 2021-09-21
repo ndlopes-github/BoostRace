@@ -5,7 +5,7 @@ from objprint import add_objprint # To print a readable report of the settings
 # Track to be considered
 from tracks import *
 
-gap=1
+gap=300
 
 @add_objprint
 class parameters():
