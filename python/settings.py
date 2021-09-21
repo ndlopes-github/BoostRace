@@ -5,7 +5,7 @@ from objprint import add_objprint # To print a readable report of the settings
 # Track to be considered
 from tracks import *
 
-gap=0
+gap=1
 
 @add_objprint
 class parameters():
@@ -19,9 +19,9 @@ class parameters():
                  #    [25,7475,455,2.92]
                  #]),
                  waves=np.array([
-                     [3333,0,0, 0.0,3.34],
-                     [0,3333,0, 285.0+gap,2.92],
-                     [0,0,3334, 683.0+gap*2,2.5]]),
+                     [3333,    0,    0, 0.0,3.34]
+                     [   0, 3333,    0, 185.0 +1 * gap ,2.92]
+                     [   0,    0, 3334, 382.0 +2 * gap ,2.5]]),
                  linearfrontview=4,
                  minratio= 15./40.,
                  maxratio= 25./40.,

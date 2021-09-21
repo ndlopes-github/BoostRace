@@ -255,22 +255,34 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
         starttimes[runner]=times[tsidx]
         endtimes[runner]=times[teidx]
 
-    print('control: waves description: departures computation', par.waves)
+    print('control: waves description: departures computation')
+    print('control:********************************************')
+    print(str(par.waves))
+    print('control:********************************************')
     r0=0
     r1=np.sum(par.waves[0, :par.numberofwaves]).astype(int)
     wave_departure=np.max(starttimes[r0:r1])
     wave_time_gap_to_cross=np.max(starttimes[r0:r1])-np.min(starttimes[r0:r1])+1
     print('control: departures:  wave: ',0, ' departure:',  wave_departure)
     print('control: departures:  wave: ',0, ' time gap to cross:',  wave_time_gap_to_cross)
+
+    wavestxt=repr(par.waves[0,:len(par.waves)])[6:-2]+', '+str(0.0)+','+str(par.waves[0,-1])+']'
+    acumulated_wave_time_gap_to_cross=wave_time_gap_to_cross
     for j in range(1,len(par.waves)):
         r0+=np.sum(par.waves[j-1, :par.numberofwaves]).astype(int)
         r1=r0+np.sum(par.waves[j, :par.numberofwaves]).astype(int)
         wave_departure=np.max(starttimes[r0:r1])
+        wavestxt+='\n'+repr(par.waves[j,:len(par.waves)])[6:-2]+', '+str(acumulated_wave_time_gap_to_cross)+' +'\
+                   +str(j)+' * gap ,'+str(par.waves[j,-1])+']'
+
         wave_time_gap_to_cross=np.max(starttimes[r0:r1])-np.min(starttimes[r0:r1])+1
+        acumulated_wave_time_gap_to_cross+=wave_time_gap_to_cross
         print('control: departures:  wave: ',j, ' departure:',  wave_departure)
         print('control: departures:  wave: ',j, ' time gap to cross:',  wave_time_gap_to_cross)
 
-
+    print('control: suggested setting for waves after initial running for tune settings')
+    print(wavestxt,sep=',')
+    print('control:  end *************************************************************')
 
     runnertimes=endtimes-starttimes
 
@@ -356,7 +368,9 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     print('control: debug: warning: number of negative penalized errors:', len(negerrors[0]))
     print('control: debug: warning: runners with negative penalized errors:', *negerrors)
 
-    print('control: waves description: errors computation for metric', par.waves)
+    print('control: waves description: errors computation for metric')
+    print(par.waves)
+    print('control: *************************************************')
     r0=0
     r1=0
     for j in range(1,len(par.waves)):
