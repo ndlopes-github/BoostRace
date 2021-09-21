@@ -3,12 +3,13 @@
 import numpy as np
 from frunnerclass import frunner, runners # As contas estão aqui
 from settings import parameters
-from timesgenerator import *
+from timesgenerator import inversepseudosigmoid
 
 # Load the settings
 par=parameters()
 print('control: track name is=', par.track.name)
 print(par)
+
 
 
 ### Initial distribution ###
@@ -28,6 +29,7 @@ group=runners(runnerslist)
 ### PROCESSING ###########################################################
 import odesolvers as os
 print('Start C++ Processing')
+#input("Press Enter to continue...")
 times, positions, velocities,rhos=os.ode_system_solver(
     group.avgspeeds[:],
     group.slopefactors[:],

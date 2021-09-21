@@ -68,6 +68,10 @@ dxdt::dxdt(dvec_i avg_speeds,
     m_foresight_area.push_back(area);
     //std::cout<<"Foresight has "<<m_foresight_area[meter] <<" squared meters at position"<< meter<< std::endl;
   }
+
+  // for(size_t idx=0; idx<m_avg_speeds.size();idx++)
+  //   m_departure_times.push_back(7200.0);
+
   std::cout <<"Ending constructor of dxdt. Elapsed time: ";
 }
 
@@ -158,10 +162,16 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
 
       else if  (x[idx]<0){
         dxdt[idx]=std::min(m_wave_init_speeds[idx],m_avg_speeds[idx]);
-        std::cout<<"runner " << idx << " not yet departed"<< std::endl;
       }
 
+
+
       else {
+        // if (m_departure_times[idx]>7199.0) {
+        //   m_departure_times[idx]=std::min(m_departure_times[idx],t);
+        //   std::cout<<"runner " << idx << " departed at "<< m_departure_times[idx]<<"second" << std::endl;
+        // }
+
         if (fabs(dxdt[idx]-VL[idx])<1.e-5)  aux=0.0; else aux=p;
         //int xidx=floor(x[idx])-road_start-1; //
         //double slope=m_road_dzdx[xidx];

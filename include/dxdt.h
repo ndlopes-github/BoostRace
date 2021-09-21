@@ -32,6 +32,9 @@ class dxdt{
   //int m_road_dzdx[10701];
   dvec_i m_road_w;
   dvec_i m_foresight_area;
+
+  //  dvec_i m_departure_times;  //to hold the times for departure for each runner
+
   tk::spline cs;
   tk::spline cs2;
 
