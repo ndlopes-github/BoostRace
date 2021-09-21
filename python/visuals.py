@@ -266,14 +266,14 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     print('control: departures:  wave: ',0, ' departure:',  wave_departure)
     print('control: departures:  wave: ',0, ' time gap to cross:',  wave_time_gap_to_cross)
 
-    wavestxt=repr(par.waves[0,:len(par.waves)])[6:-2]+', '+str(0.0)+','+str(par.waves[0,-1])+']'
+    wavestxt=repr(par.waves[0,:len(par.waves)])[6:-2]+', '+str(0.0)+','+str(par.waves[0,-1])+'],'
     acumulated_wave_time_gap_to_cross=wave_time_gap_to_cross
     for j in range(1,len(par.waves)):
         r0+=np.sum(par.waves[j-1, :par.numberofwaves]).astype(int)
         r1=r0+np.sum(par.waves[j, :par.numberofwaves]).astype(int)
         wave_departure=np.max(starttimes[r0:r1])
         wavestxt+='\n'+repr(par.waves[j,:len(par.waves)])[6:-2]+', '+str(acumulated_wave_time_gap_to_cross)+' +'\
-                   +str(j)+' * gap ,'+str(par.waves[j,-1])+']'
+                   +str(j)+' * gap ,'+str(par.waves[j,-1])+'],'
 
         wave_time_gap_to_cross=np.max(starttimes[r0:r1])-np.min(starttimes[r0:r1])+1
         acumulated_wave_time_gap_to_cross+=wave_time_gap_to_cross
@@ -393,9 +393,9 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     print('control: worst race time: ', worsttime)
     print('control: losers: ', losrunners)
 
-    metricerror=np.sum(errorspen)
+    metricerror=np.sum(errorspen)/len(errorspen)
     print('control: metric error:', metricerror)
-    l1error=np.linalg.norm(errors,ord=1)
+    l1error=np.linalg.norm(errors,ord=1)/len(errors)
     print('control: l1 error:', l1error)
 
 
@@ -424,7 +424,7 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
         print('{:.2f} '.format(x[i]), end='',file=logtex)
         print(')$',file=logtex)
 
-    text='''& ${l1error:.3E}$
-& ${metricerror:.3E}$
+    text='''& ${l1error:.1f}$
+& ${metricerror:.1f}$
 & ${racetime:4d}$ \\\\'''.format(l1error=l1error,metricerror=metricerror,racetime=int(racetime))
     print(text+'\n\n',file=logtex)
