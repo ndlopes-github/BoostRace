@@ -167,10 +167,6 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
 
 
       else {
-        // if (m_departure_times[idx]>7199.0) {
-        //   m_departure_times[idx]=std::min(m_departure_times[idx],t);
-        //   std::cout<<"runner " << idx << " departed at "<< m_departure_times[idx]<<"second" << std::endl;
-        // }
 
         if (fabs(dxdt[idx]-VL[idx])<1.e-5)  aux=0.0; else aux=p;
         //int xidx=floor(x[idx])-road_start-1; //

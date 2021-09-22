@@ -5,7 +5,7 @@ from objprint import add_objprint # To print a readable report of the settings
 # Track to be considered
 from tracks import *
 
-gap=300
+gap=1
 
 @add_objprint
 class parameters():
@@ -19,9 +19,9 @@ class parameters():
                  #     [0,7500,138+gap,2.92]
                  # ]),
                  waves=np.array( [
-                     [2500,0,0, 0.0,3.34],
-                     [0, 2500,0, 138.0 +1*gap, 2.92],
-                     [0,0,5000,  282.0+2*gap, 2.5]
+                     [1900,200,400, 0.0,3.34],
+                     [200, 1900, 400, 169.0 +1*gap, 2.92],
+                     [400,400, 4200,  334.0+2*gap, 2.5]
                  ]),
                  linearfrontview=4,
                  minratio= 15./40.,
@@ -30,7 +30,8 @@ class parameters():
                  maxrho=0.8,
                  stepper=2,
                  posweights=np.array([[0.2,0],[2.0,30],[1.5,60],[1.25,120],[1.0,100000]]),
-                 track=track_fixed_width(10.0),
+                 #track=track_fixed_width(10.0),
+                 track=track2,
                  ldist=0.5
     ):
         self.timestep=timestep # Initial time step for solver 0.4
@@ -66,7 +67,7 @@ Testes 3 ondas:
 A- 3333,3333,3334; ok
 1-3000,166,167; 166,3000,167; 167,167,3000; ok
 2-2333,500,500; 500, 2333,500; 500, 500, 2334; ok
-B-2500,2500,5000;
-1-2200, 100, 200; 100, 2200,200; 200, 200,4600;
-2-1900,200,400; 200, 1900, 400; 400,400, 4200;
+B-2500,2500,5000;ok
+1-2200, 100, 200; 100, 2200,200; 200, 200,4600; ok
+2-1900,200,400; 200, 1900, 400; 400,400, 4200; ok
 '''

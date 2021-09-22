@@ -23,7 +23,7 @@ class track():
         xs = np.linspace(self.x_data.min(), self.x_data.max(), 1000)
         fig, ax = plt.subplots(figsize=(6.5, 4))
         ax.plot(self.x_data,self.diff_data, 'o', label='data')
-        ax.plot(xs, self.cspline(xs), label="S")
+        ax.plot(xs, self.cspline(xs), label="Track Height")
         #ax.plot(xs, self.cspline(xs,1), label="S'",color='k')
         ax.set_xlim(xs.min()-10, xs.max()+10)
         ax.legend(loc='lower left', ncol=1)
@@ -34,10 +34,22 @@ class track():
         fig, ax = plt.subplots(figsize=(6.5, 4))
         #ax.plot(np.linspace(0, self.length, len(self.diff_data)),self.diff_data, 'o', label='data')
         #ax.plot(xs, self.cspline(xs), label="S")
-        ax.plot(xs, self.cspline(xs,1), label="Slope variation'",color='k')
+        ax.plot(xs, self.cspline(xs,1), label="Track Slope variation (derivative)'",color='k')
         ax.set_xlim(xs.min()-10, xs.max()+10)
         ax.legend(loc='lower left', ncol=1)
         plt.show()
+
+    def widthplot(self):
+        xs = np.linspace(self.x_data.min(), self.x_data.max(), 1000)
+        fig, ax = plt.subplots(figsize=(6.5, 4))
+        ax.plot(self.x_data,self.width_data, 'o', label='data')
+        ax.plot(xs, self.cspline2(xs), label="Track Width")
+        #ax.plot(xs, self.cspline(xs,1), label="S'",color='k')
+        ax.set_xlim(xs.min()-10, xs.max()+10)
+        ax.legend(loc='lower left', ncol=1)
+        plt.show()
+
+
 
 
 track1= track('imaginary1',data=np.array([[-500.,0.,10.],
@@ -122,7 +134,13 @@ def track_fixed_width(width):
 #                                              9.0,-10.0,-1.0,1.,0.]))
 
 if __name__== '__main__':
-    track1.plot()
-    track1.slopeplot()
     track2.plot()
     track2.slopeplot()
+    track2.widthplot()
+
+    track_fixed_width(10.0).plot()
+    track_fixed_width(10.0).slopeplot()
+    track_fixed_width(10.0).widthplot()
+
+    #track2.plot()
+    #track2.slopeplot()

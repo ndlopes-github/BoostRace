@@ -110,7 +110,10 @@ def inversepseudosigmoid( ):
     for nwave,nrunners in enumerate(NinWaves):
         linecounter=0
         for i in range(nrunners):
-            if (i+1)%int(par.track.cspline2(-linecounter*ldist))==0:
+            # To avoid truncations due to the cubic spline
+            auxwidthcontrl=int(np.floor(par.track.cspline2(-linecounter*ldist)+0.5))
+
+            if (i+1)%auxwidthcontrl==0:
                 linecounter+=1
             InitPositions[i+itemcount]=-linecounter*ldist#+0.30*np.random.random_sample()-0.15
             WaveDelays[i+itemcount]=wavedelays[nwave]+linecounter*ReactionLineTime
