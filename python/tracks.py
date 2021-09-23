@@ -97,6 +97,9 @@ track2= track('imaginary2',data=np.array([[-500,0,10.],
                                           [10200,0.0,10.]]))
 
 
+auxwidth=np.zeros(100)
+auxelev=np.zeros(100)
+x=np.linspace(-500,1200,100)
 
 track3= track('imaginary3',data=np.array([[-500,0,16.],
                                           [-400,-2,16.],
