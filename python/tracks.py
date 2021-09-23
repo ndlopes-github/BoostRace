@@ -97,11 +97,8 @@ track2= track('imaginary2',data=np.array([[-500,0,10.],
                                           [10200,0.0,10.]]))
 
 
-auxwidth=np.zeros(100)
-auxelev=np.zeros(100)
-x=np.linspace(-500,1200,100)
 
-track3= track('imaginary3',data=np.array([[-500,0,16.],
+track3ref= track('imaginary3',data=np.array([[-500,0,16.],
                                           [0,-10.0,16.0],
                                           [500,-15.0,11.0],
                                           [1000,-20.0,8.0],
@@ -111,6 +108,22 @@ track3= track('imaginary3',data=np.array([[-500,0,16.],
                                           [8500,50.0,8.],
                                           [10000,0.0,8.],
                                           [10200,0.0,8.]]))
+N=200
+auxwidth=np.zeros(N)
+auxelev=np.zeros(N)
+x=np.linspace(-500,10200,N)
+
+auxlev=track3ref.lspline(x)
+auxwidth=track3ref.lspline2(x)
+datainterp=np.zeros((len(x),3))
+for i in range(len(x)):
+    datainterp[i,0]=x[i]
+    datainterp[i,1]=auxlev[i]
+    datainterp[i,2]=auxwidth[i]
+
+print(datainterp)
+
+track3=track('silvestre',data=datainterp)
 
 
 # For fixed width
