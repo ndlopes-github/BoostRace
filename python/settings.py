@@ -20,8 +20,8 @@ class parameters():
                  # ]),
                  waves=np.array( [
                      [2333,500,500, 0.0,3.34],
-                     [500,2333,500, 214 +1*gap, 2.92],
-                     [ 500,500,2334,  440.0+2*gap, 2.5]
+                     [500,2333,500, 134 +1*gap, 2.92],
+                     [ 500,500,2334,  275.0+2*gap, 2.5]
                  ]),
                  linearfrontview=4,
                  minratio= 15./40.,
@@ -31,7 +31,7 @@ class parameters():
                  stepper=2,
                  posweights=np.array([[0.2,0],[2.0,30],[1.5,60],[1.25,120],[1.0,100000]]),
                  #track=track_fixed_width(10.0),
-                 track=track2,
+                 track=track3,
                  ldist=0.5
     ):
         self.timestep=timestep # Initial time step for solver 0.4

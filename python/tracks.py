@@ -22,8 +22,8 @@ class track():
     def plot(self):
         xs = np.linspace(self.x_data.min(), self.x_data.max(), 1000)
         fig, ax = plt.subplots(figsize=(6.5, 4))
-        ax.plot(self.x_data,self.diff_data, 'o', label='data')
-        ax.plot(xs, self.cspline(xs), label="Track Height")
+        #ax.plot(self.x_data,self.diff_data, 'o', label='data')
+        ax.plot(xs, self.cspline(xs), label='Elevation (m)')
         #ax.plot(xs, self.cspline(xs,1), label="S'",color='k')
         ax.set_xlim(xs.min()-10, xs.max()+10)
         ax.legend(loc='lower left', ncol=1)
@@ -34,7 +34,7 @@ class track():
         fig, ax = plt.subplots(figsize=(6.5, 4))
         #ax.plot(np.linspace(0, self.length, len(self.diff_data)),self.diff_data, 'o', label='data')
         #ax.plot(xs, self.cspline(xs), label="S")
-        ax.plot(xs, self.cspline(xs,1), label="Track Slope variation (derivative)'",color='k')
+        ax.plot(xs, self.cspline(xs,1)*100, label='Slope (%)',color='k')
         ax.set_xlim(xs.min()-10, xs.max()+10)
         ax.legend(loc='lower left', ncol=1)
         plt.show()
@@ -42,8 +42,8 @@ class track():
     def widthplot(self):
         xs = np.linspace(self.x_data.min(), self.x_data.max(), 1000)
         fig, ax = plt.subplots(figsize=(6.5, 4))
-        ax.plot(self.x_data,self.width_data, 'o', label='data')
-        ax.plot(xs, self.cspline2(xs), label="Track Width")
+        #ax.plot(self.x_data,self.width_data, 'o', label='data')
+        ax.plot(xs, self.cspline2(xs), label='width (m)')
         #ax.plot(xs, self.cspline(xs,1), label="S'",color='k')
         ax.set_xlim(xs.min()-10, xs.max()+10)
         ax.legend(loc='lower left', ncol=1)
@@ -98,29 +98,43 @@ track2= track('imaginary2',data=np.array([[-500,0,10.],
 
 
 
-track3= track('imaginary3',data=np.array([[-500,0,10.],
-                                          [-400,0,10.],
-                                          [-300,0,10.],
-                                          [-200,0,10.],
-                                          [-100,0,10.],
-                                          [0,0,10.],
-                                          [100,0,10.],
-                                          [1000,0,10.],
-                                          [2000,0,8.0],
-                                          [2200,0,3.0],
-                                          [2300,0,3.0],
-                                          [2400,0,2.0],
-                                          [2500,0,1.0],
-                                          [3000,0,6.0],
-                                          [4000,0,8.],
-                                          [5000,0,10.],
-                                          [6000,0,10.],
-                                          [7000,0,10.],
-                                          [8000,0,10.],
-                                          [9000,0,10.],
-                                          [10000,0.0,10.],
-                                          [10100,0.0,10.],
-                                          [10200,0.0,10.]]))
+track3= track('imaginary3',data=np.array([[-500,0,16.],
+                                          [-400,-2,16.],
+                                          [-300,-4,16.],
+                                          [-200,-6,16.],
+                                          [-100,-8,16.],
+                                          [0,-10.0,15.5],
+                                          [125,-11.5,14.5],
+                                          [250,-13.0,11.5],
+                                          [350,-15.0,8.],
+                                          [500,-17.5,6.0],
+                                          [750,-18.5,6.5],
+                                          [1000,-20.0,7.],
+                                          [2000,-20,8.0],
+                                          [2200,-20,8.0],
+                                          [2300,-20,8.0],
+                                          [2400,-20,8.0],
+                                          [2500,-20,8.0],
+                                          [3000,-20,8.0],
+                                          [4000,-20,8.],
+                                          [5000,-20,8.],
+                                          [6000,-20,8.],
+                                          [6500,-17,8.],
+                                          [6550,-15,8.],
+                                          [6600,-13,8.],
+                                          [6650,-10.0,8.],
+                                          [6700,-5.0,8.],
+                                          [6750,2.0,8.],
+                                          [6800,4.0,8.],
+                                          [6850,5.0,8.],
+                                          [6900,6,8.],
+                                          [7000,7.0,8.],
+                                          [8000,15.0,8.],
+                                          [8500,50.0,8.],
+                                          [9000,25,8.],
+                                          [10000,0.0,8.],
+                                          [10100,0.0,8.],
+                                          [10200,0.0,8.]]))
 
 
 # For fixed width
@@ -134,13 +148,13 @@ def track_fixed_width(width):
 #                                              9.0,-10.0,-1.0,1.,0.]))
 
 if __name__== '__main__':
-    track2.plot()
-    track2.slopeplot()
-    track2.widthplot()
+    track3.plot()
+    track3.slopeplot()
+    track3.widthplot()
 
-    track_fixed_width(10.0).plot()
-    track_fixed_width(10.0).slopeplot()
-    track_fixed_width(10.0).widthplot()
+    # track_fixed_width(10.0).plot()
+    # track_fixed_width(10.0).slopeplot()
+    # track_fixed_width(10.0).widthplot()
 
     #track2.plot()
     #track2.slopeplot()
