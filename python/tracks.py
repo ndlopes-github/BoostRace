@@ -26,7 +26,7 @@ class track():
         ax.plot(xs, self.cspline(xs), label='Elevation (m)')
         #ax.plot(xs, self.cspline(xs,1), label="S'",color='k')
         ax.set_xlim(xs.min()-10, xs.max()+10)
-        ax.legend(loc='lower left', ncol=1)
+        ax.legend(loc='best', ncol=1)
         plt.show()
 
     def slopeplot(self):
@@ -36,7 +36,7 @@ class track():
         #ax.plot(xs, self.cspline(xs), label="S")
         ax.plot(xs, self.cspline(xs,1)*100, label='Slope (%)',color='k')
         ax.set_xlim(xs.min()-10, xs.max()+10)
-        ax.legend(loc='lower left', ncol=1)
+        ax.legend(loc='best', ncol=1)
         plt.show()
 
     def widthplot(self):
@@ -46,7 +46,7 @@ class track():
         ax.plot(xs, self.cspline2(xs), label='width (m)')
         #ax.plot(xs, self.cspline(xs,1), label="S'",color='k')
         ax.set_xlim(xs.min()-10, xs.max()+10)
-        ax.legend(loc='lower left', ncol=1)
+        ax.legend(loc='best', ncol=1)
         plt.show()
 
 
@@ -99,16 +99,20 @@ track2= track('imaginary2',data=np.array([[-500,0,10.],
 
 
 track3ref= track('imaginary3',data=np.array([[-500,0,16.],
-                                          [0,-10.0,16.0],
-                                          [500,-15.0,11.0],
-                                          [1000,-20.0,8.0],
-                                          [2000,-20,8.0],
-                                          [6000,-20,8.],
-                                          [6500,-20,8.],
-                                          [8500,50.0,8.],
-                                          [10000,0.0,8.],
-                                          [10200,0.0,8.]]))
-N=200
+                                             [0,-10.0,16.0],
+                                             [240,-12.4,16.0],
+                                             [260,-12.6,11.0],
+                                             [500,-15.0,6.0],
+                                             [1000,-20.0,6.0],
+                                             [1500,-20.0,6.0],
+                                             [2000,-20,8.0],
+                                             [6000,-20,8.],
+                                             [6500,-20,8.],
+                                             [7500,15.0,16.],
+                                             [8500,50.0,16.],
+                                             [10000,0.0,16.],
+                                             [10200,0.0,16.]]))
+N=300
 auxwidth=np.zeros(N)
 auxelev=np.zeros(N)
 x=np.linspace(-500,10200,N)
@@ -121,7 +125,7 @@ for i in range(len(x)):
     datainterp[i,1]=auxlev[i]
     datainterp[i,2]=auxwidth[i]
 
-print(datainterp)
+#print(datainterp)
 
 track3=track('silvestre',data=datainterp)
 
