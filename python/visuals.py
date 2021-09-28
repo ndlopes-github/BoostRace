@@ -29,8 +29,8 @@ def racevisuals(anim=True,show=True,save=False,filename=None,group=None,ninwaves
         ax = plt.axes(xlim=(par.track.x_data.min(), par.track.x_data.max()),
                       ylim=(par.track.cspline(x).min()-0.5,
                             par.track.cspline(x).max()+par.track.cspline2(x).max()+0.5))
-        plt.vlines(0.0,-1,22,'k')
-        plt.vlines(10000.,-1,22,'k')
+        plt.vlines(0.0,-100,100,ls='-.',color='k')
+        plt.vlines(10000.,-100,100,ls='--',color='k')
         plt.plot(x,par.track.cspline(x),'-')
         plt.plot(x,par.track.cspline(x)+par.track.cspline2(x),'-')
         plt.plot([],[],'.')
