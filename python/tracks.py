@@ -108,12 +108,12 @@ track2= track('imaginary2',data=np.array([[-500,0,10.],
 
 
 
-track3ref= track('imaginary3',data=np.array([[-500,0,16.],
-                                             [0,-6.7,16.0],
-                                             [220,-9.6,16.0],
-                                             [260,-10.13,11.0],
-                                             [480,-12.97,11.0],
-                                             [520,-13.5,6.0],
+track3ref= track('imaginary3',data=np.array([[-500,10,16.],
+                                             # [0,0,16.0],
+                                              [220,-0.02*220,16.0],
+                                             [260,-0.02*260,11.0],
+                                             [480,-0.02*480,11.0],
+                                             [520,-0.02*520,6.0],
                                              [1000,-20.0,6.0],
                                              [1040,-20.0,8.0],
                                              [1500,-20.0,8.0],
@@ -124,11 +124,11 @@ track3ref= track('imaginary3',data=np.array([[-500,0,16.],
                                              [7500,15.0,16.],
                                              [8500,50.0,16.],
                                              [10000,0.0,16.],
-                                             [10200,0.0,16.]]))
+                                             [10500,-1050./3+1000./3,16.]]))
 N=501
 auxwidth=np.zeros(N)
 auxelev=np.zeros(N)
-x=np.linspace(-500,10200,N)
+x=np.linspace(-500,10500,N)
 
 auxlev=track3ref.lspline(x)
 auxwidth=track3ref.lspline2(x)
@@ -138,9 +138,52 @@ for i in range(len(x)):
     datainterp[i,1]=auxlev[i]
     datainterp[i,2]=auxwidth[i]
 
+track3=track('silvestre',data=datainterp)
+
+
+A=-500
+B=10500
+track4ref= track('imaginary4',data=np.array([[-10500+B+A,-1050./3+1000./3,16.],
+                                             [-10000+B+A,0.0,16.],
+                                             [-8500+B+A,50.0,16.],
+                                             [-7500+B+A,15.0,16.],
+                                             [-7460+B+A,13.6,8.],
+                                             [-6500+B+A,-20,8.],
+                                             [-6000+B+A,-20,8.],
+                                             [-2000+B+A,-20,8.0],
+                                             [-1500+B+A,-20.0,8.0],
+                                             [-1040+B+A,-20.0,8.0],
+                                             [-1000+B+A,-20.0,6.0],
+                                             [-520+B+A,-0.02*520,6.0],
+                                             [-480+B+A,-0.02*480,11.0],
+                                             [-260+B+A,-0.02*260,11.0],
+                                             [-220+B+A,-0.02*220,16.0],
+                                             [500+B+A,10,16.]]))
+
+
+N=501
+auxwidth=np.zeros(N)
+auxelev=np.zeros(N)
+x=np.linspace(-500,10500,N)
+
+auxlev=track4ref.lspline(x)
+auxwidth=track4ref.lspline2(x)
+datainterp=np.zeros((len(x),3))
+for i in range(len(x)):
+    datainterp[i,0]=x[i]
+    datainterp[i,1]=auxlev[i]
+    datainterp[i,2]=auxwidth[i]
+
+
+track4=track('Invsilvestre', data=datainterp)
+
+
+
 #print(datainterp)
 
-track3=track('silvestre',data=datainterp)
+
+
+
 
 
 # For fixed width
@@ -154,9 +197,9 @@ def track_fixed_width(width):
 #                                              9.0,-10.0,-1.0,1.,0.]))
 
 if __name__== '__main__':
-    track3.plot()
-    track3.slopeplot()
-    track3.widthplot()
+    track4.plot()
+    track4.slopeplot()
+    track4.widthplot()
 
     # track_fixed_width(10.0).plot()
     # track_fixed_width(10.0).slopeplot()
