@@ -14,10 +14,6 @@ class parameters():
                  observertimestep=1.0,
                  observernsteps=8160,
                  endtime=8160,
-                 # waves=np.array( [
-                 #     [2500,0,0.0,3.34],
-                 #     [0,7500,138+gap,2.92]
-                 # ]),
                  waves=np.array( [
                      [2333,500,500, 0.0,3.34],
                      [500,2333,500, 134 +1*gap, 2.92],
