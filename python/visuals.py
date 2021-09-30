@@ -316,7 +316,9 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     plt.clf()
 
     errors=runnertimes-runnertimes_free
-    print('control:debug: negative errors: ',*np.where(errors<0))
+    print('control:debug:  # negative errors: ',len(*np.where(errors<0)))
+    print('control:debug: negative errors: ',*zip(*np.where(errors<0), errors[np.where(errors<0)]))
+
     print('control: departure: runners  affected by the velocity rule at departure', len(*np.where(starttimes!=starttimes_free)))
 
     # print('free times',runnertimes_free[np.where(errors<0)])

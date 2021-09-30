@@ -5,19 +5,41 @@ from objprint import add_objprint # To print a readable report of the settings
 # Track to be considered
 from tracks import *
 
-gap=300
+gap=120
 
 @add_objprint
 class parameters():
     def __init__(self,
                  timestep=0.4,
                  observertimestep=1.0,
-                 observernsteps=8160,
-                 endtime=8160,
+                 observernsteps=9160,
+                 endtime=9160,
+                 # waves=np.array( [
+                 #     [3333,0,0, 0.0,3.34],
+                 #     [0,3333,0, 116 +1*gap, 2.92],
+                 #     [0,0,3334,  239.0+2*gap, 2.5]
+                 # ]),
+                 # waves=np.array( [
+                 #     [3000,166,167, 0.0,3.34],
+                 #     [166,3000,167, 133 +1*gap, 2.92],
+                 #     [167,167,3000,  266.0+2*gap, 2.5]
+                 # ]),
+                 # waves=np.array( [
+                 #     [2333,500,500, 0.0,3.34],
+                 #     [500,2333,500, 134 +1*gap, 2.92],
+                 #     [500,500,2334,  275.0+2*gap, 2.5]
+                 # ]),
+                 #  waves=np.array( [
+                 #      [2500,0,0,0, 0.0,3.34],
+                 #      [0,2500,0,0, 86 +1*gap, 2.92],
+                 #      [0,0,2500,0,  176.0+2*gap, 2.5],
+                 #      [0,0,0,2500,  271.0+3*gap, 2.4]
+                 # ]),
                  waves=np.array( [
-                     [2333,500,500, 0.0,3.34],
-                     [500,2333,500, 134 +1*gap, 2.92],
-                     [500,500,2334,  275.0+2*gap, 2.5]
+                     [2000,100,100,100, 0.0,3.34],
+                     [100,2000,100,200, 92 +1*gap, 2.92],
+                     [100,100,2000,100,  186.0+2*gap, 2.5],
+                     [300,300,300,2100,  278.0+3*gap, 2.4]
                  ]),
                  linearfrontview=4,
                  minratio= 15./40.,
@@ -27,7 +49,7 @@ class parameters():
                  stepper=2,
                  posweights=np.array([[0.2,0],[2.0,30],[1.5,60],[1.25,120],[1.0,100000]]),
                  #track=track_fixed_width(10.0),
-                 track=track3,
+                 track=track4,
                  ldist=0.5
     ):
         self.timestep=timestep # Initial time step for solver 0.4
