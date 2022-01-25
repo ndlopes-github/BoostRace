@@ -5,7 +5,7 @@ from objprint import add_objprint # To print a readable report of the settings
 # Track to be considered
 from tracks import *
 
-gap=300
+gap=180
 
 @add_objprint
 class parameters():
@@ -24,23 +24,23 @@ class parameters():
                  #     [166,3000,167, 133 +1*gap, 2.92],
                  #     [167,167,3000,  266.0+2*gap, 2.5]
                  # ]),
-                 # waves=np.array( [
-                 #     [2333,500,500, 0.0,3.34],
-                 #     [500,2333,500, 134 +1*gap, 2.92],
-                 #     [500,500,2334,  275.0+2*gap, 2.5]
-                 # ]),
+                 waves=np.array( [
+                     [2333,500,500, 0.0,3.34],
+                     [500,2333,500, 214 +1*gap, 2.92],
+                     [500,500,2334,  440.0+2*gap, 2.5]
+                 ]),
                  #  waves=np.array( [
                  #      [2500,0,0,0, 0.0,3.34],
                  #      [0,2500,0,0, 86 +1*gap, 2.92],
                  #      [0,0,2500,0,  176.0+2*gap, 2.5],
                  #      [0,0,0,2500,  271.0+3*gap, 2.4]
                  # ]),
-                 waves=np.array( [
-                     [2050,150,150,150, 0.0,3.34],
-                     [150,2050,150,150, 107 +1*gap, 2.92],
-                     [150,150,2050,150,  206.0+2*gap, 2.5],
-                     [150,150,150,2050,  314.0+3*gap, 2.4]
-                 ]),
+                 # waves=np.array( [
+                 #     [2050,150,150,150, 0.0,3.34],
+                 #     [150,2050,150,150, 107 +1*gap, 2.92],
+                 #     [150,150,2050,150,  206.0+2*gap, 2.5],
+                 #     [150,150,150,2050,  314.0+3*gap, 2.4]
+                 # ]),
                  # waves=np.array( [
                  #     [2000,100,100,100, 0.0,3.34],
                  #     [100,2000,100,200, 92 +1*gap, 2.92],
@@ -55,7 +55,7 @@ class parameters():
                  stepper=2,
                  posweights=np.array([[0.2,0],[2.0,30],[1.5,60],[1.25,120],[1.0,100000]]),
                  #track=track_fixed_width(10.0),
-                 track=track4,
+                 track=track2,
                  ldist=0.5
     ):
         self.timestep=timestep # Initial time step for solver 0.4

@@ -34,7 +34,7 @@ class frunner():
         self.time=time
         self.wavedelay=wavedelay
         self.waveinitspeed=waveinitspeed
-        self.avgspeed=10000/(self.time*60)
+        self.avgspeed=10000/(self.time*60) #m/s
         self.color=wavecolor
         self.slopefactor=np.random.uniform(-13.0,-3.0)
         self.poly1dspeed2=np.poly1d([self.slopefactor,self.avgspeed])

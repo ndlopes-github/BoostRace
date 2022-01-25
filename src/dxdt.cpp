@@ -165,7 +165,6 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
       }
 
 
-
       else {
 
         if (fabs(dxdt[idx]-VL[idx])<1.e-5)  aux=0.0; else aux=p;
@@ -182,12 +181,6 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
 };
 
 #endif
-
-
-
-
-
-
 
 
 
