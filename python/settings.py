@@ -12,8 +12,9 @@ class parameters():
     def __init__(self,
                  timestep=0.4,
                  observertimestep=1.0,
-                 observernsteps=9160,
-                 endtime=9160,
+                 observernsteps=10000,#9160,
+                 endtime=10000,#9160,
+                 waves=np.array([[10000,0.0,2.92]]),
                  # waves=np.array( [
                  #     [3333,0,0, 0.0,3.34],
                  #     [0,3333,0, 116 +1*gap, 2.92],
@@ -24,11 +25,11 @@ class parameters():
                  #     [166,3000,167, 133 +1*gap, 2.92],
                  #     [167,167,3000,  266.0+2*gap, 2.5]
                  # ]),
-                 waves=np.array( [
-                     [2333,500,500, 0.0,3.34],
-                     [500,2333,500, 214 +1*gap, 2.92],
-                     [500,500,2334,  440.0+2*gap, 2.5]
-                 ]),
+                 # waves=np.array( [
+                 #     [2333,500,500, 0.0,3.34],
+                 #     [500,2333,500, 214 +1*gap, 2.92],
+                 #     [500,500,2334,  440.0+2*gap, 2.5]
+                 # ]),
                  #  waves=np.array( [
                  #      [2500,0,0,0, 0.0,3.34],
                  #      [0,2500,0,0, 86 +1*gap, 2.92],
@@ -54,8 +55,8 @@ class parameters():
                  maxrho=0.8,
                  stepper=2,
                  posweights=np.array([[0.2,0],[2.0,30],[1.5,60],[1.25,120],[1.0,100000]]),
-                 #track=track_fixed_width(10.0),
-                 track=track2,
+                 track=track_fixed_width(20.0),
+                 #track=track2,
                  ldist=0.5
     ):
         self.timestep=timestep # Initial time step for solver 0.4
