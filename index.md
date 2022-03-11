@@ -22,9 +22,9 @@ maxrho=0.8\
 stepper=2\
 posweights=np.array([[0.2,0],[2.0,30],[1.5,60],[1.25,120],[1.0,100000]])\
 track=track2\
-ldist=0.5\
+ldist=0.5
 
-more details at [settings.py]()
+more details at [settings.py](https://github.com/ndlopes-github/BoostRace/blob/main/python/settings.py)
 
 ### Results and animation
 [Animation](https://user-images.githubusercontent.com/58338787/157900110-efebdc3d-d6e0-471e-8544-a106e0083d1e.mp4) and ![Image](src)
