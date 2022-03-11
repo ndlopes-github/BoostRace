@@ -13,7 +13,7 @@ wave3=[500,500,2334,  440.0+2\*gap, 2.5]
 More details at [settings.py](https://github.com/ndlopes-github/BoostRace/blob/main/python/settings.py)
 
 ### Results and animation
-![Click to see animation](https://user-images.githubusercontent.com/58338787/157900110-efebdc3d-d6e0-471e-8544-a106e0083d1e.mp4) 
+[Click to see animation](https://user-images.githubusercontent.com/58338787/157900110-efebdc3d-d6e0-471e-8544-a106e0083d1e.mp4) 
 
 and some timing reports for the runners
 
