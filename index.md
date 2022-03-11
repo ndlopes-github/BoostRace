@@ -4,7 +4,7 @@ Here we show some simulations done with the BoostRace code that is introduced in
 
 ### Settings for the simulation
 
-gap=180
+gap=180\
 timestep=0.4,
 observertimestep=1.0,
 observernsteps=7080,#9160,
