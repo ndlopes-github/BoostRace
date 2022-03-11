@@ -1,6 +1,6 @@
 ## Welcome to the GitHub page for "The modeling of urban races" (Work in progress)
 
-Here we show some simulations done with the BoostRace code that is introduced in the paper.
+Here we show one simulation done with the BoostRace code that is introduced in the paper.
 
 ### Settings for the simulation
 The settings regarding the departure gaps and mixtures of runners are the following:
@@ -10,14 +10,15 @@ wave1=[2333,500,500, 0.0,3.34],\
 wave2=[500,2333,500, 214 +1\*gap, 2.92],\
 wave3=[500,500,2334,  440.0+2\*gap, 2.5]
 
-More details at [settings.py](https://github.com/ndlopes-github/BoostRace/blob/main/python/settings.py)
+All the settings and parameters in file:\
+[settings.py](https://github.com/ndlopes-github/BoostRace/blob/main/python/settings.py)
 
 ### Results and animation
 [Click to see animation](https://user-images.githubusercontent.com/58338787/157900110-efebdc3d-d6e0-471e-8544-a106e0083d1e.mp4) 
 
 and some timing reports for the runners
 
-![Image](https://user-images.githubusercontent.com/58338787/157908571-a7a7f7be-6be5-469c-b0b8-24f2478e7326.png)
+![Image](https://user-images.githubusercontent.com/58338787/157927951-ee2dad74-8ada-4353-9e20-1fb06619e0b8.png)
 
 For more details: [submitted paper]().
 
