@@ -1,4 +1,4 @@
-## Welcome to the GitHub page for the paper "The modeling of urban races" **(Work in progress)**
+## Welcome to the GitHub page for "The modeling of urban races" (Work in progress)
 
 Here we show some simulations done with the BoostRace code that is introduced in the paper.
 
