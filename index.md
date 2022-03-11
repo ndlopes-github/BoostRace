@@ -14,7 +14,7 @@ All the settings and parameters in file:\
 [settings.py](https://github.com/ndlopes-github/BoostRace/blob/main/python/settings.py)
 
 ### Results and animation
-[Click to see animation](https://user-images.githubusercontent.com/58338787/157934005-3ee81d2b-b250-4a76-8aed-b60825f31ec6.mp4) 
+[Click to see animation](https://user-images.githubusercontent.com/58338787/157934418-f3460f0e-0dc9-4fef-be4a-3ecf554735a5.mp4) 
 
 and some timing reports for the runners
 
