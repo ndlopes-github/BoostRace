@@ -4,8 +4,6 @@ Here we show one simulation done with the code BoostRace that is introduced in t
 
 ### Settings for the simulation
 
-
-
 ```
 ### Results and animation
 [Animation](url) and ![Image](src)
