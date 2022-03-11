@@ -19,7 +19,6 @@ and some timing reports for the runners
 
 ![Image](https://user-images.githubusercontent.com/58338787/157908571-a7a7f7be-6be5-469c-b0b8-24f2478e7326.png)
 
-
 For more details: [submitted paper]().
 
 ### Contacts
