@@ -22,6 +22,7 @@ and some timing reports for the runners
 
 For more details: [submitted paper]().
 
+
 ### Contacts
 ricardo.roque@isel.pt\
 nuno.lopes@isel.pt
