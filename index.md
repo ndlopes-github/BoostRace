@@ -3,8 +3,9 @@
 Here we show some simulations done with the BoostRace code that is introduced in the paper.
 
 ### Settings for the simulation
-The settings regardings the departure gaps and mixtures are the following
-gap=180
+The settings regardings the departure gaps and mixtures are the following:
+
+gap=180\
 wave1=[2333,500,500, 0.0,3.34],\
 wave2=[500,2333,500, 214 +1\*gap, 2.92],\
 wave3=[500,500,2334,  440.0+2\*gap, 2.5]
