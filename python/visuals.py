@@ -20,7 +20,7 @@ def spystep(ws=None, we=None,step=None, group=None):
 def racevisuals(anim=True,show=True,save=False,filename=None,group=None,ninwaves=None,fps=None,dpi=None,cache_frame_data=True):
 
     if anim:
-        plt.rcParams['figure.figsize'] = [8, 6]
+        plt.rcParams['figure.figsize'] = [4, 3] #[8,6]
         plt.rcParams['figure.dpi'] = dpi # 200 e.g. is really fine, but slower
 
 
@@ -382,18 +382,18 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
         print('control: wave ', j,' start: ',r0,'wave end: ',r1-1,', ',par.waves[j,par.numberofwaves])
 
 
-    plt.plot(errors,'o',ms=0.5,label='Errors')
-    plt.plot(errorspen,'o',ms=0.5,label='PErrors')
-    plt.ylabel('Time in seconds (total: '+str(racetime)+')')
+    plt.plot(errors,'o',ms=0.5,label='Time lost')
+    plt.plot(errorspen,'o',ms=0.5,label='Metric score')
+    plt.ylabel('Time in seconds (total race time: '+str(int(racetime))+')')
 
     print('control: race time: ', racetime)
     print('control: slowest racer: ', slowrunners)
 
     print('control: best race time: ', mintime)
-    print('control: winners: ', winrunners)
+    print('control: winner: ', winrunners)
 
     print('control: worst race time: ', worsttime)
-    print('control: losers: ', losrunners)
+    print('control: last: ', losrunners)
 
     metricerror=np.sum(errorspen)/len(errorspen)
     print('control: metric error:', metricerror)
@@ -401,13 +401,13 @@ def timesvisuals(times=None,times_free=None,group=None,group_free=None):
     print('control: l1 error:', l1error)
 
 
-    plt.xlabel('Runner index (slow runners= '+str(slowrunners)+')')
-    plt.title('l1 norm='+str(l1error)+\
-              '\n metric ='+str(metricerror)+\
-              ' delays ='+str(par.waves[:,par.numberofwaves]))
+    plt.xlabel('Runner index')
+    plt.title('Averaged time lost ='+str(int(l1error))+\
+              '\n Averaged metric score='+str(int(metricerror))+\
+              ' departure times ='+str(par.waves[:,par.numberofwaves]))
     #plt.text(0,550,'l1 norm='+str(np.linalg.norm(errors,ord=1)))
     #plt.text(0,500,'metric ='+str(np.sum(errorspen)))
-    plt.text(0,250,'waves ='+str(par.waves[:,0:par.numberofwaves]))
+    plt.text(0,350,'waves ='+str(par.waves[:,0:par.numberofwaves]))
     #plt.text(0,400,'delays ='+str(par.waves[:,1]))
     #plt.text(0,350,'speeds_0 ='+str(par.waves[:,2]))
     plt.legend(loc=9 )

@@ -17,8 +17,8 @@ args = vars(ap.parse_args())
 
 #### Race Animation ########################################################################
 from visuals import *
-DPI=150
-FPS=25  #Frames per second
+DPI=30 #150
+FPS=100  # 25 Frames per second
 
 ANIM=int(args['anim']) # execute animation
 SHOW=0
