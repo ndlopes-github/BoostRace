@@ -16,6 +16,7 @@ More details at [settings.py](https://github.com/ndlopes-github/BoostRace/blob/m
 ![Click to see animation](https://user-images.githubusercontent.com/58338787/157900110-efebdc3d-d6e0-471e-8544-a106e0083d1e.mp4) 
 
 and some timing reports for the runners
+
 ![Image](https://user-images.githubusercontent.com/58338787/157908571-a7a7f7be-6be5-469c-b0b8-24f2478e7326.png)
 
 
