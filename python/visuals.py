@@ -230,7 +230,13 @@ def histvisuals(group=None):
     # the video can be embedded in html5.  You may need to adjust this for
     # your system: for more information, see
     # http://matplotlib.sourceforge.net/api/animation_api.html
-    # anim.save('hist_animation.mp4', fps=30, extra_args=['-vcodec', 'libx264'])
+
+    #writer.setup(fig,str(FNumber)+'race_animation.mp4',-1)
+    #writer.finish()
+    writer = animation.FFMpegWriter(fps=25)
+    anim.save('race_hist.mp4', writer=writer,dpi=150)
+
+    #anim.save('hist_animation.mp4', fps=30, extra_args=['-vcodec', 'libx264'])
     print('hist anim done')
     plt.show()
     plt.clf()
