@@ -96,17 +96,19 @@ function inversepseudosigmoid( )
         NinWaves[wave]=sum(mixwaves[wave, 1: nwaves])
     end
 
-    #=
+
     itemcount=0
-    for nwave,nrunners in enumerate(NinWaves):
+    for (nwave,nrunners) in enumerate(NinWaves)
         linecounter=0
-        for i in range(nrunners):
+        for i in range(1,nrunners)
             # To avoid truncations due to the cubic spline
-            auxwidthcontrl=int(np.floor(par.track.cspline2(-linecounter*ldist)+0.5))
+            #=
+            auxwidthcontrl=Int(np.floor(par.track.cspline2(-linecounter*ldist)+0.5))
 
             if (i+1)%auxwidthcontrl==0:
-                linecounter+=1
+                 linecounter+=1
             end
+            =#
             InitPositions[i+itemcount]=-linecounter*ldist#+0.30*np.random.random_sample()-0.15
             WaveDelays[i+itemcount]=wavedelays[nwave]+linecounter*ReactionLineTime
             WaveInitSpeeds[i+itemcount]=waveinitspeeds[nwave]
@@ -115,7 +117,6 @@ function inversepseudosigmoid( )
     end
 
     return AvgTimes, NinWaves,InitPositions, WaveDelays,WaveInitSpeeds
-    =#
 end
 
 end
