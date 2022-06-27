@@ -1,11 +1,41 @@
 module Track
-export track1
+export track
 using CubicSplines
 using Plots
 #plotlyjs()
 pyplot()
 
-struct track
+include("Settings.jl")
+import .Settings
+track_choice=Settings.track
+
+if track_choice=="track1"
+    ## Track1 ##
+    name="imaginary1"
+    data=[-500.0 0.0 10.0 ;
+          -400.0  0.0 10.0;
+          -300.0 0.0 10.0;
+          -200.0 0.0 10.0;
+          -100.0 0.0 10.0;
+          0.0 0.0 10.0;
+          100.0 0.0 10.0;
+          1000.0 100.0 10.0;
+          2000.0 -50.0 10.0;
+          3000.0 -30.0 10.0;
+          4000.0 120.0 10.0;
+          5000.0 -27.0 10.0;
+          6000.0 59.00 10.0;
+          7000.0 -100.0 10.0;
+          8000.0 -120.0 10.0;
+          9000.0 190.0 10.0;
+          10000.0 10.0 10.0;
+          10100.0 10.0 10.0;
+          10200.0 10.0 10.0]
+end
+
+
+
+struct track_struct
     name
     x_data
     diff_data
@@ -14,17 +44,13 @@ struct track
     cspline2
 end
 
-## Track1 ##
-name="imaginary1"
-
-data=[-500.0 0.0 10.0 ; -400.0  0.0 10.0; -300.0 0.0 10.0;  -200.0 0.0 10.0; -100.0 0.0 10.0; 0.0 0.0 10.0;  100.0 0.0 10.0; 1000.0 100.0 10.0; 2000.0 -50.0 10.0;  3000.0 -30.0 10.0; 4000.0 120.0 10.0; 5000.0 -27.0 10.0; 6000.0 59.00 10.0; 7000.0 -100.0 10.0;  8000.0 -120.0 10.0; 9000.0 190.0 10.0; 10000.0 10.0 10.0; 10100.0 10.0 10.0; 10200.0 10.0 10.0]
 
 x_data=data[:,1]
 diff_data=data[:,2]
 width_data=data[:,3]
 cspline=CubicSpline(x_data,diff_data)
 cspline2=CubicSpline(x_data,width_data)
-track1=track(name,x_data,diff_data,width_data,cspline,cspline2)
+track=track_struct(name,x_data,diff_data,width_data,cspline,cspline2)
 
 
 
@@ -77,8 +103,8 @@ function plot_slope_track( track)
     #plt.show()
 end
 
-plot_diff_track(track1)
-plot_width_track(track1)
-plot_slope_track(track1)
+plot_diff_track(track)
+plot_width_track(track)
+plot_slope_track(track)
 
 end

@@ -13,7 +13,7 @@ nsteps=par.observernsteps
 include("Track.jl")
 import .Track
 
-track=Track.track1
+track=Track.track
 
 
 TimeBins=[i for i in 30:100]
