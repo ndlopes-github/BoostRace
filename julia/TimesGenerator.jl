@@ -136,11 +136,11 @@ plot(AcumulatedRelativeRunnerDist,TimeBins,
      title="Inverse Acumulated Relative Runner Distribution", reuse=false)
 )
 
-#plot(AcumulatedRelativeRunnerDist,
-#     CubicSpline(AcumulatedRelativeRunnerDist,TimeBins,
-#                 extrapl=[1, ], extrapr=[1, ])[AcumulatedRelativeRunnerDist],
-#     linecolor = :red,lw=2)
-plot( AvgTimes,RandDist,seriestype = :scatter,
+plot(AcumulatedRelativeRunnerDist,
+    CubicSpline(AcumulatedRelativeRunnerDist,TimeBins,
+                 extrapl=[1, ], extrapr=[1, ])[AcumulatedRelativeRunnerDist],
+     linecolor = :red,lw=2)
+plot!(RandDist,AvgTimes,seriestype = :scatter,
       title="Random Times Distribution",
       markersize=0.3,
       markeralpha = 0.4,
