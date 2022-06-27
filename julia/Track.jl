@@ -30,8 +30,8 @@ track=track_struct(trackname,x_data,diff_data,width_data,cspline,cspline2)
 function plot_diff_track(track)
     xs = range(start=minimum(track.x_data), stop=maximum(track.x_data), length=1000)
     ys=track.cspline(xs)
-    plot(xs, ys,title="Elevation (m)",reuse=false)
-    gui()
+    display(plot(xs, ys,title="Elevation (m)",reuse=false))
+
 
 end
 
@@ -40,8 +40,8 @@ function plot_width_track(track)
     #fig, ax = plt.subplots(figsize=(6.5, 4))
     #ax.plot(self.x_data,self.diff_data, 'o', label='data')
     ys=track.cspline2(xs)
-    plot(xs, ys,reuse=false, title="Width (m)")
-    gui()
+    display(plot(xs, ys,reuse=false, title="Width (m)"))
+
 end
 
 function plot_slope_track(track)
@@ -51,8 +51,7 @@ function plot_slope_track(track)
     for x in xs
         append!(slope, 100*gradient(spline,x,1))
     end
-    plot(xs, slope,reuse=false,title="Slope (%)")
-    gui()
+  display(plot(xs, slope,reuse=false,title="Slope (%)"))
 
 end
 

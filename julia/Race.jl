@@ -10,9 +10,10 @@ import .TimesGenerator
 
 function model()
     println(Settings.par)
-    #println(TimesGenerator.inversepseudosigmoid())
+    println(TimesGenerator.AvgTimes,TimesGenerator.NinWaves,
+            TimesGenerator.InitPositions,TimesGenerator.WaveDelays,
+            TimesGenerator.WaveInitSpeeds)
 end
 
-# your other definitions here
 
 end

@@ -1,8 +1,10 @@
 module TimesGenerator
-export inversepseudosigmoid
+export AvgTimes, NinWaves,InitPositions, WaveDelays,WaveInitSpeeds
 using Distributions
 using Random
 using CubicSplines
+using Plots
+plotlyjs()
 
 include("Settings.jl")
 import .Settings
@@ -122,5 +124,22 @@ function inversepseudosigmoid( )
 
     return AvgTimes, NinWaves,InitPositions, WaveDelays,WaveInitSpeeds
 end
+
+AvgTimes, NinWaves,InitPositions, WaveDelays,WaveInitSpeeds= inversepseudosigmoid()
+
+display(
+plot(TimeBins,AcumulatedRelativeRunnerDist,
+     title=" Acumulated Relative Runner Distribution", reuse=false)
+)
+display(
+plot(AcumulatedRelativeRunnerDist,TimeBins,
+     title="Inverse Acumulated Relative Runner Distribution", reuse=false)
+)
+#    plt.plot(acp,CubicSpline(acp,TimeBins)(acp),'r-',lw=0.5)
+#    AvgTimes,RandDist,_,_=inversepseudosigmoid2(10000,10,0.5,[3333,3333,3334],[0,360,720])
+#    plt.plot(RandDist, AvgTimes,'b+')
+#    plt.show()
+#    print(AvgTimes)
+
 
 end
