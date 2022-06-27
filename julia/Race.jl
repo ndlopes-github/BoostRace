@@ -10,7 +10,7 @@ import .TimesGenerator
 
 function model()
     println(Settings.par)
-    println(TimesGenerator.inversepseudosigmoid())
+    #println(TimesGenerator.inversepseudosigmoid())
 end
 
 # your other definitions here
