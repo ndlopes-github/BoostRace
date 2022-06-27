@@ -4,10 +4,10 @@ using CubicSplines
 using Plots
 #plotlyjs()
 pyplot()
-
 include("Settings.jl")
 import .Settings
 track_choice=Settings.track
+
 
 if track_choice=="track1"
     ## Track1 ##
@@ -31,6 +31,33 @@ if track_choice=="track1"
           10000.0 10.0 10.0;
           10100.0 10.0 10.0;
           10200.0 10.0 10.0]
+end
+
+if track_choice=="track2"
+    name="imaginary2"
+    data=[-500.0 0.0 10.0;
+          -400.0 0.0 10.0;
+          -300.0 0.0 10.0;
+          -200.0 0.0 10.0;
+          -100.0 0.0 10.0;
+          0.0 0.0 10.0;
+          100.0 0.0 10.0;
+          1000.0 10.0 10.0;
+          2000.0 -2.0 5.0;
+          2200.0 -2.0 3.0;
+          2300.0 -1.0 3.0;
+          2400.0 -1.0 3.0;
+          2500.0 -1.0 6.0;
+          3000.0 -15.0 10.0;
+          4000.0 20.0 2.0;
+          5000.0 -7.0 10.0;
+          6000.0 9.0 10.0;
+          7000.0 -10.0 10.0;
+          8000.0 -1.0 7.0;
+          9000.0 1.0 10.0;
+          10000.0 0.0 10.0;
+          10100.0 0.0 10.0;
+          10200.0 0.0 10.0]
 end
 
 
@@ -59,7 +86,7 @@ function plot_diff_track(track)
     #fig, ax = plt.subplots(figsize=(6.5, 4))
     #ax.plot(self.x_data,self.diff_data, 'o', label='data')
     ys=track.cspline(xs)
-    plot(xs, ys,reuse=false)
+    plot(xs, ys,title="Elevation (m)",reuse=false)
     gui()
     #ax.plot(xs, self.cspline(xs,1), label="S'",color='k')
     #ax.set_xlim(xs.min()-10, xs.max()+10)

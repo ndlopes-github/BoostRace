@@ -197,9 +197,9 @@ def track_fixed_width(width):
 #                                              9.0,-10.0,-1.0,1.,0.]))
 
 if __name__== '__main__':
-    track4.plot()
-    track4.slopeplot()
-    track4.widthplot()
+    track2.plot()
+    track2.slopeplot()
+    track2.widthplot()
 
     # track_fixed_width(10.0).plot()
     # track_fixed_width(10.0).slopeplot()
