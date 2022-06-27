@@ -1,5 +1,5 @@
 module TimesGenerator
-export AvgTimes, NinWaves,InitPositions, WaveDelays,WaveInitSpeeds
+export AvgTimes, RandDist,NinWaves,InitPositions, WaveDelays,WaveInitSpeeds
 using Distributions
 using Random
 using CubicSplines
@@ -122,10 +122,10 @@ function inversepseudosigmoid( )
         itemcount+=nrunners
     end
 
-    return AvgTimes, NinWaves,InitPositions, WaveDelays,WaveInitSpeeds
+    return AvgTimes, RandDist, NinWaves,InitPositions, WaveDelays,WaveInitSpeeds
 end
 
-AvgTimes, NinWaves,InitPositions, WaveDelays,WaveInitSpeeds= inversepseudosigmoid()
+AvgTimes, RandDist,NinWaves,InitPositions, WaveDelays,WaveInitSpeeds= inversepseudosigmoid()
 
 display(
 plot(TimeBins,AcumulatedRelativeRunnerDist,
@@ -135,11 +135,17 @@ display(
 plot(AcumulatedRelativeRunnerDist,TimeBins,
      title="Inverse Acumulated Relative Runner Distribution", reuse=false)
 )
-#    plt.plot(acp,CubicSpline(acp,TimeBins)(acp),'r-',lw=0.5)
-#    AvgTimes,RandDist,_,_=inversepseudosigmoid2(10000,10,0.5,[3333,3333,3334],[0,360,720])
-#    plt.plot(RandDist, AvgTimes,'b+')
-#    plt.show()
-#    print(AvgTimes)
+
+#plot(AcumulatedRelativeRunnerDist,
+#     CubicSpline(AcumulatedRelativeRunnerDist,TimeBins,
+#                 extrapl=[1, ], extrapr=[1, ])[AcumulatedRelativeRunnerDist],
+#     linecolor = :red,lw=2)
+plot( AvgTimes,RandDist,seriestype = :scatter,
+      title="Random Times Distribution",
+      markersize=0.3,
+      markeralpha = 0.4,
+      markercolor = :blue )
+gui()
 
 
 end

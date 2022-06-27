@@ -10,7 +10,9 @@ import .TimesGenerator
 
 function model()
     println(Settings.par)
-    println(TimesGenerator.AvgTimes,TimesGenerator.NinWaves,
+    println(TimesGenerator.AvgTimes,
+            TimesGenerator.RandDist,
+            TimesGenerator.NinWaves,
             TimesGenerator.InitPositions,TimesGenerator.WaveDelays,
             TimesGenerator.WaveInitSpeeds)
 end
