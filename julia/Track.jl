@@ -1,9 +1,10 @@
 module Track
 export track
 using CubicSplines
+using Interpolations
 using Plots
-#plotlyjs()
-pyplot()
+plotlyjs()
+#pyplot()
 include("Settings.jl")
 import .Settings
 track_choice=Settings.track
@@ -58,6 +59,43 @@ if track_choice=="track2"
           10000.0 0.0 10.0;
           10100.0 0.0 10.0;
           10200.0 0.0 10.0]
+end
+
+
+if track_choice=="track3"
+    name="silvestre"
+    data_aux=[-500.0 10.0 16.0;
+              220.0 (-0.02*220.0) 16.0;
+              260.0 (-0.02*260.0) 11.0;
+              480.0 (-0.02*480.0) 11.0;
+              520.0 (-0.02*520.0) 6.0;
+              1000.0 -20.0 6.0;
+              1040.0 -20.0 8.0;
+              1500.0 -20.0 8.0;
+              2000.0 -20.0 8.0;
+              6000.0 -20.0 8.0;
+              6500.0 -20.0 8.0;
+              7460.0 13.6 8.0;
+              7500.0 15.0 16.0;
+              8500.0 50.0 16.0;
+              10000.0 0.0 16.0;
+              10500.0 (-1050.0/3+1000.0/3.0) 16.0]
+    N=501
+    auxwidth=zeros(N)
+    auxelev=zeros(N)
+    x=range(start=-500.0,stop=10500,length=N)
+
+    aux_diff_lspline=LinearInterpolation(data_aux[:,1],data_aux[:,2])
+    aux_width_lspline=LinearInterpolation(data_aux[:,1],data_aux[:,3])
+    auxlevel=aux_diff_lspline.(x)
+    auxwidth=aux_width_lspline.(x)
+    data=zeros((size(x),3))
+    for i in range(1,size(x))
+        data[i,1]=x[i]
+        data[i,2]=auxlev[i]
+        data[i,3]=auxwidth[i]
+    end
+
 end
 
 

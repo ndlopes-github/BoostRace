@@ -23,7 +23,7 @@ end
 
 gap=180
 waves=[ 2333 500 500 0.0 3.34; 500 2333 500 (214 +1*gap) 2.92;  500 500 2334 (440.0+2*gap) 2.5]
-track="track2"
+track="track3"
 #println(waves)
 nw=size(waves)[1]
 nr=sum(waves[:, 1:nw])
