@@ -6,9 +6,15 @@ using CubicSplines
 
 include("Settings.jl")
 import .Settings
-
 par=Settings.par
 nsteps=par.observernsteps
+
+
+include("Track.jl")
+import .Track
+
+track=Track.track1
+
 
 TimeBins=[i for i in 30:100]
 println(TimeBins)
@@ -36,8 +42,8 @@ function inversepseudosigmoid( )
 
     wavedelays=Settings.par.waves[:,nwaves+1]
     waveinitspeeds=Settings.par.waves[:,nwaves+2]
-    println(wavedelays)
-    println(waveinitspeeds)
+    #println(wavedelays)
+    #println(waveinitspeeds)
 
     partitions=zeros(size(mixwaves)[1]+1)
     for part in range(1,nwaves)
@@ -102,13 +108,11 @@ function inversepseudosigmoid( )
         linecounter=0
         for i in range(1,nrunners)
             # To avoid truncations due to the cubic spline
-            #=
-            auxwidthcontrl=Int(np.floor(par.track.cspline2(-linecounter*ldist)+0.5))
+            auxwidthcontrl=Int(floor(track.cspline2(-linecounter*ldist)+0.5))
 
-            if (i+1)%auxwidthcontrl==0:
-                 linecounter+=1
+            if (i+1)%auxwidthcontrl==0
+                linecounter+=1
             end
-            =#
             InitPositions[i+itemcount]=-linecounter*ldist#+0.30*np.random.random_sample()-0.15
             WaveDelays[i+itemcount]=wavedelays[nwave]+linecounter*ReactionLineTime
             WaveInitSpeeds[i+itemcount]=waveinitspeeds[nwave]
