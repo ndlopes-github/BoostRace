@@ -9,8 +9,6 @@ plotlyjs()
 include("Settings.jl")
 import .Settings
 par=Settings.par
-nsteps=par.observernsteps
-
 
 include("Track.jl")
 import .Track
@@ -32,18 +30,18 @@ AcumulatedRelativeRunnerDist=cumsum(RunnerDist/sum(RunnerDist))
 println("AcumulatedRelativeRunnerDis=",AcumulatedRelativeRunnerDist)
 
 function inversepseudosigmoid( )
-    ldist=Settings.par.ldist
-    nrunners=Int(Settings.par.nrunners)
-    nwaves=Settings.par.numberofwaves
+    ldist=par.ldist
+    nrunners=Int(par.nrunners)
+    nwaves=par.numberofwaves
 
 
-    mixwaves=Int.(Settings.par.waves[:,1:nwaves])
+    mixwaves=Int.(par.waves[:,1:nwaves])
     println("control: preprocessing times: waves:")
     println(mixwaves)
     println(size(mixwaves))
 
-    wavedelays=Settings.par.waves[:,nwaves+1]
-    waveinitspeeds=Settings.par.waves[:,nwaves+2]
+    wavedelays=par.waves[:,nwaves+1]
+    waveinitspeeds=par.waves[:,nwaves+2]
     #println(wavedelays)
     #println(waveinitspeeds)
 
@@ -127,25 +125,26 @@ end
 
 AvgTimes, RandDist,NinWaves,InitPositions, WaveDelays,WaveInitSpeeds= inversepseudosigmoid()
 
-display(
-plot(TimeBins,AcumulatedRelativeRunnerDist,
-     title=" Acumulated Relative Runner Distribution", reuse=false)
-)
-display(
-plot(AcumulatedRelativeRunnerDist,TimeBins,
-     title="Inverse Acumulated Relative Runner Distribution", reuse=false)
-)
+if par.logplot==true
+    display(
+        plot(TimeBins,AcumulatedRelativeRunnerDist,
+             title=" Acumulated Relative Runner Distribution", reuse=false)
+    )
+    display(
+        plot(AcumulatedRelativeRunnerDist,TimeBins,
+             title="Inverse Acumulated Relative Runner Distribution", reuse=false)
+    )
 
-plot(AcumulatedRelativeRunnerDist,
-    CubicSpline(AcumulatedRelativeRunnerDist,TimeBins,
-                 extrapl=[1, ], extrapr=[1, ])[AcumulatedRelativeRunnerDist],
-     linecolor = :red,lw=2)
-plot!(RandDist,AvgTimes,seriestype = :scatter,
-      title="Random Times Distribution",
-      markersize=0.3,
-      markeralpha = 0.4,
-      markercolor = :blue )
-gui()
-
+    plot(AcumulatedRelativeRunnerDist,
+         CubicSpline(AcumulatedRelativeRunnerDist,TimeBins,
+                     extrapl=[1, ], extrapr=[1, ])[AcumulatedRelativeRunnerDist],
+         linecolor = :red,lw=2)
+    plot!(RandDist,AvgTimes,seriestype = :scatter,
+          title="Random Times Distribution",
+          markersize=0.3,
+          markeralpha = 0.4,
+          markercolor = :blue )
+    gui()
+end
 
 end

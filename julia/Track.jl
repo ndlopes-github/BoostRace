@@ -6,16 +6,17 @@ plotlyjs()
 #pyplot()
 include("Settings.jl")
 import .Settings
-trackname=Settings.trackname
-data=Settings.trackdata
+par=Settings.par
+trackname=par.trackname
+data=par.trackdata
 
 struct track_struct
-    name
-    x_data
-    diff_data
-    width_data
-    cspline
-    cspline2
+    name::String
+    x_data::Vector{Float32}
+    diff_data::Vector{Float32}
+    width_data::Vector{Float32}
+    cspline::CubicSplines.CubicSpline{Float32}
+    cspline2::CubicSplines.CubicSpline{Float32}
 end
 
 x_data=data[:,1]
@@ -55,8 +56,11 @@ function plot_slope_track(track)
 
 end
 
-plot_diff_track(track)
-plot_width_track(track)
-plot_slope_track(track)
+
+if par.logplot==true
+    plot_diff_track(track)
+    plot_width_track(track)
+    plot_slope_track(track)
+end
 
 end

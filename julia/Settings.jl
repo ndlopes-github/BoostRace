@@ -1,13 +1,15 @@
 module Settings
-export par
 using Interpolations
+export par
 
 # TODO: ORGANIZATION
 
-timestep=0.4
+logplot=false
+
+timestep=0.2 # should divide observertimestep
 observertimestep=1.0
 observernsteps=7080
-endtime=7080
+endtime=7080.0
 linearfrontview=4.0
 minratio=15.0/40.0
 maxratio=25.0/40.0
@@ -104,30 +106,31 @@ end
 
 ##############################################################################
 
-struct parameters
-    timestep
-    observertimestep
-    observernsteps
-    endtime
-    waves
-    linearfrontview
-    minratio
-    maxratio
-    minrho
-    maxrho
-    posweights
-    ldist
-    numberofwaves
-    nrunners
-    trackname
-    trackdata
+struct Parameters
+    timestep::Float32
+    observertimestep::Float32
+    observernsteps::Int16
+    endtime::Float32
+    waves::Matrix{Float32}
+    linearfrontview::Float32
+    minratio::Float32
+    maxratio::Float32
+    minrho::Float32
+    maxrho::Float32
+    posweights::Matrix{Float32}
+    ldist::Float32
+    numberofwaves::Int8
+    nrunners::Int16
+    trackname::String
+    trackdata::Matrix{Float32}
+    logplot::Bool
 end
 
 numberofwaves=size(waves)[1]
 nrunners=sum(waves[:, 1:numberofwaves])
-par=parameters(timestep,observertimestep,observernsteps, endtime,
+par=Parameters(timestep,observertimestep,observernsteps, endtime,
                waves,linearfrontview,minratio,maxratio,minrho,maxrho,
-               posweights,ldist, numberofwaves, nrunners, trackname,trackdata)
+               posweights,ldist, numberofwaves, nrunners, trackname,trackdata,logplot)
 
 
 end
