@@ -32,7 +32,7 @@ function rk4_solver(avgspeeds,
     positions=zeros(Float32, observernsteps,nrunners)
 
     for i in 1:nrunners positions[1,i]=initpositions[i][1] end
-    println(positions[1,:])
+    #println(positions[1,:])
 
     #println(typeof(positions))
     velocities=zeros(observernsteps,nrunners)
@@ -69,7 +69,7 @@ function rk4_solver(avgspeeds,
         #velocities[i,:]=F(times[i])
         #rhos[i,:]=rk_rhos
     end
-    println(positions[observernsteps,:])
+    #println(positions[observernsteps,:])
     return times, positions,velocities, rhos
 
 end
