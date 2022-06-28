@@ -4,7 +4,7 @@ export par
 
 # TODO: ORGANIZATION
 
-logplot=false
+logplot=true
 
 timestep=0.2 # should divide observertimestep
 observertimestep=1.0

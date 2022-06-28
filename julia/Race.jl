@@ -30,7 +30,10 @@ function model()
     end
 
     group=Runners(runnerslist)
-    println(size(group.pos))
+    println(">control sizes:")
+    println(">control sizes(group.pos)= ", size(group.pos))
+    println(">control sizes(group.vels)= ", size(group.vels))
+    println(">control sizes(group.rhos)= ", size(group.rhos))
     println(">control: Pre-Processing done")
     println(">control: Starting Race Simulation")
 
