@@ -128,7 +128,7 @@ end
 
 numberofwaves=size(waves)[1]
 nrunners=Int(sum(waves[:,1:numberofwaves]))
-println(nrunners)
+println("> Control Settings nrunners = ", nrunners)
 par=Parameters(timestep,observertimestep,observernsteps, endtime,
                waves,linearfrontview,minratio,maxratio,minrho,maxrho,
                posweights,ldist, numberofwaves, nrunners, trackname,trackdata,logplot)

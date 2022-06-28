@@ -17,7 +17,7 @@ track=Track.track
 
 
 TimeBins=[i for i in 30:100]
-println(TimeBins)
+println(">Control TimesGenerator: TimeBins= ", TimeBins)
 
 ReactionLineTime=0.4
 
@@ -27,7 +27,7 @@ RunnerDist=[15,18,20,17,18,18,31,40,45,72,96,88,109,131,155,192,
             151,112,145,96,85,85,87,85,73,42,47,27,39,45,31,28,29,24,21,15,21,14,17,14,12,12]
 
 AcumulatedRelativeRunnerDist=cumsum(RunnerDist/sum(RunnerDist))
-println("AcumulatedRelativeRunnerDis=",AcumulatedRelativeRunnerDist)
+println(">Control TimesGenerator: AcumulatedRelativeRunnerDis=", AcumulatedRelativeRunnerDist[1:10])
 
 function inversepseudosigmoid( )
     ldist=par.ldist
@@ -36,24 +36,18 @@ function inversepseudosigmoid( )
 
 
     mixwaves=Int.(par.waves[:,1:nwaves])
-    println("control: preprocessing times: waves:")
-    println(mixwaves)
-    println(size(mixwaves))
+    println(">Control TimesGenerator size(mixwaves) =", size(mixwaves))
 
     wavedelays=par.waves[:,nwaves+1]
     waveinitspeeds=par.waves[:,nwaves+2]
-    #println(wavedelays)
-    #println(waveinitspeeds)
 
     partitions=zeros(size(mixwaves)[1]+1)
     for part in range(1,nwaves)
         partitions[part+1]=partitions[part]+sum(mixwaves[:,part])/nrunners
     end
 
-    println("control: partitions")
-    println(partitions)
-    println("control: number of waves")
-    println(nwaves)
+    println(">Control TimesGenerator: partitions ", partitions)
+    println(">Control TimesGenerator: number of waves",  nwaves)
 
     waves=zeros(nrunners)
     wb=1
@@ -65,15 +59,15 @@ function inversepseudosigmoid( )
         pe=1
         for part in range(1, nwaves)
             size=mixwaves[wave,part]
-            println(size)
+            println(">Control TimesGenerator: sizes of parts of mixwaves:",  size)
             pe+=size
             wavepart=rand(Uniform(partitions[part],partitions[part+1]),size)
-            println("control: uniform part begin= ", partitions[part], "end= ", partitions[part+1])
+            println(">Control TimesGenerator: uniform part begin= ", partitions[part], " end= ", partitions[part+1])
             parts[pb:pe-1]=wavepart
             pb=pe
         end
         we+=size(parts)[1]
-        println(wb," ", we-1)
+        println(">Control TimesGenerator: uniform wb = ", wb," we-1 = ", we-1)
         #mix parts in each wave
         shuffle!(parts)
         waves[wb:we-1]=parts
@@ -82,11 +76,11 @@ function inversepseudosigmoid( )
 
     RandDist=waves
     #println(RandDist)
-    println(size(AcumulatedRelativeRunnerDist))
-    println(size(TimeBins))
+    println(">Control TimesGenerator: size(AcumulatedRelativeRunnerDist) = ", size(AcumulatedRelativeRunnerDist))
+    println(">Control TimesGenerator: size(TimeBins) = ", size(TimeBins))
 
     AvgTimes=CubicSpline(AcumulatedRelativeRunnerDist,TimeBins,  extrapl=[1, ], extrapr=[1, ])[RandDist]
-    println("Control: number of runners",size(AvgTimes))
+    println(">Control TimesGenerator:: number of runners =",size(AvgTimes))
     sort!(AvgTimes) # The Fastest are in the first Lines
 
     InitPositions=zeros(nrunners)
