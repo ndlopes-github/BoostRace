@@ -15,11 +15,11 @@ minratio=15.0/40.0
 maxratio=25.0/40.0
 minrho=0.4
 maxrho=0.8
-posweights=[0.2 0; 2.0 30;  1.5 60;  1.25 120;  1.0 100000]
+posweights=[0.2 0; 2.0 30;  1.5 60;  1.25 120; 1.0 100000]
 ldist=0.5
 gap=180
 waves=[ 2333 500 500 0.0 3.34;
-        500 2333 500 (214 +1*gap) 2.92;
+        500  2333 500 (214 +1*gap) 2.92;
         500 500 2334 (440.0+2*gap) 2.5]
 
 #=
@@ -127,7 +127,8 @@ struct Parameters
 end
 
 numberofwaves=size(waves)[1]
-nrunners=sum(waves[:, 1:numberofwaves])
+nrunners=Int(sum(waves[:,1:numberofwaves]))
+println(nrunners)
 par=Parameters(timestep,observertimestep,observernsteps, endtime,
                waves,linearfrontview,minratio,maxratio,minrho,maxrho,
                posweights,ldist, numberofwaves, nrunners, trackname,trackdata,logplot)

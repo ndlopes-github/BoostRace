@@ -44,7 +44,7 @@ Frunner(time,wavedelay,waveinitspeed,initposition)=Frunner(time,wavedelay,wavein
 
 struct Runners
     group::Vector{Main.RunModelDone.Race.Frunnerclass.Frunner}
-    pos::Vector{Vector{Float32}}
+    pos::Matrix{Float32} #Vector{Vector{Float32}}
     vels::Vector{Vector{Float32}}
     rhos::Vector{Vector{Float32}}
     wavedelays::Vector{Float32}
@@ -58,7 +58,7 @@ struct Runners
     #     names
     #     instantspeed
 end
-positions(group)=[runner.pos for runner in group]
+positions(group)=reduce(hcat,[runner.pos for runner in group])'
 velocities(group)=[runner.vels for runner in group]
 rhosall(group)=[runner.rhos for runner in group]
 wavedelays(group)=[runner.wavedelay for runner in group]

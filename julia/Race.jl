@@ -30,6 +30,7 @@ function model()
     end
 
     group=Runners(runnerslist)
+    println(size(group.pos))
     println(">control: Pre-Processing done")
     println(">control: Starting Race Simulation")
 
