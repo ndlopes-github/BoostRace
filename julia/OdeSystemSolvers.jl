@@ -1,54 +1,68 @@
 module OdeSystemSolvers
-export rk4_solver
 
 using ProgressBars
+using CubicSplines
 
 
-function F(t, avgspeeds, slopefactors)
-    return avgspeeds #.+ slopefactors
+# Index r for runner
+# Index i for time stepping
+
+function F(t, X,allrunners,par,track)
+    spline=track.cspline_elev
+    rtrn=zeros(allrunners.nrunners)
+
+
+    for r in 1:allrunners.nrunners
+        if (t <= allrunners.wavedelays[r]) || (X[r]>10000)
+            rtrn[r]=0.0
+        else
+            rtrn[r]=allrunners.avgspeeds[r] + gradient(spline,X[r],1)*allrunners.slopefactors[r]
+        end
+    end
+
+    return rtrn
 end
 
-function rk4_solver(avgspeeds,
-                           slopefactors,
-                           wavedelays,
-                           waveinitspeeds,
-                           trackdata,
-                           initpositions,
-                           observernsteps,
-                           observertimestep,
-                           timestep,
-                           linearfrontview,
-                           minratio,
-                           maxratio,
-                           minrho,
-                           maxrho
-                    )
-    println(">Control: Entering rk4_solver")
-    nrunners=size(slopefactors)[1]
-    println(">Control: number of runners = ", nrunners)
+
+
+
+function rk2_solver(allrunners,parameters,track)
+    println(">Control OdeSystemSolvers: Entering rk2_solver")
+
+    nrunners=allrunners.nrunners
+    obsnsteps=parameters.observernsteps
+    obststep=parameters.observertimestep
+    avgspeeds=allrunners.avgspeeds
+    slopefactors=allrunners.slopefactors
+
+    println(">Control OdeSystemSolvers: number of runners = ", nrunners)
     # Container for the solutions
-    times=zeros(observernsteps)
+    times=zeros(obsnsteps)
 
-    positions=zeros(Float32, observernsteps,nrunners)
-
-    for i in 1:nrunners positions[1,i]=initpositions[i][1] end
-    #println(positions[1,:])
+    # Internal Copy of allrunners.positions
+    positions=allrunners.pos
+    println(">control OdeSystemSolvers: size(positions)= ", size(positions))
+    println(">control OdeSystemSolvers: initial positions= ", positions[nrunners-10:nrunners,1])
 
     #println(typeof(positions))
-    velocities=zeros(observernsteps,nrunners)
-    rhos=zeros(observernsteps,nrunners)
+    velocities=zeros(nrunners,obsnsteps)
+    rhos=zeros(nrunners,obsnsteps)
 
+    X=positions[:,1]
     K1=zeros(nrunners)
-    #k2=zeros(nrunners)
+    k2=zeros(nrunners)
     #k3=zeros(nrunners)
     #k4=zeros(nrunners)
 
-    for i in ProgressBar(1:observernsteps-1)
-        times[i]=observertimestep*i
-        K1=F(times[i], avgspeeds, slopefactors)
+    for i in ProgressBar(1:obsnsteps-1)
+        times[i]=obststep*i
+        K1=F(times[i], X, allrunners,parameters,track)
+        K2=F(times[i]+obststep, X, allrunners,parameters,track)
+        X=X .+ 0.5*obststep .* (K1 .+ K2)
 
-        positions[i+1,:]=positions[i,:] .+ observertimestep .* K1
-       #=
+        positions[:,i+1]=X
+
+        #=
         function rungekutta4(f, y0, t)
             n = length(t)
             y = zeros((n, length(y0)))

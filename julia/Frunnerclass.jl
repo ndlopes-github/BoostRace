@@ -39,8 +39,9 @@ Frunner(time,wavedelay,waveinitspeed,initposition)=Frunner(time,wavedelay,wavein
                                               avgspeed(time), slopefactor,pos(initposition),vels,rhos)
 
 
-struct Runners
+mutable struct Runners
     group::Vector{Main.RunModelDone.Race.Frunnerclass.Frunner}
+    nrunners::Int16
 
     pos::Matrix{Float32} #Vector{Vector{Float32}}
     vels::Matrix{Float32}
@@ -52,6 +53,7 @@ struct Runners
     slopefactors::Vector{Float32}
 
 end
+nrunners(group)=size(group)[1]
 positions(group)=reduce(hcat,[runner.pos for runner in group])' # ' = transpose
 velocities(group)=reduce(hcat,[runner.vels for runner in group])'
 rhosall(group)=reduce(hcat,[runner.rhos for runner in group])'
@@ -61,6 +63,7 @@ avgspeeds(group)=[runner.avgspeed for runner in group]
 slopefactors(group)=[runner.slopefactor for runner in group]
 
 Runners(group)=Runners(group,
+                       nrunners(group),
                        positions(group),
                        velocities(group),
                        rhosall(group),

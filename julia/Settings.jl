@@ -4,7 +4,7 @@ export par
 
 # TODO: ORGANIZATION
 
-logplot=true
+logplot=false
 
 timestep=0.2 # should divide observertimestep
 observertimestep=1.0
@@ -128,7 +128,7 @@ end
 
 numberofwaves=size(waves)[1]
 nrunners=Int(sum(waves[:,1:numberofwaves]))
-println("> Control Settings nrunners = ", nrunners)
+println(">Control Settings: nrunners = ", nrunners)
 par=Parameters(timestep,observertimestep,observernsteps, endtime,
                waves,linearfrontview,minratio,maxratio,minrho,maxrho,
                posweights,ldist, numberofwaves, nrunners, trackname,trackdata,logplot)

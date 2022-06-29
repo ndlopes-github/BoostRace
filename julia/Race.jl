@@ -1,26 +1,29 @@
 module Race
-export model
+#export model
 
-include("Settings.jl")
- import .Settings
-par=Settings.par
-nrunners=par.nrunners #Number of runners
+include("PreProcessing.jl")
+import .PreProcessing
 
-include("OdeSystemSolvers.jl")
-import .OdeSystemSolvers
-rk4_solver=OdeSystemSolvers.rk4_solver
+AvgTimes=PreProcessing.AvgTimes
+WaveDelays=PreProcessing.WaveDelays
+WaveInitSpeeds=PreProcessing.WaveInitSpeeds
+InitPositions=PreProcessing.InitPositions
+track= PreProcessing.track
+parameters=PreProcessing.par
+nrunners=parameters.nrunners
 
-include("TimesGenerator.jl")
-import .TimesGenerator
-AvgTimes=TimesGenerator.AvgTimes
-WaveDelays=TimesGenerator.WaveDelays
-WaveInitSpeeds=TimesGenerator.WaveInitSpeeds
-InitPositions=TimesGenerator.InitPositions
 
 include("Frunnerclass.jl")
 import .Frunnerclass
 Frunner=Frunnerclass.Frunner
 Runners=Frunnerclass.Runners
+
+
+include("OdeSystemSolvers.jl")
+import .OdeSystemSolvers
+solver=OdeSystemSolvers.rk2_solver
+
+ using JLD2
 
 function model()
 
@@ -29,31 +32,30 @@ function model()
         runnerslist[i]=Frunner(AvgTimes[i],WaveDelays[i],WaveInitSpeeds[i],InitPositions[i])
     end
 
-    group=Runners(runnerslist)
+    allrunners=Runners(runnerslist)
+
     println(">control sizes:")
-    println(">control sizes(group.pos)= ", size(group.pos))
-    println(">control sizes(group.vels)= ", size(group.vels))
-    println(">control sizes(group.rhos)= ", size(group.rhos))
+    println(">control sizes(allrunners.group)= ", size(allrunners.group))
+    println(">control sizes(allrunners.pos)= ", size(allrunners.pos))
+    println(">control sizes(allrunners.vels)= ", size(allrunners.vels))
+    println(">control sizes(allrunners.rhos)= ", size(allrunners.rhos))
     println(">control: Pre-Processing done")
     println(">control: Starting Race Simulation")
 
-    times, positions,velocities,rhos=rk4_solver(
-        group.avgspeeds,
-        group.slopefactors,
-        group.wavedelays,
-        group.waveinitspeeds,
-        par.trackdata,
-        group.pos[:,1],
-        par.observernsteps,
-        par.observertimestep,
-        par.timestep,
-        par.linearfrontview,
-        par.minratio,
-        par.maxratio,
-        par.minrho,
-        par.maxrho
-    )
-    println(">control: Processing done")
+    times, allrunners.pos, allrunners.vels, allrunners.rhos=solver(allrunners,parameters,track)
+
+    println(">Control Race: Processing done")
+
+
+
+    println(">Control Race: Writing to files with hdf5")
+    #save it
+
+
+    save_object("./results/times.jld2", times)
+    save_object("./results/allrunners.jld2",  allrunners)
+    save_object("./results/parameters.jld2",parameters)
+    save_object("./results/track.jld2",track)
 
 end
 

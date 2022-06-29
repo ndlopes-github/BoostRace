@@ -1,5 +1,4 @@
-module TimesGenerator
-export AvgTimes, RandDist,NinWaves,InitPositions, WaveDelays,WaveInitSpeeds
+module PreProcessing
 using Distributions
 using Random
 using CubicSplines
@@ -9,15 +8,12 @@ plotlyjs()
 include("Settings.jl")
 import .Settings
 par=Settings.par
-
 include("Track.jl")
-import .Track
-
 track=Track.track
 
 
 TimeBins=[i for i in 30:100]
-println(">Control TimesGenerator: TimeBins= ", TimeBins)
+println(">Control TimesGenerator: TimeBins= ", TimeBins[1:5])
 
 ReactionLineTime=0.4
 
@@ -27,7 +23,7 @@ RunnerDist=[15,18,20,17,18,18,31,40,45,72,96,88,109,131,155,192,
             151,112,145,96,85,85,87,85,73,42,47,27,39,45,31,28,29,24,21,15,21,14,17,14,12,12]
 
 AcumulatedRelativeRunnerDist=cumsum(RunnerDist/sum(RunnerDist))
-println(">Control TimesGenerator: AcumulatedRelativeRunnerDis=", AcumulatedRelativeRunnerDist[1:10])
+println(">Control TimesGenerator: AcumulatedRelativeRunnerDis=", AcumulatedRelativeRunnerDist[1:5])
 
 function inversepseudosigmoid( )
     ldist=par.ldist
@@ -102,7 +98,7 @@ function inversepseudosigmoid( )
         linecounter=0
         for i in range(1,nrunners)
             # To avoid truncations due to the cubic spline
-            auxwidthcontrl=Int(floor(track.cspline2(-linecounter*ldist)+0.5))
+            auxwidthcontrl=Int(floor(track.cspline_width(-linecounter*ldist)+0.5))
 
             if (i+1)%auxwidthcontrl==0
                 linecounter+=1
