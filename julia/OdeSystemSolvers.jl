@@ -13,7 +13,7 @@ function F(t, X,allrunners,par,track)
 
 
     for r in 1:allrunners.nrunners
-        if (t <= allrunners.wavedelays[r]) || (X[r]>10000)
+        if (t <= allrunners.wavedelays[r]) || (X[r]>10001)
             rtrn[r]=0.0
         else
             rtrn[r]=allrunners.avgspeeds[r] + gradient(spline,X[r],1)*allrunners.slopefactors[r]
