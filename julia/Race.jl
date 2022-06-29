@@ -8,6 +8,7 @@ AvgTimes=PreProcessing.AvgTimes
 WaveDelays=PreProcessing.WaveDelays
 WaveInitSpeeds=PreProcessing.WaveInitSpeeds
 InitPositions=PreProcessing.InitPositions
+NinWaves=PreProcessing.NinWaves
 track= PreProcessing.track
 parameters=PreProcessing.par
 nrunners=parameters.nrunners
@@ -49,6 +50,7 @@ function model()
 
 
     println(">Control Race: Writing to files with jld2")
+    println(">Control Race: NinWaves", NinWaves)
     #save it
 
 
@@ -56,6 +58,7 @@ function model()
     save_object("./results/allrunners.jld2",  allrunners)
     save_object("./results/parameters.jld2",parameters)
     save_object("./results/track.jld2",track)
+    save_object("./results/ninwaves.jld2",NinWaves)
 
 end
 
