@@ -48,7 +48,7 @@ function model()
 
 
 
-    println(">Control Race: Writing to files with hdf5")
+    println(">Control Race: Writing to files with jld2")
     #save it
 
 
