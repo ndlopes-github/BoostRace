@@ -15,6 +15,7 @@ ninwaves=load_object("./results/ninwaves.jld2")
 
 function snapshot(step,allrunners,parameters,track,ninwaves)
     nrunners=allrunners.nrunners
+    time=step*parameters.observertimestep
     xs = range(start=minimum(track.x_data), stop=maximum(track.x_data), length=1000)
     ys=track.cspline_elev(xs)
     ws=track.cspline_width(xs)
@@ -26,14 +27,30 @@ function snapshot(step,allrunners,parameters,track,ninwaves)
         YWS[r]=rand(Uniform(0,1))*track.cspline_width(X[r])+track.cspline_elev(X[r])
     end
 
-    plot(xs, ys,title="Race Snapshot",label="Elevation")
-    xlabel!("Track length in (m)")
-    plot!(xs,yws,label="Width")
-    plot!(X,YWS,seriestype = :scatter,
-          markersize=0.2,
-          markeralpha = 1.0,
-          markerstrokecolor =:blue, label="Positions")
 
+    colors=["orange","cyan","green","purple","brown","pink","gray","azure","olive","blue"]
+    nwaves=size(ninwaves)[1]
+
+
+    plot(xs, ys,title="Race Snapshot t=$time (s)",label="Elevation")
+    xlabel!("Track length (m)")
+    ylabel!("Track elevation (m)")
+    plot!(xs,yws,label="Width")
+    wb=1
+    we=0
+    n=0
+    for (color,counter) in zip(colors[1:nwaves],ninwaves)
+        n+=1
+        we+=counter
+        plot!(X[wb:we],YWS[wb:we],seriestype = :scatter,
+              markersize=0.3,
+              markeralpha = 1.0,
+              markerstrokecolor =color,
+              label="wave $n")
+        wb=we+1
+    end
+    plot!(size=(800,400))
+    savefig("snapshot$time.pdf")
     gui()
 end
 
