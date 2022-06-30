@@ -5,12 +5,15 @@ export par
 # TODO: ORGANIZATION
 
 logplot=false
+freerace=false
+
+racedistance=10000.0 #in meters
 
 timestep=0.2 # should divide observertimestep
 observertimestep=1.0
 observernsteps=7080
 endtime=7080.0
-linearfrontview=4.0
+frontviewdistance=4.0 # Linear Reference distance in front of the runner
 minratio=15.0/40.0
 maxratio=25.0/40.0
 minrho=0.4
@@ -112,7 +115,7 @@ struct Parameters
     observernsteps::Int16
     endtime::Float32
     waves::Matrix{Float32}
-    linearfrontview::Float32
+    frontviewdistance::Float32
     minratio::Float32
     maxratio::Float32
     minrho::Float32
@@ -123,6 +126,8 @@ struct Parameters
     nrunners::Int16
     trackname::String
     trackdata::Matrix{Float32}
+    racedistance::Float32
+    freerace::Bool
     logplot::Bool
 end
 
@@ -130,8 +135,9 @@ numberofwaves=size(waves)[1]
 nrunners=Int(sum(waves[:,1:numberofwaves]))
 println(">Control Settings: nrunners = ", nrunners)
 par=Parameters(timestep,observertimestep,observernsteps, endtime,
-               waves,linearfrontview,minratio,maxratio,minrho,maxrho,
-               posweights,ldist, numberofwaves, nrunners, trackname,trackdata,logplot)
+               waves,frontviewdistance,minratio,maxratio,minrho,maxrho,
+               posweights,ldist, numberofwaves, nrunners, trackname,trackdata,
+               racedistance,freerace,logplot)
 
 
 end

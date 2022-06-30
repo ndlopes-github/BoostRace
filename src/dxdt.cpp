@@ -185,9 +185,6 @@ void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double 
 
 
 
-
-
-
 #ifdef DEBUG
 void dxdt::operator() ( const dvec_i &x /*state*/ , dvec_i &dxdt , const double  t )
 {

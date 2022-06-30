@@ -16,7 +16,11 @@ struct Tracks
     width_data::Vector{Float32}
     cspline_elev::CubicSplines.CubicSpline{Float32}
     cspline_width::CubicSplines.CubicSpline{Float32}
+    foresightarea_data::Vector{Float32}
 end
+
+
+
 
 x_data=data[:,1]
 diff_data=data[:,2]
@@ -24,7 +28,22 @@ width_data=data[:,3]
 cspline_elev=CubicSpline(x_data,diff_data)
 cspline_width=CubicSpline(x_data,width_data)
 
-track=Tracks(trackname,x_data,diff_data,width_data,cspline_elev,cspline_width)
+roadstart=0.0
+roadend=floor(Int,Settings.par.racedistance)
+roadbins= range(roadstart,roadend-1.0,ceil(Int,Settings.par.racedistance))
+foresightarea_data=zeros(size(roadbins)[1])
+
+for bin in roadbins
+    h=Settings.par.frontviewdistance
+    a=bin
+    b=a+h
+    wa=cspline_width(a)
+    wb=cspline_width(b)
+    foresightarea_data[floor(Int,bin)+1]=(wa+wb)*h/2.0
+end
+
+
+track=Tracks(trackname,x_data,diff_data,width_data,cspline_elev,cspline_width,foresightarea_data)
 
 
 
