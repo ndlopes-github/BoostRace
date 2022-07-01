@@ -71,10 +71,12 @@ function F(t, X,V,allrunners,par,track)
                           -maxrho*(D_A-minratio))/(minratio-maxratio)
             end
 
-
+            ############### CORRIGIR
             lngth=floor(Int,minn/2) #
             if lngth <2 continue end
-            VL[arg]=min(sum(sort(V[argsofguysinfront]))/lngth,V[arg])
+            VL[arg]=min(
+                sum(sort(V[argsofguysinfront]))/????????????,
+                        V[arg])
 
             # last step compute av speed of the slower guyes
 
@@ -91,7 +93,7 @@ function F(t, X,V,allrunners,par,track)
                 rspeed=(allrunners.avgspeeds[r] +
                         gradient(spline,X[r],1)*allrunners.slopefactors[r])
 
-                V[r]=(1-rho[r])*rspeed+rho[r]*VL[r]
+                V[r]=rho[r]*VL[r] #+(1.0-rho[r])*rspeed+
             end
         end
 
