@@ -8,18 +8,25 @@ using CubicSplines
 # Index i for time stepping
 
 # Velocity function dx/dt=F(...)
-function F(t, X,allrunners,par,track)
+function F(t, X,V,allrunners,par,track)
+    ## Some alias to simplify
     spline=track.cspline_elev
     nrunners=allrunners.nrunners
-    rtrn=zeros(nrunners)
+    V=zeros(nrunners)
+    minrho=par.minrho
+    maxrho=par.maxrho
+    minratio=par.minratio
+    maxratio=par.minratio
+    fvdist=par.frontviewdistance
+    VL=zeros(nrunners)
 
     if par.freerace==true
         # Race for timing reports
         for r in 1:nrunners
             if (t <= allrunners.wavedelays[r]) || (X[r]>10010)
-                rtrn[r]=0.0
+                V[r]=0.0
             else
-                rtrn[r]=(allrunners.avgspeeds[r] + gradient(spline,X[r],1)*allrunners.slopefactors[r])
+                V[r]=(allrunners.avgspeeds[r] + gradient(spline,X[r],1)*allrunners.slopefactors[r])
             end
         end
 
@@ -30,39 +37,66 @@ function F(t, X,allrunners,par,track)
         # rho definition (density container)
         rho=zeros(nrunners)
         #For VL calculation. average of the  slowest in front of the runner
-        vl=zeros(nrunners)
         foresightarea=zeros(nrunners)
 
         # First step: counting the number of runner in the frontview  area
-        for arg in sortedargs
+        for (arg_idx, arg) in enumerate(sortedargs)
             if X[arg]< 0.0 continue end #start counting only after crossing the starting line
-            if X[arg] > par.racedistance - par.frontviewdistance continue end #stop near the crossing the finish line
+            if X[arg] > par.racedistance - fvdist continue end #stop near the crossing the finish line
             foresightarea[arg]=track.foresightarea_data[ceil(Int,X[arg])+1]
             #minn rf is the minimum number of runners in the foresight that impacts the runners speed
-            minn=floor(Int,par.minratio*foresightarea[arg])
-            #maxn rf is the minimum number of runners in the foresight that impacts the runners speed
-            maxn=floor(Int,par.maxratio*foresightarea[arg])
 
-            for arg_i in sortedargs[arg+minn:min(arg+maxn,nrunners)]
-                if X[arg_i]-X[arg]<par.frontviewdistance
-                    rho[arg]+=1.0
-                else continue
+            minn=floor(Int, minratio*foresightarea[arg]) #min number of  runners for impact area
+            maxn=floor(Int, minratio*foresightarea[arg]) #min number of  runners for impact are
+
+            # continue conditions
+            if minn<3 continue end #At least 3 runners in the impact area
+            if arg_idx+minn>size(sortedargs)[1] continue end
+            if X[arg_idx+minn]-X[arg]>= fvdist continue end
+
+            rhocounter=3
+            #### corrigir
+            argsofguysinfront=sortedargs[arg_idx+minn+1:min(arg_idx+maxn,nrunners)]
+            for arg_i in argsofguysinfront
+                if X[arg_i]-X[arg]>fvdist continue
+                else rhocounter+=1.0
                 end
             end
+
+            if rhocounter/foresightarea[arg]>maxratio rho[arg]=maxrho
+            elseif ((rhocounter/foresightarea[arg]<=maxratio)
+                    && (rhocounter/foresightarea[arg]>=minratio))
+                D_A=rhocounter/foresightarea[arg]
+                rho[arg]=(minrho*(D_A-maxratio)
+                          -maxrho*(D_A-minratio))/(minratio-maxratio)
+            end
+
+
+            lngth=floor(Int,minn/2) #
+            if lngth <2 continue end
+            VL[arg]=min(sum(sort(V[argsofguysinfront]))/lngth,V[arg])
+
+            # last step compute av speed of the slower guyes
+
         end
+
+
 
         for r in 1:allrunners.nrunners
             if (t <= allrunners.wavedelays[r]) || (X[r]>10010)
-                rtrn[r]=0.0
+                V[r]=0.0
             elseif X[r]<0 # This Condition can be improved! (wave propagation in lanes)
-                rtrn[r]=min(allrunners.waveinitspeeds[r],allrunners.avgspeeds[r])
+                V[r]=min(allrunners.waveinitspeeds[r],allrunners.avgspeeds[r])
             else
-                rtrn[r]=(allrunners.avgspeeds[r] + gradient(spline,X[r],1)*allrunners.slopefactors[r])
+                rspeed=(allrunners.avgspeeds[r] +
+                        gradient(spline,X[r],1)*allrunners.slopefactors[r])
+
+                V[r]=(1-rho[r])*rspeed+rho[r]*VL[r]
             end
         end
 
     end
-    return rtrn
+    return V
 end
 
 
@@ -94,6 +128,8 @@ function rk2_solver(allrunners,parameters,track)
     rhos=zeros(nrunners,obsnsteps)
 
     X=positions[:,1]
+    V=velocities[:,1] # useless since it is 0
+
     K1=zeros(nrunners)
     k2=zeros(nrunners)
     #k3=zeros(nrunners)
@@ -101,12 +137,13 @@ function rk2_solver(allrunners,parameters,track)
 
     for i in ProgressBar(1:obsnsteps-1)
         times[i]=obststep*i
-        K1=obststep .* F(times[i], X, allrunners,parameters,track)
-        K2=obststep .* F(times[i]+obststep, X .+ K1, allrunners,parameters,track)
-        X=X .+ 0.5 .* (K1 .+ K2)
+        V=F(times[i], X, V,allrunners,parameters,track) #update velocities
+        K1=obststep .* V
+        K2=obststep .* F(times[i]+obststep, X .+ K1, V, allrunners,parameters,track)
+        X=X .+ 0.5 .* (K1 .+ K2) # update positions
 
         positions[:,i+1]=X
-
+        velocities[:,i+1]=V
         #=
         function rungekutta4(f, y0, t)
             n = length(t)
