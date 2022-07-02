@@ -68,6 +68,29 @@ function race_visuals(times,allrunners,parameters,track)
 end
 
 #race_visuals(times,allrunners,parameters,track)
-snapshot(1500,allrunners,parameters,track,ninwaves)
+snapshot(1000,allrunners,parameters,track,ninwaves)
+
+#=
+function speedsvisuals(rstep,allrunners,parameters,track,ninwaves):
+    nrunners=allrunners.nrunners
+    time=step*parameters.observertimestep
+    nsteps=parameters.nobservertimesteps
+
+    t=range(0, nsteps, nsteps+1)
+    ax = plt.axes(xlim=(0, 6000),
+                  ylim=(group.vels[:,:].min(),
+                        group.vels[:,:].max()))
+
+    plt.xlabel('Time',fontsize=20)
+    plt.ylabel('Speeds (m/s)',fontsize=20)
+
+    for runner in runnerslist: #range(group.size):
+        plt.plot(t,group.vels[runner,:],lw=0.5,label=str(runner))
+
+    if len(runnerslist)<11:
+        plt.legend()
+    plt.show()
+=#
+
 
 end

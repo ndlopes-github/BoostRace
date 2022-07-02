@@ -2,7 +2,7 @@ module Race
 #export model
 
 include("PreProcessing.jl")
-import .PreProcessing
+using .PreProcessing
 
 AvgTimes=PreProcessing.AvgTimes
 WaveDelays=PreProcessing.WaveDelays
@@ -47,10 +47,7 @@ function model()
     println(">control: Starting Race Simulation")
 
     times, allrunners.pos, allrunners.vels, allrunners.rhos=solver(allrunners,parameters,track)
-
     println(">Control Race: Processing done")
-
-
 
     println(">Control Race: Writing to files with jld2")
     println(">Control Race: NinWaves", NinWaves)

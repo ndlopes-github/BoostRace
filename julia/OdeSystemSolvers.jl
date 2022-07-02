@@ -1,5 +1,4 @@
 module OdeSystemSolvers
-
 using ProgressBars
 using CubicSplines
 
@@ -8,7 +7,7 @@ using CubicSplines
 # Index i for time stepping
 
 # Velocity function dx/dt=F(...)
-function F(t, X,V,allrunners,par,track)
+function F(t,X,V,allrunners,par,track)
     ## Some alias to simplify
     spline=track.cspline_elev
     nrunners=allrunners.nrunners
@@ -50,11 +49,11 @@ function F(t, X,V,allrunners,par,track)
             # continue conditions
             if minn<3 continue end #At least 3 runners in the impact area
             if arg_idx+minn>size(sortedargs)[1] continue end
-            if X[arg_idx+minn]-X[arg]>= fvdist continue end
+            if X[sortedargs[arg_idx+minn]]-X[arg]>= fvdist continue end
 
-            rhocounter=3
+            rhocounter=1.0
             ############ CONFIRMAR
-            argsofguysinfront=sortedargs[arg_idx+minn:min(arg_idx+maxn,nrunners)]
+            argsofguysinfront=sortedargs[arg_idx+1:min(arg_idx+maxn,nrunners)]
             #println(arg_idx+minn:min(arg_idx+maxn,nrunners))
 
             for arg_i in argsofguysinfront
@@ -77,7 +76,7 @@ function F(t, X,V,allrunners,par,track)
             lngth=floor(Int,minn/2) #
             if lngth <2 continue end
             sortedspeeds=sort(V[argsofguysinfront])
-            slowersspeeds=sortedspeeds
+            slowersspeeds=sortedspeeds[1:lngth]
             slowersavgspeed=sum(slowersspeeds)/size(slowersspeeds)[1]
             VL[arg]=min(slowersavgspeed,V[arg])
             #############################################################################
@@ -94,8 +93,7 @@ function F(t, X,V,allrunners,par,track)
             elseif X[r]<0 # This Condition can be improved! (wave propagation in lanes)
                 V[r]=min(allrunners.waveinitspeeds[r],allrunners.avgspeeds[r])
             else
-                rspeed=(allrunners.avgspeeds[r] +
-                        gradient(spline,X[r],1)*allrunners.slopefactors[r])
+                rspeed=(allrunners.avgspeeds[r]+gradient(spline,X[r],1)*allrunners.slopefactors[r])
                 V[r]=(1.0-rho[r])*rspeed+rho[r]*VL[r]
                 #println("VR ",V[r])
             end
@@ -137,7 +135,7 @@ function rk2_solver(allrunners,parameters,track)
     V=velocities[:,1] # useless since it is 0
 
     K1=zeros(nrunners)
-    k2=zeros(nrunners)
+    K2=zeros(nrunners)
     #k3=zeros(nrunners)
     #k4=zeros(nrunners)
 
@@ -150,24 +148,8 @@ function rk2_solver(allrunners,parameters,track)
 
         positions[:,i+1]=X
         velocities[:,i+1]=V
-        #=
-        function rungekutta4(f, y0, t)
-            n = length(t)
-            y = zeros((n, length(y0)))
-            y[1,:] = y0
-            for i in 1:n-1
-                h = t[i+1] - t[i]
-                k1 = f(y[i,:], t[i])
-                k2 = f(y[i,:] + k1 * h/2, t[i] + h/2)
-                k3 = f(y[i,:] + k2 * h/2, t[i] + h/2)
-                k4 = f(y[i,:] + k3 * h, t[i] + h)
-                y[i+1,:] = y[i,:] + (h/6) * (k1 + 2*k2 + 2*k3 + k4)
-            end
-            return y
-        end
-        =#
 
-        #positions[i+1,:]=X[i+1]
+
         #velocities[i,:]=F(times[i])
         #rhos[i,:]=rk_rhos
     end
