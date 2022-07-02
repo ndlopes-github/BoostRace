@@ -4,7 +4,7 @@ export par
 
 # TODO: ORGANIZATION
 
-logplot=false
+logplot=true
 freerace=false
 
 racedistance=10000.0 #in meters
@@ -24,6 +24,7 @@ gap=180
 waves=[ 2333 500 500 0.0 3.34;
         500  2333 500 (214 +1*gap) 2.92;
         500 500 2334 (440.0+2*gap) 2.5]
+
 
 #=
     trackname="track1"

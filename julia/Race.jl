@@ -26,11 +26,15 @@ solver=OdeSystemSolvers.rk2_solver
 
  using JLD2
 
+
+########################################### DEBUG IS REQUERID OS RANDOMS NÃO ESTÃO A FUNCIONAR :/
+
 function model()
 
     runnerslist=Array{Frunner,1}(undef, nrunners)
     for i in 1:nrunners
         runnerslist[i]=Frunner(AvgTimes[i],WaveDelays[i],WaveInitSpeeds[i],InitPositions[i])
+        println(runnerslist[i].slopefactor)
     end
 
     allrunners=Runners(runnerslist)

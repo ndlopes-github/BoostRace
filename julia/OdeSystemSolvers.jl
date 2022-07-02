@@ -63,8 +63,9 @@ function F(t, X,V,allrunners,par,track)
                 end
             end
 
-            if rhocounter/foresightarea[arg]>maxratio rho[arg]=maxrho
-                println(rho[arg])
+            if (rhocounter/foresightarea[arg])>maxratio
+                rho[arg]=maxrho
+                #println(rho[arg])
             elseif ((rhocounter/foresightarea[arg]<=maxratio)
                     && (rhocounter/foresightarea[arg]>=minratio))
                 D_A=rhocounter/foresightarea[arg]
