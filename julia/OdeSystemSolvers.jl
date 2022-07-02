@@ -53,6 +53,7 @@ function F(t, X,V,allrunners,par,track)
             if X[arg_idx+minn]-X[arg]>= fvdist continue end
 
             rhocounter=3
+            ############ CONFIRMAR
             argsofguysinfront=sortedargs[arg_idx+minn:min(arg_idx+maxn,nrunners)]
             #println(arg_idx+minn:min(arg_idx+maxn,nrunners))
 
@@ -63,20 +64,22 @@ function F(t, X,V,allrunners,par,track)
             end
 
             if rhocounter/foresightarea[arg]>maxratio rho[arg]=maxrho
+                println(rho[arg])
             elseif ((rhocounter/foresightarea[arg]<=maxratio)
                     && (rhocounter/foresightarea[arg]>=minratio))
                 D_A=rhocounter/foresightarea[arg]
                 rho[arg]=(minrho*(D_A-maxratio)-maxrho*(D_A-minratio))/(minratio-maxratio)
+                #println(rho[arg])
             end
 
-            ############### CORRIGIR #########################################
+            ############### CORRIGIR ####################################################
             lngth=floor(Int,minn/2) #
             if lngth <2 continue end
             sortedspeeds=sort(V[argsofguysinfront])
             slowersspeeds=sortedspeeds
             slowersavgspeed=sum(slowersspeeds)/size(slowersspeeds)[1]
             VL[arg]=min(slowersavgspeed,V[arg])
-
+            #############################################################################
 
             # last step compute av speed of the slower guyes
 
@@ -92,9 +95,9 @@ function F(t, X,V,allrunners,par,track)
             else
                 rspeed=(allrunners.avgspeeds[r] +
                         gradient(spline,X[r],1)*allrunners.slopefactors[r])
-
+                #println("VL ",VL[r])
                 V[r]=(1.0-rho[r])*rspeed+rho[r]*VL[r]
-                #println("NEW ",V[r])
+                #println("VR ",V[r])
             end
         end
 
