@@ -1,6 +1,6 @@
 module PreProcessing
-using Distributions
 using Random
+using Distributions
 using CubicSplines
 using Plots
 plotlyjs()
@@ -83,9 +83,7 @@ function inversepseudosigmoid( )
     InitPositions=zeros(nrunners)
     WaveDelays=zeros(nrunners)
     WaveInitSpeeds=zeros(nrunners)
-
-
-
+    SlopeFactors=rand(Uniform(-13.0,-3.0),nrunners)
 
     # Position along the start line
     NinWaves=Int.(zeros(nwaves))
@@ -111,10 +109,10 @@ function inversepseudosigmoid( )
         itemcount+=nrunners
     end
 
-    return AvgTimes, RandDist, NinWaves,InitPositions, WaveDelays,WaveInitSpeeds
+    return AvgTimes, RandDist, NinWaves,InitPositions, WaveDelays,WaveInitSpeeds,SlopeFactors
 end
 
-AvgTimes, RandDist,NinWaves,InitPositions, WaveDelays,WaveInitSpeeds= inversepseudosigmoid()
+AvgTimes, RandDist,NinWaves,InitPositions, WaveDelays,WaveInitSpeeds, SlopeFactors= inversepseudosigmoid()
 
 
 

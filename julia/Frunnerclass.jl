@@ -1,8 +1,5 @@
 module Frunnerclass
 export Runners, Frunner
-using Distributions
-using Random
-
 
 include("Settings.jl")
 import .Settings
@@ -14,9 +11,9 @@ struct Frunner
     wavedelay::Float32
     waveinitspeed::Float32
     initposition::Float32
-    avgspeed::Float32
     slopefactor::Float32
 
+    avgspeed::Float32
     pos::Vector{Float32}
     vels::Vector{Float32}
     rhos::Vector{Float32}
@@ -24,7 +21,6 @@ struct Frunner
 end
 
 avgspeed(time)=(10000.0/(time*60.0))
-slopefactor=rand(Uniform(-13.0,-3.0))
 
 function pos(initposition)
     aux=zeros(par.observernsteps)
@@ -35,8 +31,9 @@ end
 vels=zeros(par.observernsteps)
 rhos=zeros(par.observernsteps)
 
-Frunner(time,wavedelay,waveinitspeed,initposition)=Frunner(time,wavedelay,waveinitspeed,initposition,
-                                              avgspeed(time), slopefactor,pos(initposition),vels,rhos)
+Frunner(time,wavedelay,waveinitspeed,initposition,slopefactor)=
+Frunner(time,wavedelay,waveinitspeed,initposition,slopefactor,
+        avgspeed(time),pos(initposition),vels,rhos)
 
 
 mutable struct Runners
@@ -71,6 +68,5 @@ Runners(group)=Runners(group,
                        waveinitspeeds(group),
                        avgspeeds(group),
                        slopefactors(group))
-
 
 end

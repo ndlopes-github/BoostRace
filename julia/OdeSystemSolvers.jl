@@ -96,7 +96,6 @@ function F(t, X,V,allrunners,par,track)
             else
                 rspeed=(allrunners.avgspeeds[r] +
                         gradient(spline,X[r],1)*allrunners.slopefactors[r])
-                #println("VL ",VL[r])
                 V[r]=(1.0-rho[r])*rspeed+rho[r]*VL[r]
                 #println("VR ",V[r])
             end

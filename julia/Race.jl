@@ -9,6 +9,7 @@ WaveDelays=PreProcessing.WaveDelays
 WaveInitSpeeds=PreProcessing.WaveInitSpeeds
 InitPositions=PreProcessing.InitPositions
 NinWaves=PreProcessing.NinWaves
+SlopeFactors=PreProcessing.SlopeFactors
 track= PreProcessing.track
 parameters=PreProcessing.par
 nrunners=parameters.nrunners
@@ -27,16 +28,14 @@ solver=OdeSystemSolvers.rk2_solver
  using JLD2
 
 
-########################################### DEBUG IS REQUERID OS RANDOMS NÃO ESTÃO A FUNCIONAR :/
+########################################### DEBUG IS REQUERID OS RANDOMS NOT WORKING A FUNCIONAR :/
 
 function model()
 
     runnerslist=Array{Frunner,1}(undef, nrunners)
     for i in 1:nrunners
-        runnerslist[i]=Frunner(AvgTimes[i],WaveDelays[i],WaveInitSpeeds[i],InitPositions[i])
-        println(runnerslist[i].slopefactor)
+        runnerslist[i]=Frunner(AvgTimes[i],WaveDelays[i],WaveInitSpeeds[i],InitPositions[i],SlopeFactors[i])
     end
-
     allrunners=Runners(runnerslist)
 
     println(">control sizes:")
