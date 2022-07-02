@@ -12,11 +12,10 @@ function F(t, X,V,allrunners,par,track)
     ## Some alias to simplify
     spline=track.cspline_elev
     nrunners=allrunners.nrunners
-    V=zeros(nrunners)
     minrho=par.minrho
     maxrho=par.maxrho
     minratio=par.minratio
-    maxratio=par.minratio
+    maxratio=par.maxratio
     fvdist=par.frontviewdistance
     VL=zeros(nrunners)
 
@@ -33,7 +32,6 @@ function F(t, X,V,allrunners,par,track)
     else
         # sorted indexes of  the runners
         sortedargs=sortperm(X)
-
         # rho definition (density container)
         rho=zeros(nrunners)
         #For VL calculation. average of the  slowest in front of the runner
@@ -47,16 +45,17 @@ function F(t, X,V,allrunners,par,track)
             #minn rf is the minimum number of runners in the foresight that impacts the runners speed
 
             minn=floor(Int, minratio*foresightarea[arg]) #min number of  runners for impact area
-            maxn=floor(Int, minratio*foresightarea[arg]) #min number of  runners for impact are
-
+            maxn=floor(Int, maxratio*foresightarea[arg]) #min number of  runners for impact are
+            #println(minn," ",maxn)
             # continue conditions
             if minn<3 continue end #At least 3 runners in the impact area
             if arg_idx+minn>size(sortedargs)[1] continue end
             if X[arg_idx+minn]-X[arg]>= fvdist continue end
 
             rhocounter=3
-            #### corrigir
-            argsofguysinfront=sortedargs[arg_idx+minn+1:min(arg_idx+maxn,nrunners)]
+            argsofguysinfront=sortedargs[arg_idx+minn:min(arg_idx+maxn,nrunners)]
+            #println(arg_idx+minn:min(arg_idx+maxn,nrunners))
+
             for arg_i in argsofguysinfront
                 if X[arg_i]-X[arg]>fvdist continue
                 else rhocounter+=1.0
@@ -67,16 +66,17 @@ function F(t, X,V,allrunners,par,track)
             elseif ((rhocounter/foresightarea[arg]<=maxratio)
                     && (rhocounter/foresightarea[arg]>=minratio))
                 D_A=rhocounter/foresightarea[arg]
-                rho[arg]=(minrho*(D_A-maxratio)
-                          -maxrho*(D_A-minratio))/(minratio-maxratio)
+                rho[arg]=(minrho*(D_A-maxratio)-maxrho*(D_A-minratio))/(minratio-maxratio)
             end
 
-            ############### CORRIGIR
+            ############### CORRIGIR #########################################
             lngth=floor(Int,minn/2) #
             if lngth <2 continue end
-            VL[arg]=min(
-                sum(sort(V[argsofguysinfront]))/????????????,
-                        V[arg])
+            sortedspeeds=sort(V[argsofguysinfront])
+            slowersspeeds=sortedspeeds
+            slowersavgspeed=sum(slowersspeeds)/size(slowersspeeds)[1]
+            VL[arg]=min(slowersavgspeed,V[arg])
+
 
             # last step compute av speed of the slower guyes
 
@@ -93,7 +93,8 @@ function F(t, X,V,allrunners,par,track)
                 rspeed=(allrunners.avgspeeds[r] +
                         gradient(spline,X[r],1)*allrunners.slopefactors[r])
 
-                V[r]=rho[r]*VL[r] #+(1.0-rho[r])*rspeed+
+                V[r]=(1.0-rho[r])*rspeed+rho[r]*VL[r]
+                #println("NEW ",V[r])
             end
         end
 

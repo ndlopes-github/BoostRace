@@ -68,6 +68,6 @@ function race_visuals(times,allrunners,parameters,track)
 end
 
 #race_visuals(times,allrunners,parameters,track)
-snapshot(2500,allrunners,parameters,track,ninwaves)
+snapshot(1500,allrunners,parameters,track,ninwaves)
 
 end
