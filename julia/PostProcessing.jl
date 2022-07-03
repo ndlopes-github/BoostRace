@@ -67,30 +67,33 @@ function race_visuals(times,allrunners,parameters,track)
 
 end
 
-#race_visuals(times,allrunners,parameters,track)
-snapshot(1000,allrunners,parameters,track,ninwaves)
 
-#=
-function speedsvisuals(rstep,allrunners,parameters,track,ninwaves):
+
+function speedsvisuals(runnersidxs,allrunners,parameters,track)
     nrunners=allrunners.nrunners
-    time=step*parameters.observertimestep
-    nsteps=parameters.nobservertimesteps
+    nsteps=parameters.observernsteps
+    time=parameters.observertimestep*nsteps
 
-    t=range(0, nsteps, nsteps+1)
-    ax = plt.axes(xlim=(0, 6000),
-                  ylim=(group.vels[:,:].min(),
-                        group.vels[:,:].max()))
+    t=range(0,time,nsteps)
 
-    plt.xlabel('Time',fontsize=20)
-    plt.ylabel('Speeds (m/s)',fontsize=20)
+    plot(title="Speed Profile")
+    xlabel!("Time (s)")
+    ylabel!("Speed (m/s)")
 
-    for runner in runnerslist: #range(group.size):
-        plt.plot(t,group.vels[runner,:],lw=0.5,label=str(runner))
-
-    if len(runnerslist)<11:
-        plt.legend()
-    plt.show()
-=#
+    for runner in runnersidxs #range(group.size):
+        plot!(t,allrunners.vels[runner,:],lw=0.5,label="")
+    end
+    plot!(size=(800,400))
+    savefig("speeds_profile.pdf")
+    gui()
+end
 
 
+## Function calls
+
+#race_visuals(times,allrunners,parameters,track)
+
+#snapshot(1000,allrunners,parameters,track,ninwaves)
+runnersidxs=rand(1:allrunners.nrunners,30)
+speedsvisuals(runnersidxs,allrunners,parameters,track)
 end
