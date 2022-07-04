@@ -88,26 +88,20 @@ function speedsvisuals(runnersidxs,allrunners,parameters,track)
     gui()
 end
 
-#=
-function phasevisuals(runnersidxs,allrunners,parameters,track)
-    nrunners=allrunners.nrunners
-    nsteps=parameters.observernsteps
-    time=parameters.observertimestep*nsteps
 
-    track=range(0,time,nsteps)
+function phasevisuals(runnersidxs,allrunners)
 
     plot(title="Phase Profile")
     xlabel!("Position (m)")
     ylabel!("Speed (m/s)")
 
     for runner in runnersidxs #range(group.size):
-        plot!(t,allrunners.vels[runner,:],lw=0.5,label="")
+        plot!(allrunners.pos[runner,:],allrunners.vels[runner,:],lw=0.5,label="")
     end
     plot!(size=(800,400))
-    savefig("speeds_profile.pdf")
+    savefig("Phases..pdf")
     gui()
 end
-=#
 
 
 ## Function calls
@@ -117,4 +111,5 @@ end
 snapshot(1000,allrunners,parameters,track,ninwaves)
 runnersidxs=rand(1:allrunners.nrunners,30)
 speedsvisuals(runnersidxs,allrunners,parameters,track)
+phasevisuals(runnersidxs,allrunners)
 end

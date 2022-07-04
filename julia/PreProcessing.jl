@@ -133,8 +133,8 @@ if par.logplot==true
          CubicSpline(AcumulatedRelativeRunnerDist,TimeBins,
                      extrapl=[1, ], extrapr=[1, ])[AcumulatedRelativeRunnerDist],
          linecolor = :red,lw=2)
-
-    plot!(RandDist,AvgTimes,seriestype = :scatter,
+    # sort()
+    plot!(RandDist,sort(AvgTimes),seriestype = :scatter,
           title="Random Times Distribution",
           markersize=0.3,
           markeralpha = 0.4,
