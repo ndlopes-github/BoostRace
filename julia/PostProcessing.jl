@@ -1,5 +1,7 @@
 module PostProcessing
 using Plots
+# To be available directly with "using .PostProcessing" (no prefix required)
+export times, allrunners,parameters, track, ninwaves, snapshot
 #pyplot()
 plotlyjs()
 using JLD2
