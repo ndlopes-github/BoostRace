@@ -30,9 +30,8 @@ function inversepseudosigmoid( )
     ldist=par.ldist
     nrunners=Int(par.nrunners)
     nwaves=par.numberofwaves
-
-
     mixwaves=Int.(par.waves[:,1:nwaves])
+
     println(">Control PreProcessing size(mixwaves) =", size(mixwaves))
 
     wavedelays=par.waves[:,nwaves+1]
@@ -78,7 +77,7 @@ function inversepseudosigmoid( )
 
     AvgTimes=CubicSpline(AcumulatedRelativeRunnerDist,TimeBins,  extrapl=[1, ], extrapr=[1, ])[RandDist]
     println(">Control PreProcessing:: number of runners =",size(AvgTimes))
-    sort!(AvgTimes) # The Fastest are in the first Lines
+    #sort!(AvgTimes) # The Fastest are in the first Lines
 
     InitPositions=zeros(nrunners)
     WaveDelays=zeros(nrunners)
@@ -120,6 +119,7 @@ AvgTimes, RandDist,NinWaves,InitPositions, WaveDelays,WaveInitSpeeds, SlopeFacto
 
 
 if par.logplot==true
+#=
     display(
         plot(TimeBins,AcumulatedRelativeRunnerDist,
              title=" Acumulated Relative Runner Distribution", reuse=false)
@@ -128,11 +128,12 @@ if par.logplot==true
         plot(AcumulatedRelativeRunnerDist,TimeBins,
              title="Inverse Acumulated Relative Runner Distribution", reuse=false)
     )
-
+=#
     plot(AcumulatedRelativeRunnerDist,
          CubicSpline(AcumulatedRelativeRunnerDist,TimeBins,
                      extrapl=[1, ], extrapr=[1, ])[AcumulatedRelativeRunnerDist],
          linecolor = :red,lw=2)
+
     plot!(RandDist,AvgTimes,seriestype = :scatter,
           title="Random Times Distribution",
           markersize=0.3,

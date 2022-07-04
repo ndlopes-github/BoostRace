@@ -7,7 +7,7 @@ using CubicSplines
 # Index i for time stepping
 
 # Velocity function dx/dt=F(...)
-function F(t,X,V,allrunners,par,track)
+function F(t,X,V, allrunners,par,track)
     ## Some alias to simplify
     spline=track.cspline_elev
     nrunners=allrunners.nrunners
@@ -31,8 +31,8 @@ function F(t,X,V,allrunners,par,track)
     else
         # sorted indexes of  the runners
         sortedargs=sortperm(X)
+        R=zeros(nrunners)
         # rho definition (density container)
-        rho=zeros(nrunners)
         #For VL calculation. average of the  slowest in front of the runner
         foresightarea=zeros(nrunners)
 
@@ -63,12 +63,12 @@ function F(t,X,V,allrunners,par,track)
             end
 
             if (rhocounter/foresightarea[arg])>maxratio
-                rho[arg]=maxrho
+                R[arg]=maxrho
                 #println(rho[arg])
             elseif ((rhocounter/foresightarea[arg]<=maxratio)
                     && (rhocounter/foresightarea[arg]>=minratio))
                 D_A=rhocounter/foresightarea[arg]
-                rho[arg]=(minrho*(D_A-maxratio)-maxrho*(D_A-minratio))/(minratio-maxratio)
+                R[arg]=(minrho*(D_A-maxratio)-maxrho*(D_A-minratio))/(minratio-maxratio)
                 #println(rho[arg])
             end
 
@@ -94,16 +94,13 @@ function F(t,X,V,allrunners,par,track)
                 V[r]=min(allrunners.waveinitspeeds[r],allrunners.avgspeeds[r])
             else
                 rspeed=(allrunners.avgspeeds[r]+gradient(spline,X[r],1)*allrunners.slopefactors[r])
-                V[r]=(1.0-rho[r])*rspeed+rho[r]*VL[r]
-                #println("VR ",V[r])
+                V[r]=(1.0-R[r])*rspeed+R[r]*VL[r]
             end
         end
 
     end
-    return V
+    return V, R
 end
-
-
 
 
 
@@ -141,14 +138,15 @@ function rk2_solver(allrunners,parameters,track)
 
     for i in ProgressBar(1:obsnsteps-1)
         times[i]=obststep*i
-        V=F(times[i], X, V,allrunners,parameters,track) #update velocities
+        V, R = F(times[i], X, V, allrunners,parameters,track) #update velocities
         K1=obststep .* V
-        K2=obststep .* F(times[i]+obststep, X .+ K1, V, allrunners,parameters,track)
+        V, R = F(times[i]+obststep, X .+ K1, V, allrunners,parameters,track) #update velocities
+        K2=obststep .* V
         X=X .+ 0.5 .* (K1 .+ K2) # update positions
 
         positions[:,i+1]=X
         velocities[:,i+1]=V
-
+        rhos[:,i+1]=R
 
         #velocities[i,:]=F(times[i])
         #rhos[i,:]=rk_rhos

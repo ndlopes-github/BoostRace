@@ -114,7 +114,7 @@ end
 
 #race_visuals(times,allrunners,parameters,track)
 
-#snapshot(1000,allrunners,parameters,track,ninwaves)
+snapshot(1000,allrunners,parameters,track,ninwaves)
 runnersidxs=rand(1:allrunners.nrunners,30)
 speedsvisuals(runnersidxs,allrunners,parameters,track)
 end
