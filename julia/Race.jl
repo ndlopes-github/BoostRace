@@ -5,6 +5,7 @@ export race, training
 include("PreProcessing.jl")
 using .PreProcessing
 nrunners=parameters.nrunners
+dump(parameters) # This prints the parameters in a human readable format.
 
 #Expose: Frunner, Runners
 include("Frunnerclass.jl")
