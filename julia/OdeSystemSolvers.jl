@@ -1,4 +1,6 @@
 module OdeSystemSolvers
+export rk2
+
 using ProgressBars
 using CubicSplines
 
@@ -7,7 +9,7 @@ using CubicSplines
 # Index i for time stepping
 
 # Velocity function dx/dt=F(...)
-function F(t,X,V, allrunners,par,track)
+function F(t,X,V, allrunners,par,track,training)
     ## Some alias to simplify
     spline=track.cspline_elev
     nrunners=allrunners.nrunners
@@ -17,21 +19,21 @@ function F(t,X,V, allrunners,par,track)
     maxratio=par.maxratio
     fvdist=par.frontviewdistance
     VL=zeros(nrunners)
+    racedistance=par.racedistance
+    R=zeros(nrunners)
 
-    if par.freerace==true
+    if training==true
         # Race for timing reports
         for r in 1:nrunners
-            if (t <= allrunners.wavedelays[r]) || (X[r]>10010)
+            if (t <= allrunners.wavedelays[r]) || (X[r]>racedistance)
                 V[r]=0.0
             else
                 V[r]=(allrunners.avgspeeds[r] + gradient(spline,X[r],1)*allrunners.slopefactors[r])
             end
         end
-
-    else
+    elseif training==false
         # sorted indexes of  the runners
         sortedargs=sortperm(X)
-        R=zeros(nrunners)
         # rho definition (density container)
         #For VL calculation. average of the  slowest in front of the runner
         foresightarea=zeros(nrunners)
@@ -39,7 +41,7 @@ function F(t,X,V, allrunners,par,track)
         # First step: counting the number of runner in the frontview  area
         for (arg_idx, arg) in enumerate(sortedargs)
             if X[arg]< 0.0 continue end #start counting only after crossing the starting line
-            if X[arg] > par.racedistance - fvdist continue end #stop near the crossing the finish line
+            if X[arg] > racedistance - fvdist continue end #stop near the crossing the finish line
             foresightarea[arg]=track.foresightarea_data[ceil(Int,X[arg])+1]
             #minn rf is the minimum number of runners in the foresight that impacts the runners speed
 
@@ -88,7 +90,7 @@ function F(t,X,V, allrunners,par,track)
 
 
         for r in 1:allrunners.nrunners
-            if (t <= allrunners.wavedelays[r]) || (X[r]>10010)
+            if (t <= allrunners.wavedelays[r]) || (X[r]>racedistance)
                 V[r]=0.0
             elseif X[r]<0 # This Condition can be improved! (wave propagation in lanes)
                 V[r]=min(allrunners.waveinitspeeds[r],allrunners.avgspeeds[r])
@@ -106,7 +108,7 @@ end
 
 
 
-function rk2_solver(allrunners,parameters,track)
+function rk2(allrunners,parameters,track,training)
     println(">Control OdeSystemSolvers: Entering rk2_solver")
 
     nrunners=allrunners.nrunners
@@ -138,9 +140,9 @@ function rk2_solver(allrunners,parameters,track)
 
     for i in ProgressBar(1:obsnsteps-1)
         times[i]=obststep*i
-        V, R = F(times[i], X, V, allrunners,parameters,track) #update velocities
+        V, R = F(times[i], X, V, allrunners,parameters,track,training) #update velocities
         K1=obststep .* V
-        V, R = F(times[i]+obststep, X .+ K1, V, allrunners,parameters,track) #update velocities
+        V, R = F(times[i]+obststep, X .+ K1, V, allrunners,parameters,track,training) #update velocities
         K2=obststep .* V
         X=X .+ 0.5 .* (K1 .+ K2) # update positions
 

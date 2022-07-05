@@ -1,4 +1,5 @@
 module PreProcessing
+export AvgTimes, WaveDelays, WaveInitSpeeds,InitPositions,NinWaves,SlopeFactors, track,parameters
 using Random
 using Distributions
 using CubicSplines
@@ -8,7 +9,7 @@ Random.seed!(1234)
 
 include("Settings.jl")
 import .Settings
-par=Settings.par
+parameters=Settings.par
 include("Track.jl")
 track=Track.track
 
@@ -27,6 +28,7 @@ AcumulatedRelativeRunnerDist=cumsum(RunnerDist/sum(RunnerDist))
 println(">Control PreProcessing: AcumulatedRelativeRunnerDis=", AcumulatedRelativeRunnerDist[1:5])
 
 function inversepseudosigmoid( )
+    par=parameters
     ldist=par.ldist
     nrunners=Int(par.nrunners)
     nwaves=par.numberofwaves
@@ -118,7 +120,7 @@ AvgTimes, RandDist,NinWaves,InitPositions, WaveDelays,WaveInitSpeeds, SlopeFacto
 
 
 
-if par.logplot==true
+if parameters.logplot==true
 #=
     display(
         plot(TimeBins,AcumulatedRelativeRunnerDist,

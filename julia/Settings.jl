@@ -5,7 +5,6 @@ export par
 # TODO: ORGANIZATION
 
 logplot=true
-freerace=false
 
 racedistance=10000.0 #in meters
 
@@ -130,7 +129,6 @@ struct Parameters
     trackname::String
     trackdata::Matrix{Float32}
     racedistance::Float32
-    freerace::Bool
     logplot::Bool
 end
 
@@ -140,7 +138,7 @@ println(">Control Settings: nrunners = ", nrunners)
 par=Parameters(timestep,observertimestep,observernsteps, endtime,
                waves,frontviewdistance,minratio,maxratio,minrho,maxrho,
                posweights,ldist, numberofwaves, nrunners, trackname,trackdata,
-               racedistance,freerace,logplot)
+               racedistance,logplot)
 
 
 end

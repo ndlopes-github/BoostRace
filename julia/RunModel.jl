@@ -1,7 +1,10 @@
-module RunModelDone
+module RunModel
+t=@elapsed begin
     include("Race.jl")
-    import .Race
-   # using .Tmp # we can use `using` to bring the exported symbols in `Tmp` into our namespace
-
-Race.model()
+    using .Race
+    # using .Tmp # we can use `using` to bring the exported symbols in `Tmp` into our namespace
+    training()
+    race()
+end
+println(">Elapsed time=", t)
 end

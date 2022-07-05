@@ -37,7 +37,7 @@ Frunner(time,wavedelay,waveinitspeed,initposition,slopefactor,
 
 
 mutable struct Runners
-    group::Vector{Main.RunModelDone.Race.Frunnerclass.Frunner}
+    group::Vector{Main.RunModel.Race.Frunnerclass.Frunner}
     nrunners::Int16
 
     pos::Matrix{Float32} #Vector{Vector{Float32}}
