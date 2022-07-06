@@ -128,7 +128,7 @@ function timesvisuals(times,allrunners,allrunners_training,parameters)
     endtimes=zeros(nrunners)
 
     for runner in 1:nrunners
-        tsidx=findfirst(x->(x>=0), allrunners.pos[runner,:])
+        tsidx=findfirst(x->(x>0.0), allrunners.pos[runner,:])
         teidx=findfirst(x->(x>=par.racedistance),allrunners.pos[runner,:])
         starttimes[runner]=times[tsidx]
         endtimes[runner]=times[teidx]
@@ -141,8 +141,8 @@ function timesvisuals(times,allrunners,allrunners_training,parameters)
     wave_departure=maximum(starttimes[r0:r1])
     wave_time_gap_to_cross=maximum(starttimes[r0:r1])-minimum(starttimes[r0:r1])+1
     println(">control Post-Processing: departures computation")
-    println(">control Post-Processing: departures:  wave: ",0, " departure:",  wave_departure)
-    println(">control Post-Processing: departures:  wave: ",0, " time gap to cross:",  wave_time_gap_to_cross)
+    println(">control Post-Processing: departures:  wave: ",1, " departure:",  wave_departure)
+    println(">control Post-Processing: departures:  wave: ",1, " time gap to cross:",  wave_time_gap_to_cross)
 
     wavetxt=" ["*string(par.waves[1,1:size(par.waves)[1]])[9: end-1]*" ,0.0 ,"*string(par.waves[1,end])*"]"
     acumulated_wave_time_gap_to_cross=wave_time_gap_to_cross
@@ -153,12 +153,13 @@ function timesvisuals(times,allrunners,allrunners_training,parameters)
         r1=r0+sum(Int,par.waves[j: par.numberofwaves])-1
         wave_departure=maximum(starttimes[r0:r1])
         wavetxt*="\n ["*string(par.waves[j,1:size(par.waves)[1]])[9:end-1]*","*string(acumulated_wave_time_gap_to_cross)*
-        " + "*string(j-1)*"*gap ,"*string(par.waves[j,end])*"]"
+        " + "*string(j)*"*gap ,"*string(par.waves[j,end])*"]"
         wave_time_gap_to_cross=maximum(starttimes[r0:r1])-minimum(starttimes[r0:r1])+1
         acumulated_wave_time_gap_to_cross+=wave_time_gap_to_cross
         println(">control Post-Processing: departures:  wave: ",j, " departure:",  wave_departure)
         println(">control Post-Processing:  wave: ",j, " time gap to cross: ",  wave_time_gap_to_cross)
     end
+
     println(">control Post-Processing: suggested setting for waves after initial running for tune settings")
     println(wavetxt)
     println("control Post-Processing:  ********************************************************")
@@ -171,12 +172,13 @@ function timesvisuals(times,allrunners,allrunners_training,parameters)
     worsttime=maximum(runnertimes)
     winrunners=argmin(runnertimes)
     losrunners=argmax(runnertimes)
+
     starttimes_training=zeros(nrunners)
     endtimes_training=zeros(nrunners)
 
 
     for runner in 1:nrunners
-        tsidx=findfirst(x->(x>=0), allrunners_training.pos[runner,:])
+        tsidx=findfirst(x->(x>0.0), allrunners_training.pos[runner,:])
         teidx=findfirst(x->(x>=par.racedistance),allrunners_training.pos[runner,:])
         starttimes_training[runner]=times[tsidx]
         endtimes_training[runner]=times[teidx]
@@ -200,9 +202,9 @@ function timesvisuals(times,allrunners,allrunners_training,parameters)
     savefig("./reports/personaltimings.png")
 
     errors=runnertimes-runnertimes_training
-    println(">control Post-Processing: debug:  # negative errors: ",length(findall(x->(x<0),errors)))
-    println(">control Post-Processing: debug: negative errors: ",errors[findall(x->(x<0),errors)])
-    println(">control Post-Processing: debug: args negative errors: ",findall(x->(x<0),errors))
+    println(">control Post-Processing: debug:  # negative errors: ",length(findall(x->(x<0.0),errors)))
+    println(">control Post-Processing: debug: negative errors: ",errors[findall(x->(x<0.0),errors)])
+    println(">control Post-Processing: debug: args negative errors: ",findall(x->(x<0.0),errors))
 
     #print('control: departure: runners  affected by the velocity rule at departure', len(*np.where(starttimes!=starttimes_free)))
 
