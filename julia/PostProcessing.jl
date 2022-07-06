@@ -2,7 +2,7 @@ module PostProcessing
 using Plots
 # To be available directly with "using .PostProcessing" (no prefix required)
 # with import .PostProcessing prefix is necessary.
-export times, allrunners,parameters, track, ninwaves, snapshot
+export times, allrunners,parameters, track, ninwaves, snapshot,phasevisuals,rhosvisuals#,timesvisuals
 #pyplot()
 plotlyjs()
 using JLD2
@@ -20,7 +20,7 @@ function snapshot(step,allrunners,parameters,track,ninwaves)
 
     X=allrunners.pos[:, step]
     YWS=zeros(nrunners)
-    for r in range(1,nrunners)
+    for r in 1:nrunners
         YWS[r]=rand(Uniform(0,1))*track.cspline_width(X[r])+track.cspline_elev(X[r])
     end
 
@@ -70,7 +70,7 @@ function speedsvisuals(runnersidxs,allrunners,parameters,track)
     nsteps=parameters.observernsteps
     time=parameters.observertimestep*nsteps
 
-    t=range(0,time,nsteps)
+    t=range(start=0.0,stop=time,length=nsteps)
 
     plot(title="Speed Profile")
     xlabel!("Time (s)")
@@ -105,7 +105,7 @@ function rhosvisuals(runnersidxs,allrunners)
     nsteps=parameters.observernsteps
     time=parameters.observertimestep*nsteps
 
-    t=range(0,time,nsteps)
+    t=range(start=0.0,stop=time,length=nsteps)
 
     plot(title="Rho Profile")
     xlabel!("Time (s)")
@@ -119,78 +119,73 @@ function rhosvisuals(runnersidxs,allrunners)
     gui()
 end
 
-#=
-function timesvisuals(times,times_free,allrunners,allrunnersfree,parameters)
+
+
+function timesvisuals(times,allrunners,allrunners_training,parameters)
     par=parameters
     nrunners=allrunners.nrunners
     starttimes=zeros(nrunners)
     endtimes=zeros(nrunners)
 
-    #Wave departure times#
-    #for wave in waves:
-    #for runner in wave:
-    #       pass
-
-
-
-
-    for runner in range(group.size):
-        tsidx=np.min(np.where(group.pos[runner,:]>0))
-        teidx=np.min(np.where(group.pos[runner,:]>10000))
+    for runner in 1:nrunners
+        tsidx=findfirst(x->(x>=0), allrunners.pos[runner,:])
+        teidx=findfirst(x->(x>=par.racedistance),allrunners.pos[runner,:])
         starttimes[runner]=times[tsidx]
         endtimes[runner]=times[teidx]
+    end
 
-    print('control: waves description: departures computation')
-    print('control:********************************************')
-    print(str(par.waves))
-    print('control:********************************************')
-    r0=0
-    r1=np.sum(par.waves[0, :par.numberofwaves]).astype(int)
-    wave_departure=np.max(starttimes[r0:r1])
-    wave_time_gap_to_cross=np.max(starttimes[r0:r1])-np.min(starttimes[r0:r1])+1
-    print('control: departures:  wave: ',0, ' departure:',  wave_departure)
-    print('control: departures:  wave: ',0, ' time gap to cross:',  wave_time_gap_to_cross)
+    println(">control Post-Processing: dump(waves) departures computation")
+    println(dump(par.waves))
+    r0=1
+    r1=sum(Int,par.waves[1, 1:par.numberofwaves])
+    wave_departure=maximum(starttimes[r0:r1])
+    wave_time_gap_to_cross=maximum(starttimes[r0:r1])-minimum(starttimes[r0:r1])+1
+    println(">control Post-Processing: departures computation")
+    println(">control Post-Processing: departures:  wave: ",0, " departure:",  wave_departure)
+    println(">control Post-Processing: departures:  wave: ",0, " time gap to cross:",  wave_time_gap_to_cross)
 
-    wavestxt=repr(par.waves[0,:len(par.waves)])[6:-2]+', '+str(0.0)+','+str(par.waves[0,-1])+'],'
+    wavetxt=" ["*string(par.waves[1,1:size(par.waves)[1]])[9: end-1]*" ,0.0 ,"*string(par.waves[1,end])*"]"
     acumulated_wave_time_gap_to_cross=wave_time_gap_to_cross
-    for j in range(1,len(par.waves)):
-        r0+=np.sum(par.waves[j-1, :par.numberofwaves]).astype(int)
-        r1=r0+np.sum(par.waves[j, :par.numberofwaves]).astype(int)
-        wave_departure=np.max(starttimes[r0:r1])
-        wavestxt+='\n'+repr(par.waves[j,:len(par.waves)])[6:-2]+', '+str(acumulated_wave_time_gap_to_cross)+' +'\
-                   +str(j)+' * gap ,'+str(par.waves[j,-1])+'],'
 
-        wave_time_gap_to_cross=np.max(starttimes[r0:r1])-np.min(starttimes[r0:r1])+1
+
+    for j in range(2,size(par.waves)[1])
+        r0+=sum(Int,par.waves[j-1: par.numberofwaves])
+        r1=r0+sum(Int,par.waves[j: par.numberofwaves])-1
+        wave_departure=maximum(starttimes[r0:r1])
+        wavetxt*="\n ["*string(par.waves[j,1:size(par.waves)[1]])[9:end-1]*","*string(acumulated_wave_time_gap_to_cross)*
+        " + "*string(j-1)*"*gap ,"*string(par.waves[j,end])*"]"
+        wave_time_gap_to_cross=maximum(starttimes[r0:r1])-minimum(starttimes[r0:r1])+1
         acumulated_wave_time_gap_to_cross+=wave_time_gap_to_cross
-        print('control: departures:  wave: ',j, ' departure:',  wave_departure)
-        print('control: departures:  wave: ',j, ' time gap to cross:',  wave_time_gap_to_cross)
+        println(">control Post-Processing: departures:  wave: ",j, " departure:",  wave_departure)
+        println(">control Post-Processing:  wave: ",j, " time gap to cross: ",  wave_time_gap_to_cross)
+    end
+    println(">control Post-Processing: suggested setting for waves after initial running for tune settings")
+    println(wavetxt)
+    println("control Post-Processing:  *************************************************************")
 
-    print('control: suggested setting for waves after initial running for tune settings')
-    print(wavestxt,sep=',')
-    print('control:  end *************************************************************')
 
     runnertimes=endtimes-starttimes
-
-    racetime=np.max(endtimes)
-    slowrunners=np.argmax(endtimes)
-
-    mintime=np.min(runnertimes)
-    worsttime=np.max(runnertimes)
-    winrunners=np.argmin(runnertimes)
-    losrunners=np.argmax(runnertimes)
-
-    starttimes_free=np.zeros(group_free.size)
-    endtimes_free=np.zeros(group_free.size)
-
-    for runner in range(group_free.size):
-        tsidx=np.min(np.where(group_free.pos[runner,:]>0))
-        teidx=np.min(np.where(group_free.pos[runner,:]>10000))
-        starttimes_free[runner]=times[tsidx]
-        endtimes_free[runner]=times[teidx]
-
-    runnertimes_free=endtimes_free-starttimes_free
+    racetime=maximum(endtimes)
+    slowrunners=argmax(endtimes)
+    mintime=minimum(runnertimes)
+    worsttime=maximum(runnertimes)
+    winrunners=argmin(runnertimes)
+    losrunners=argmax(runnertimes)
+    starttimes_free=zeros(nrunners)
+    endtimes_free=zeros(nrunners)
 
 
+    for runner in 1:nrunners
+        tsidx=findfirst(x->(x>=0), allrunners_training.pos[runner,:])
+        teidx=findfirst(x->(x>=par.racedistance),allrunners_training.pos[runner,:])
+        starttimes_training[runner]=times[tsidx]
+        endtimes_training[runner]=times[teidx]
+    end
+
+    runnertimes_training=endtimes_training-starttimes_training
+
+end
+#=
 
     plt.plot(runnertimes,'o',ms=0.5,label='Race')
     plt.plot(runnertimes_free,'o',ms=0.5,label='Alone')
@@ -323,17 +318,19 @@ end
 #race_visuals(times,allrunners,parameters,track)
 times=load_object("./results/times.jld2")
 allrunners=load_object("./results/allrunners.jld2")
+allrunners_training=load_object("./training_results/allrunners.jld2")
 parameters=load_object("./results/parameters.jld2")
 track=load_object("./results/track.jld2")
 ninwaves=load_object("./results/ninwaves.jld2")
 
-
+#=
 snapshot(1000,allrunners,parameters,track,ninwaves)
 runnersidxs=rand(1:allrunners.nrunners,30)
 speedsvisuals(runnersidxs,allrunners,parameters,track)
 phasevisuals(runnersidxs,allrunners)
 rhosvisuals(runnersidxs,allrunners)
+=#
 
-#timesvisuals(times=times,times_free=times_free,group=group,group_free=group_free)
+timesvisuals(times,allrunners,allrunners_training,parameters)
 
 end

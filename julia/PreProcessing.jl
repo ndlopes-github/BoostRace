@@ -10,9 +10,13 @@ Random.seed!(1234)
 include("Settings.jl")
 import .Settings
 parameters=Settings.par
+println(">Control PreProcessing: dump(parameters)")
+dump(parameters) # This prints the parameters in a human readable format.
+
 include("Track.jl")
 track=Track.track
-
+println(">Control PreProcessing: dump(track)")
+dump(track)
 
 TimeBins=[i for i in 30:100]
 println(">Control PreProcessing: TimeBins= ", TimeBins[1:5])
@@ -114,9 +118,6 @@ function inversepseudosigmoid( )
 end
 
 AvgTimes, RandDist,NinWaves,InitPositions, WaveDelays,WaveInitSpeeds, SlopeFactors= inversepseudosigmoid()
-
-
-
 
 
 

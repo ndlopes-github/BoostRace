@@ -5,7 +5,6 @@ export race, training
 include("PreProcessing.jl")
 using .PreProcessing
 nrunners=parameters.nrunners
-dump(parameters) # This prints the parameters in a human readable format.
 
 #Expose: Frunner, Runners
 include("Frunnerclass.jl")
@@ -29,7 +28,8 @@ function race()
         runnerslist[i]=Frunner(AvgTimes[i],WaveDelays[i],WaveInitSpeeds[i],InitPositions[i],SlopeFactors[i])
     end
     allrunners=Runners(runnerslist)
-
+    println(">Control Race: dump(allrunners)")
+    dump(allrunners)
     println(">control Race: sizes(allrunners.group)= ", size(allrunners.group))
     println(">control Race: sizes(allrunners.pos)= ", size(allrunners.pos))
     println(">control Race: sizes(allrunners.vels)= ", size(allrunners.vels))
@@ -61,7 +61,8 @@ function training()
         runnerslist[i]=Frunner(AvgTimes[i],WaveDelays[i],WaveInitSpeeds[i],InitPositions[i],SlopeFactors[i])
     end
     allrunners=Runners(runnerslist)
-
+    println(">Control Race: dump(allrunners)")
+    dump(allrunners)
     println(">control Training Race: sizes:")
     println(">control Training Race: sizes(allrunners.group)= ", size(allrunners.group))
     println(">control Training Race: sizes(allrunners.pos)= ", size(allrunners.pos))
@@ -74,15 +75,7 @@ function training()
     println(">Control Training Race: Processing done")
 
     println(">Control Training Race: Writing to files with jld2")
-    println(">Control Training Race: NinWaves", NinWaves)
-    #save it
-
-
-    save_object("./training_results/times.jld2", times)
     save_object("./training_results/allrunners.jld2",  allrunners)
-    save_object("./training_results/parameters.jld2",parameters)
-    save_object("./training_results/track.jld2",track)
-    save_object("./training_results/ninwaves.jld2",NinWaves)
 
 end
 
