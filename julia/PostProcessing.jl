@@ -161,7 +161,7 @@ function timesvisuals(times,allrunners,allrunners_training,parameters)
     end
     println(">control Post-Processing: suggested setting for waves after initial running for tune settings")
     println(wavetxt)
-    println("control Post-Processing:  *************************************************************")
+    println("control Post-Processing:  ********************************************************")
 
 
     runnertimes=endtimes-starttimes
@@ -171,8 +171,8 @@ function timesvisuals(times,allrunners,allrunners_training,parameters)
     worsttime=maximum(runnertimes)
     winrunners=argmin(runnertimes)
     losrunners=argmax(runnertimes)
-    starttimes_free=zeros(nrunners)
-    endtimes_free=zeros(nrunners)
+    starttimes_training=zeros(nrunners)
+    endtimes_training=zeros(nrunners)
 
 
     for runner in 1:nrunners
@@ -184,16 +184,22 @@ function timesvisuals(times,allrunners,allrunners_training,parameters)
 
     runnertimes_training=endtimes_training-starttimes_training
 
-end
-#=
 
-    plt.plot(runnertimes,'o',ms=0.5,label='Race')
-    plt.plot(runnertimes_free,'o',ms=0.5,label='Alone')
-    plt.ylabel("Time in seconds")
-    plt.xlabel("Runner index")
-    plt.legend()
-    plt.savefig('./reports/personaltimings.png')
-    plt.clf()
+    plot(1:nrunners,runnertimes,ms=0.5,label="Race",seriestype = :scatter,
+         markersize=0.3,
+         markeralpha = 1.0,
+         markerstrokecolor = "red",
+         reuse=false)
+    plot!(1:nrunners,runnertimes_training,ms=0.5,label="Training",seriestype = :scatter,
+          markersize=0.3,
+          markeralpha = 1.0,
+          markerstrokecolor ="blue")
+    ylabel!("Time in seconds")
+    xlabel!("Runner index")
+    gui()
+    savefig("./reports/personaltimings.png")
+    end
+#=
 
     errors=runnertimes-runnertimes_free
     print('control:debug:  # negative errors: ',len(*np.where(errors<0)))
