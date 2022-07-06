@@ -185,27 +185,26 @@ function timesvisuals(times,allrunners,allrunners_training,parameters)
     runnertimes_training=endtimes_training-starttimes_training
 
 
-    plot(1:nrunners,runnertimes,ms=0.5,label="Race",seriestype = :scatter,
-         markersize=0.3,
-         markeralpha = 1.0,
-         markerstrokecolor = "red",
+    plot(1:nrunners,runnertimes,ms=0.8,label="Race",seriestype = :scatter,
+         #markersize=0.5,
+        # markeralpha = .5,
+         markerstrokecolor = "orange",
          reuse=false)
-    plot!(1:nrunners,runnertimes_training,ms=0.5,label="Training",seriestype = :scatter,
-          markersize=0.3,
-          markeralpha = 1.0,
-          markerstrokecolor ="blue")
+    plot!(1:nrunners,runnertimes_training,ms=0.8,label="Training",seriestype = :scatter,
+          #markersize=0.5,
+         # markeralpha = 0.5,
+         markerstrokecolor ="blue")
     ylabel!("Time in seconds")
     xlabel!("Runner index")
     gui()
     savefig("./reports/personaltimings.png")
-    end
-#=
 
-    errors=runnertimes-runnertimes_free
-    print('control:debug:  # negative errors: ',len(*np.where(errors<0)))
-    print('control:debug: negative errors: ',*zip(*np.where(errors<0), errors[np.where(errors<0)]))
+    errors=runnertimes-runnertimes_training
+    println(">control Post-Processing: debug:  # negative errors: ",length(findall(x->(x<0),errors)))
+    println(">control Post-Processing: debug: negative errors: ",errors[findall(x->(x<0),errors)])
+    println(">control Post-Processing: debug: args negative errors: ",findall(x->(x<0),errors))
 
-    print('control: departure: runners  affected by the velocity rule at departure', len(*np.where(starttimes!=starttimes_free)))
+    #print('control: departure: runners  affected by the velocity rule at departure', len(*np.where(starttimes!=starttimes_free)))
 
     # print('free times',runnertimes_free[np.where(errors<0)])
     # print('times',runnertimes[np.where(errors<0)])
@@ -214,6 +213,8 @@ function timesvisuals(times,allrunners,allrunners_training,parameters)
     # print('free end',endtimes_free[np.where(errors<0)])
     # print('end',endtimes[np.where(errors<0)])
 
+    end
+#=
 
     t1=par.posweights[1,1]
     t2=par.posweights[2,1]
