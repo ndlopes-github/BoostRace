@@ -5,6 +5,15 @@ using ProgressBars
 using CubicSplines
 
 
+
+
+
+function Rho(t,X,V, allrunners,par,track,training)
+
+
+    return R
+    end
+
 # Index r for runner
 # Index i for time stepping
 
@@ -20,18 +29,21 @@ function F(t,X,V, allrunners,par,track,training)
     fvdist=par.frontviewdistance
     VL=zeros(nrunners)
     racedistance=par.racedistance
+    epsm=100
     R=zeros(nrunners)
 
     if training==true
         # Race for timing reports
         for r in 1:nrunners
-            if (t <= allrunners.wavedelays[r]) || (X[r]>racedistance)
+            # Stop epsm=100m after the finishing line
+            if (t <= allrunners.wavedelays[r]) || (X[r]>=racedistance+epsm)
                 V[r]=0.0
             else
                 V[r]=(allrunners.avgspeeds[r] + gradient(spline,X[r],1)*allrunners.slopefactors[r])
             end
         end
     elseif training==false
+
         # sorted indexes of  the runners
         sortedargs=sortperm(X)
         # rho definition (density container)
@@ -50,7 +62,7 @@ function F(t,X,V, allrunners,par,track,training)
             #println(minn," ",maxn)
             # continue conditions
             if minn<3 continue end #At least 3 runners in the impact area
-            if arg_idx+minn>size(sortedargs)[1] continue end
+            if arg_idx+minn>length(sortedargs) continue end
             if X[sortedargs[arg_idx+minn]]-X[arg]>= fvdist continue end
 
             rhocounter=1.0
@@ -74,23 +86,23 @@ function F(t,X,V, allrunners,par,track,training)
                 #println(rho[arg])
             end
 
-            ############### CORRIGIR ####################################################
+
+
             lngth=floor(Int,minn/2) #
             if lngth <2 continue end
             sortedspeeds=sort(V[argsofguysinfront])
             slowersspeeds=sortedspeeds[1:lngth]
-            slowersavgspeed=sum(slowersspeeds)/size(slowersspeeds)[1]
+            slowersavgspeed=sum(slowersspeeds)/length(slowersspeeds)
             VL[arg]=min(slowersavgspeed,V[arg])
             #############################################################################
 
             # last step compute av speed of the slower guyes
-
         end
 
 
 
         for r in 1:allrunners.nrunners
-            if (t <= allrunners.wavedelays[r]) || (X[r]>racedistance)
+            if (t <= allrunners.wavedelays[r]) || (X[r]>=racedistance+epsm)
                 V[r]=0.0
             elseif X[r]<0 # This Condition can be improved! (wave propagation in lanes)
                 V[r]=min(allrunners.waveinitspeeds[r],allrunners.avgspeeds[r])
@@ -114,6 +126,9 @@ function rk2(allrunners,parameters,track,training)
     nrunners=allrunners.nrunners
     obsnsteps=parameters.observernsteps
     obststep=parameters.observertimestep
+    dt=parameters.timestep
+    nsteps=ceil(Int,parameters.endtime/dt)
+    println(">Control OdeSystemSolvers: total number of time steps = ", nsteps)
     avgspeeds=allrunners.avgspeeds
     slopefactors=allrunners.slopefactors
 
@@ -130,30 +145,38 @@ function rk2(allrunners,parameters,track,training)
     velocities=zeros(nrunners,obsnsteps)
     rhos=zeros(nrunners,obsnsteps)
 
-    X=positions[:,1]
+    X1=positions[:,1] #rk Updated positions
+    X0=positions[:,1] #rk old positions
     V=velocities[:,1] # useless since it is 0
 
     K1=zeros(nrunners)
     K2=zeros(nrunners)
     #k3=zeros(nrunners)
     #k4=zeros(nrunners)
+    j=0
+    for i in ProgressBar(0:nsteps-1)
+        t=dt*i
+        V, R = F(t, X0, V, allrunners,parameters,track,training) #update velocities
+        K1=dt .* V
+        V, R = F(t+dt, X0 .+ K1, V, allrunners,parameters,track,training) #update velocities
+        K2=dt .* V
+        X1=X0 .+ 0.5 .* (K1 .+ K2) # update positions
 
-    for i in ProgressBar(1:obsnsteps-1)
-        times[i]=obststep*i
-        V, R = F(times[i], X, V, allrunners,parameters,track,training) #update velocities
-        K1=obststep .* V
-        V, R = F(times[i]+obststep, X .+ K1, V, allrunners,parameters,track,training) #update velocities
-        K2=obststep .* V
-        X=X .+ 0.5 .* (K1 .+ K2) # update positions
-
-        positions[:,i+1]=X
-        velocities[:,i+1]=V
-        rhos[:,i+1]=R
-
-        #velocities[i,:]=F(times[i])
-        #rhos[i,:]=rk_rhos
+        ## Containers for Observer
+        if ((i+1)*dt>=(obststep*j) && i*dt<=(obststep*j))
+            delta=(j*obststep-i*dt)/dt
+            beta=1.0-delta
+            times[j+1]=obststep*(j+1)
+            ## interpolations
+            positions[:,j+1]= beta .* X0 .+ delta .*X1
+            velocities[:,j+1]=V #beta .* velocities[:,j] .+delta.* V
+            rhos[:,j+1]=R #beta .* rhos[:,j] .+ delta .* R
+            if (j+1 == obsnsteps) break end
+            j+=1
+        end
+        X0=X1
     end
-    #println(positions[observernsteps,:])
+
     return times, positions,velocities, rhos
 
 end

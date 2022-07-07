@@ -2,12 +2,14 @@ module PostProcessing
 using Plots
 # To be available directly with "using .PostProcessing" (no prefix required)
 # with import .PostProcessing prefix is necessary.
-export times, allrunners,parameters, track, ninwaves, snapshot,phasevisuals,rhosvisuals#,timesvisuals
+export times, allrunners,parameters, track, ninwaves, runnersidx
+export snapshot,speedsvisuals,phasevisuals,rhosvisuals#,timesvisuals
 #pyplot()
 plotlyjs()
 using JLD2
 using Random
 using Distributions
+using LinearAlgebra
 Random.seed!(1234)
 
 function snapshot(step,allrunners,parameters,track,ninwaves)
@@ -132,6 +134,7 @@ function timesvisuals(times,allrunners,allrunners_training,parameters)
         teidx=findfirst(x->(x>=par.racedistance),allrunners.pos[runner,:])
         starttimes[runner]=times[tsidx]
         endtimes[runner]=times[teidx]
+        #println(runner, ">>>>>>>>>>> ", teidx)
     end
 
     println(">control Post-Processing: dump(waves) departures computation")
@@ -149,20 +152,20 @@ function timesvisuals(times,allrunners,allrunners_training,parameters)
 
 
     for j in range(2,size(par.waves)[1])
-        r0+=sum(Int,par.waves[j-1: par.numberofwaves])
-        r1=r0+sum(Int,par.waves[j: par.numberofwaves])-1
+        r0+=sum(Int,par.waves[j-1, 1: par.numberofwaves])
+        r1=r0+sum(Int,par.waves[j,1: par.numberofwaves])-1
         wave_departure=maximum(starttimes[r0:r1])
         wavetxt*="\n ["*string(par.waves[j,1:size(par.waves)[1]])[9:end-1]*","*string(acumulated_wave_time_gap_to_cross)*
-        " + "*string(j)*"*gap ,"*string(par.waves[j,end])*"]"
+        " + "*string(j-1)*"*gap ,"*string(par.waves[j,end])*"]"
         wave_time_gap_to_cross=maximum(starttimes[r0:r1])-minimum(starttimes[r0:r1])+1
         acumulated_wave_time_gap_to_cross+=wave_time_gap_to_cross
         println(">control Post-Processing: departures:  wave: ",j, " departure:",  wave_departure)
-        println(">control Post-Processing:  wave: ",j, " time gap to cross: ",  wave_time_gap_to_cross)
+        println(">control Post-Processing:  departures: wave: ",j, " time gap to cross: ",  wave_time_gap_to_cross)
     end
 
     println(">control Post-Processing: suggested setting for waves after initial running for tune settings")
     println(wavetxt)
-    println("control Post-Processing:  ********************************************************")
+    println(">control Post-Processing:  ********************************************************")
 
 
     runnertimes=endtimes-starttimes
@@ -202,144 +205,152 @@ function timesvisuals(times,allrunners,allrunners_training,parameters)
     savefig("./reports/personaltimings.png")
 
     errors=runnertimes-runnertimes_training
-    println(">control Post-Processing: debug:  # negative errors: ",length(findall(x->(x<0.0),errors)))
+    println(">control Post-Processing: debug:  length of  negative errors: ",length(findall(x->(x<0.0),errors)))
     println(">control Post-Processing: debug: negative errors: ",errors[findall(x->(x<0.0),errors)])
     println(">control Post-Processing: debug: args negative errors: ",findall(x->(x<0.0),errors))
 
-    #print('control: departure: runners  affected by the velocity rule at departure', len(*np.where(starttimes!=starttimes_free)))
+    println(">control Post-Processing: departure: runners  affected by the velocity rule at departure ",
+          length(findall(x->(x!=0.0),starttimes-starttimes_training)))
 
-    # print('free times',runnertimes_free[np.where(errors<0)])
+    #println("training times',runnertimes_free[np.where(errors<0)])
     # print('times',runnertimes[np.where(errors<0)])
     # print('free start',starttimes_free[np.where(errors<0)])
     # print('start',starttimes[np.where(errors<0)])
     # print('free end',endtimes_free[np.where(errors<0)])
     # print('end',endtimes[np.where(errors<0)])
 
-    end
-#=
-
-    t1=par.posweights[1,1]
-    t2=par.posweights[2,1]
-    t3=par.posweights[3,1]
-    t4=par.posweights[4,1]
-
-    w0=par.posweights[0,0]
-    w1=par.posweights[1,0]
-    w2=par.posweights[2,0]
-    w3=par.posweights[3,0]
-    w4=par.posweights[4,0]
 
 
-    errorspen=np.zeros(len(errors))
+    t1=par.posweights[2,2]
+    t2=par.posweights[3,2]
+    t3=par.posweights[4,2]
+    t4=par.posweights[5,2]
+
+    w0=par.posweights[1,1]
+    w1=par.posweights[2,1]
+    w2=par.posweights[3,1]
+    w3=par.posweights[4,1]
+    w4=par.posweights[5,1]
+
+
+    errorspen=zeros(length(errors))
     count_t1=0
     count_t2=0
     count_t3=0
     count_t4=0
-    for idx,error in enumerate(errors):
-        if error <= t1:
+    for (idx,error) in enumerate(errors)
+        if error <= t1
             errorspen[idx]=error*w1
             count_t1+=1
-        elif t1 < error <= t2:
+        elseif t1 < error <= t2
             errorspen[idx]=w1*t1+(error-t1)*w2
             count_t2+=1
-        elif t2 < error <= t3 :
+        elseif t2 < error <= t3
             errorspen[idx]=w1*t1+(t2-t1)*w2+(error-t2)*w3
             count_t3+=1
-        else :
+        else
             errorspen[idx]=w1*t1+(t2-t1)*w2+(t3-t2)*w3+(error-t3)*w4
             count_t4+=1
+        end
+    end
+    println("> control Post-Processing: number of runners with time loss in [0,", t1,"] is ", count_t1)
+    println("> control Post-Processing: number of runners with time loss in ]",t1,",", t2,"] is ", count_t2)
+    println("> control Post-Processing: number of runners with time loss in ]",t2,",", t3,"] is ", count_t3)
+    println("> control Post-Processing: number of runners with time loss >",t3, " is", count_t4)
 
-    print('control: number of runners with time loss in [0,', t1,'] is', count_t1)
-    print('control: number of runners with time loss in ]',t1,',', t2,'] is', count_t2)
-    print('control: number of runners with time loss in ]',t2,',', t3,'] is', count_t3)
-    print('control: number of runners with time loss >',t3, ' is', count_t4)
+    errorspen .+= w0 .* starttimes
+    negerrors=findall(x->(x<0.0),errorspen)
+    println(">control Post-Processing: debug: warning: number of negative penalized errors:", length(negerrors))
+    println(">control Post-Processing: debug: warning: runners with negative penalized errors:", negerrors)
 
-    errorspen+=starttimes*w0
-    negerrors=np.where(errorspen<0)
-    print('control: debug: warning: number of negative penalized errors:', len(negerrors[0]))
-    print('control: debug: warning: runners with negative penalized errors:', *negerrors)
-
-    print('control: waves description: errors computation for metric')
-    print(par.waves)
-    print('control: *************************************************')
-    r0=0
-    r1=0
-    for j in range(1,len(par.waves)):
-        r0+=np.sum(par.waves[j-1, :par.numberofwaves]).astype(int)
-        r1=r0+np.sum(par.waves[j, :par.numberofwaves]).astype(int)
-        errorspen[r0:r1]-=w0*par.waves[j,par.numberofwaves]
-        print('control: wave ', j,' start: ',r0,'wave end: ',r1-1,', ',par.waves[j,par.numberofwaves])
-
-
-    plt.plot(errors,'o',ms=0.5,label='Time lost')
-    plt.plot(errorspen,'o',ms=0.5,label='Metric score')
-    plt.ylabel('Time in seconds (total race time: '+str(int(racetime))+')')
-
-    print('control: race time: ', racetime)
-    print('control: slowest racer: ', slowrunners)
-
-    print('control: best race time: ', mintime)
-    print('control: winner: ', winrunners)
-
-    print('control: worst race time: ', worsttime)
-    print('control: last: ', losrunners)
-
-    metricerror=np.sum(errorspen)/len(errorspen)
-    print('control: metric error:', metricerror)
-    l1error=np.linalg.norm(errors,ord=1)/len(errors)
-    print('control: l1 error:', l1error)
+    println(">control Post-Processing: waves description: errors computation for metric")
+    println(dump(par.waves))
+    println(">control Post-Processing: *************************************************")
+    r0=1
+    r1=1
+     for j in range(2,size(par.waves)[1])
+         r0+=sum(Int,par.waves[j-1, 1:par.numberofwaves])
+         r1=r0+sum(Int,par.waves[j, 1:par.numberofwaves])
+         errorspen[r0:r1-1].-= w0.*par.waves[j,par.numberofwaves]
+         println(">control Post-Processing:  wave ",
+                 j-1, "start: ",r0," wave end: ",r1-1,", ",par.waves[j,par.numberofwaves+1])
+     end
 
 
-    plt.xlabel('Runner index')
-    plt.title('Averaged time lost ='+str(int(l1error))+\
-              '\n Averaged metric score='+str(int(metricerror))+\
-              ' departure times ='+str(par.waves[:,par.numberofwaves]))
-    #plt.text(0,550,'l1 norm='+str(np.linalg.norm(errors,ord=1)))
-    #plt.text(0,500,'metric ='+str(np.sum(errorspen)))
-    plt.text(0,350,'waves ='+str(par.waves[:,0:par.numberofwaves]))
-    #plt.text(0,400,'delays ='+str(par.waves[:,1]))
-    #plt.text(0,350,'speeds_0 ='+str(par.waves[:,2]))
-    plt.legend(loc=9 )
-    plt.savefig('./reports/errors_report.png')
-    plt.clf()
+    println(">control Post-Processing: race time: ", racetime)
+    println(">control Post-Processing: slowest racer: ", slowrunners)
 
-    logtex=open('./reports/simpletex.txt','a')
-    print(datetime.datetime.now(), file=logtex)
-    for x in par.waves:
-        print('& $(',end='', file=logtex)
-        for i in range(len(par.waves)):
-            print('{:d}, '.format(int(x[i])), end='',file=logtex)
-        i=len(par.waves)
-        print('{:d}, '.format(int(x[i])), end='',file=logtex)
-        i=len(par.waves)+1
-        print('{:.2f} '.format(x[i]), end='',file=logtex)
-        print(')$',file=logtex)
+    println(">control Post-Processing: best race time: ", mintime)
+    println(">control Post-Processing: winner: ", winrunners)
 
-    text='''& ${l1error:.1f}$
-& ${metricerror:.1f}$
-& ${racetime:4d}$ \\\\'''.format(l1error=l1error,metricerror=metricerror,racetime=int(racetime))
-    print(text+'\n\n',file=logtex)
+    println(">control Post-Processing: worst race time: ", worsttime)
+    println(">control Post-Processing: last: ", losrunners)
+
+    metricerror=sum(errorspen)/length(errorspen)
+    println(">control Post-Processing: metric error: ", metricerror)
+    l1error=norm(errors,1)/length(errors)
+    println(">control Post-Processing:  l1 error: ", l1error)
+
+
+    plot(1:nrunners,errors,ms=0.5,label="Time lost",seriestype = :scatter, markerstrokecolor = "orange",
+         title="Averaged time and metric losses = "*
+         string(round(Int,l1error))*", "
+         *string(round(Int,metricerror)))
+    plot!(1:nrunners,errorspen,ms=0.5,label="Metric score",seriestype = :scatter, markerstrokecolor = "blue",)
+    ylabel!("Time in seconds (total race time: "*string(ceil(Int,racetime))*")")
+    xlabel!("Runner index")
+    savefig("./reports/errors_report.png")
+    gui()
 end
-=#
+
+logtex=open("./reports/simpletex.txt","a")
+write(logtex,datetime.datetime.now())
+close(logtex)
+#     for x in par.waves:
+#         print('& $(',end='', file=logtex)
+#         for i in range(len(par.waves)):
+#             print('{:d}, '.format(int(x[i])), end='',file=logtex)
+#         i=len(par.waves)
+#         print('{:d}, '.format(int(x[i])), end='',file=logtex)
+#         i=len(par.waves)+1
+#         print('{:.2f} '.format(x[i]), end='',file=logtex)
+#         print(')$',file=logtex)
+
+#     text='''& ${l1error:.1f}$
+# & ${metricerror:.1f}$
+# & ${racetime:4d}$ \\\\'''.format(l1error=l1error,metricerror=metricerror,racetime=int(racetime))
+#     print(text+'\n\n',file=logtex)
+end
+
 
 ## Function calls
 
 #race_visuals(times,allrunners,parameters,track)
-times=load_object("./results/times.jld2")
-allrunners=load_object("./results/allrunners.jld2")
-allrunners_training=load_object("./training_results/allrunners.jld2")
-parameters=load_object("./results/parameters.jld2")
-track=load_object("./results/track.jld2")
-ninwaves=load_object("./results/ninwaves.jld2")
+function load_objects()
+    times=load_object("./results/times.jld2")
+    allrunners=load_object("./results/allrunners.jld2")
+    allrunners_training=load_object("./training_results/allrunners.jld2")
+    parameters=load_object("./results/parameters.jld2")
+    track=load_object("./results/track.jld2")
+    ninwaves=load_object("./results/ninwaves.jld2")
+    return times, allrunners, allrunners_training,parameters, track, ninwaves
+end
 
-#=
-snapshot(1000,allrunners,parameters,track,ninwaves)
-runnersidxs=rand(1:allrunners.nrunners,30)
-speedsvisuals(runnersidxs,allrunners,parameters,track)
-phasevisuals(runnersidxs,allrunners)
-rhosvisuals(runnersidxs,allrunners)
-=#
+
+times, allrunners, allrunners_training,parameters, track, ninwaves=load_objects()
+# snapshot(1000,allrunners,parameters,track,ninwaves)
+# runnersidxs=rand(1:allrunners.nrunners,30)
+# speedsvisuals(runnersidxs,allrunners,parameters,track)
+# phasevisuals(runnersidxs,allrunners)
+# rhosvisuals(runnersidxs,allrunners)
+
 
 timesvisuals(times,allrunners,allrunners_training,parameters)
-
+times=Nothing
+allrunners=Nothing
+allrunners_training=Nothing
+parameters=Nothing
+track=Nothing
+ninwaves=Nothing
+GC.gc()
 end

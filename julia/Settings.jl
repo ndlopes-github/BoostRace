@@ -8,10 +8,10 @@ logplot=true
 
 racedistance=10000.0 #in meters
 
-timestep=0.2 # should divide observertimestep
+timestep=0.4 # should divide observertimestep
 observertimestep=1.0
-observernsteps=7080
-endtime=7080.0
+observernsteps=8080
+endtime=8080.0
 frontviewdistance=4.0 # Linear Reference distance in front of the runner
 minratio=15.0/40.0
 maxratio=25.0/40.0
@@ -20,7 +20,7 @@ maxrho=0.8
 posweights=[0.2 0; 2.0 30;  1.5 60;  1.25 120; 1.0 100000]
 ldist=0.5
 
-gap=60
+gap=180
 
 waves=[ 2333 500 500 0.0 3.34;
         500  2333 500 (214 +1*gap) 2.92;
@@ -50,7 +50,7 @@ waves=[ 2333 500 500 0.0 3.34;
           10200.0 10.0 10.0]
 =#
 
-#=
+
     trackname="track2"
     trackdata=[-500.0 0.0 10.0;
           -400.0 0.0 10.0;
@@ -75,8 +75,8 @@ waves=[ 2333 500 500 0.0 3.34;
           10000.0 0.0 10.0;
           10100.0 0.0 10.0;
           10200.0 0.0 10.0]
-=#
 
+#=
 trackname="silvestre"
 data_aux=[-500.0 10.0 16.0;
           220.0 (-0.02*220.0) 16.0;
@@ -108,6 +108,7 @@ for i in range(1,N)
     trackdata[i,2]=auxlevel[i]
     trackdata[i,3]=auxwidth[i]
 end
+=#
 
 ##############################################################################
 
