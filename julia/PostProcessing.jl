@@ -10,6 +10,8 @@ using JLD2
 using Random
 using Distributions
 using LinearAlgebra
+using Dates
+using DelimitedFiles
 Random.seed!(1234)
 
 function snapshot(step,allrunners,parameters,track,ninwaves)
@@ -301,25 +303,19 @@ function timesvisuals(times,allrunners,allrunners_training,parameters)
     xlabel!("Runner index")
     savefig("./reports/errors_report.png")
     gui()
-end
 
-logtex=open("./reports/simpletex.txt","a")
-write(logtex,datetime.datetime.now())
-close(logtex)
-#     for x in par.waves:
-#         print('& $(',end='', file=logtex)
-#         for i in range(len(par.waves)):
-#             print('{:d}, '.format(int(x[i])), end='',file=logtex)
-#         i=len(par.waves)
-#         print('{:d}, '.format(int(x[i])), end='',file=logtex)
-#         i=len(par.waves)+1
-#         print('{:.2f} '.format(x[i]), end='',file=logtex)
-#         print(')$',file=logtex)
-
-#     text='''& ${l1error:.1f}$
-# & ${metricerror:.1f}$
-# & ${racetime:4d}$ \\\\'''.format(l1error=l1error,metricerror=metricerror,racetime=int(racetime))
-#     print(text+'\n\n',file=logtex)
+    outfile = "./reports/simpletex.txt"
+    open(outfile, "a") do f
+        println(f,"start*************")
+        println(f,now())
+         println(f,"")
+        writedlm(f,par.waves)
+        println(f,"")
+        println(f,l1error)
+        println(f,metricerror)
+        println(f,racetime)
+        println(f,"stop*************")
+    end
 end
 
 
@@ -346,11 +342,11 @@ times, allrunners, allrunners_training,parameters, track, ninwaves=load_objects(
 
 
 timesvisuals(times,allrunners,allrunners_training,parameters)
-times=Nothing
-allrunners=Nothing
-allrunners_training=Nothing
-parameters=Nothing
-track=Nothing
-ninwaves=Nothing
-GC.gc()
+# times=Nothing
+# allrunners=Nothing
+# allrunners_training=Nothing
+# parameters=Nothing
+# track=Nothing
+# ninwaves=Nothing
+# GC.gc()
 end
