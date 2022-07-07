@@ -8,11 +8,64 @@ using CubicSplines
 
 
 
-function Rho(t,X,V, allrunners,par,track,training)
+function RhoVL(R,VL,X,V,allrunners,par,track,training)
+    nrunners=allrunners.nrunners
+    minrho=par.minrho
+    maxrho=par.maxrho
+    minratio=par.minratio
+    maxratio=par.maxratio
+    racedistance=par.racedistance
+    fvdist=par.frontviewdistance
+    # sorted indexes of  the runners
+    sortedargs=sortperm(X)
+    # rho definition (density container)
+    #For VL calculation. average of the  slowest in front of the runner
+    foresightarea=zeros(nrunners)
+
+    # First step: counting the number of runner in the frontview  area
+    for (arg_idx, arg) in enumerate(sortedargs)
+        if X[arg]< 0.0 continue end #start counting only after crossing the starting line
+        if X[arg] > racedistance - fvdist continue end #stop near the crossing the finish line
+        foresightarea[arg]=track.foresightarea_data[ceil(Int,X[arg])+1]
+        #minn rf is the minimum number of runners in the foresight that impacts the runners speed
+
+        minn=floor(Int, minratio*foresightarea[arg]) #min number of  runners for impact area
+        maxn=floor(Int, maxratio*foresightarea[arg]) #min number of  runners for impact are
+        #println(minn," ",maxn)
+        # continue conditions
+        if minn<3 continue end #At least 3 runners in the impact area
+        if arg_idx+minn>length(sortedargs) continue end
+        if X[sortedargs[arg_idx+minn]]-X[arg]>= fvdist continue end
+
+        rhocounter=1.0
+        argsofguysinfront=sortedargs[arg_idx+1:min(arg_idx+maxn,nrunners)]
+        for arg_i in argsofguysinfront
+            if X[arg_i]-X[arg]>fvdist continue
+            else rhocounter+=1.0
+            end
+        end
+
+        if (rhocounter/foresightarea[arg])>maxratio
+            R[arg]=maxrho
+            #println(rho[arg])
+        elseif ((rhocounter/foresightarea[arg]<=maxratio)
+                && (rhocounter/foresightarea[arg]>=minratio))
+            D_A=rhocounter/foresightarea[arg]
+            R[arg]=(minrho*(D_A-maxratio)-maxrho*(D_A-minratio))/(minratio-maxratio)
+            #println(rho[arg])
+        end
 
 
-    return R
+        lngth=floor(Int,minn/2) #
+        #if lngth <2 continue end
+        sortedspeeds=sort(V[argsofguysinfront])
+        slowersspeeds=sortedspeeds[1:lngth]
+        slowersavgspeed=sum(slowersspeeds)/length(slowersspeeds)
+        VL[arg]=min(slowersavgspeed,V[arg])
+        ############################################################################
     end
+    return R,VL
+end
 
 # Index r for runner
 # Index i for time stepping
@@ -22,11 +75,6 @@ function F(t,X,V, allrunners,par,track,training)
     ## Some alias to simplify
     spline=track.cspline_elev
     nrunners=allrunners.nrunners
-    minrho=par.minrho
-    maxrho=par.maxrho
-    minratio=par.minratio
-    maxratio=par.maxratio
-    fvdist=par.frontviewdistance
     VL=zeros(nrunners)
     racedistance=par.racedistance
     epsm=100
@@ -44,64 +92,9 @@ function F(t,X,V, allrunners,par,track,training)
         end
     elseif training==false
 
-        # sorted indexes of  the runners
-        sortedargs=sortperm(X)
-        # rho definition (density container)
-        #For VL calculation. average of the  slowest in front of the runner
-        foresightarea=zeros(nrunners)
+        R, VL =RhoVL(R,VL,X,V,allrunners,par,track,training)
 
-        # First step: counting the number of runner in the frontview  area
-        for (arg_idx, arg) in enumerate(sortedargs)
-            if X[arg]< 0.0 continue end #start counting only after crossing the starting line
-            if X[arg] > racedistance - fvdist continue end #stop near the crossing the finish line
-            foresightarea[arg]=track.foresightarea_data[ceil(Int,X[arg])+1]
-            #minn rf is the minimum number of runners in the foresight that impacts the runners speed
-
-            minn=floor(Int, minratio*foresightarea[arg]) #min number of  runners for impact area
-            maxn=floor(Int, maxratio*foresightarea[arg]) #min number of  runners for impact are
-            #println(minn," ",maxn)
-            # continue conditions
-            if minn<3 continue end #At least 3 runners in the impact area
-            if arg_idx+minn>length(sortedargs) continue end
-            if X[sortedargs[arg_idx+minn]]-X[arg]>= fvdist continue end
-
-            rhocounter=1.0
-            ############ CONFIRMAR
-            argsofguysinfront=sortedargs[arg_idx+1:min(arg_idx+maxn,nrunners)]
-            #println(arg_idx+minn:min(arg_idx+maxn,nrunners))
-
-            for arg_i in argsofguysinfront
-                if X[arg_i]-X[arg]>fvdist continue
-                else rhocounter+=1.0
-                end
-            end
-
-            if (rhocounter/foresightarea[arg])>maxratio
-                R[arg]=maxrho
-                #println(rho[arg])
-            elseif ((rhocounter/foresightarea[arg]<=maxratio)
-                    && (rhocounter/foresightarea[arg]>=minratio))
-                D_A=rhocounter/foresightarea[arg]
-                R[arg]=(minrho*(D_A-maxratio)-maxrho*(D_A-minratio))/(minratio-maxratio)
-                #println(rho[arg])
-            end
-
-
-
-            lngth=floor(Int,minn/2) #
-            if lngth <2 continue end
-            sortedspeeds=sort(V[argsofguysinfront])
-            slowersspeeds=sortedspeeds[1:lngth]
-            slowersavgspeed=sum(slowersspeeds)/length(slowersspeeds)
-            VL[arg]=min(slowersavgspeed,V[arg])
-            #############################################################################
-
-            # last step compute av speed of the slower guyes
-        end
-
-
-
-        for r in 1:allrunners.nrunners
+        for r in 1:nrunners
             if (t <= allrunners.wavedelays[r]) || (X[r]>=racedistance+epsm)
                 V[r]=0.0
             elseif X[r]<0 # This Condition can be improved! (wave propagation in lanes)

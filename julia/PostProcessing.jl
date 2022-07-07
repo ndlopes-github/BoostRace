@@ -139,8 +139,8 @@ function timesvisuals(times,allrunners,allrunners_training,parameters)
         #println(runner, ">>>>>>>>>>> ", teidx)
     end
 
-    println(">control Post-Processing: dump(waves) departures computation")
-    println(dump(par.waves))
+    println(">control Post-Processing: par.waves")
+    println(display(par.waves))
     r0=1
     r1=sum(Int,par.waves[1, 1:par.numberofwaves])
     wave_departure=maximum(starttimes[r0:r1])
@@ -210,7 +210,6 @@ function timesvisuals(times,allrunners,allrunners_training,parameters)
     println(">control Post-Processing: debug:  length of  negative errors: ",length(findall(x->(x<0.0),errors)))
     println(">control Post-Processing: debug: negative errors: ",errors[findall(x->(x<0.0),errors)])
     println(">control Post-Processing: debug: args negative errors: ",findall(x->(x<0.0),errors))
-
     println(">control Post-Processing: departure: runners  affected by the velocity rule at departure ",
           length(findall(x->(x!=0.0),starttimes-starttimes_training)))
 
@@ -221,6 +220,8 @@ function timesvisuals(times,allrunners,allrunners_training,parameters)
     # print('free end',endtimes_free[np.where(errors<0)])
     # print('end',endtimes[np.where(errors<0)])
 
+    println(">control Post-Processing: par.posweights")
+    println(display(par.posweights))
 
 
     t1=par.posweights[2,2]
@@ -240,6 +241,7 @@ function timesvisuals(times,allrunners,allrunners_training,parameters)
     count_t2=0
     count_t3=0
     count_t4=0
+
     for (idx,error) in enumerate(errors)
         if error <= t1
             errorspen[idx]=error*w1
@@ -255,10 +257,10 @@ function timesvisuals(times,allrunners,allrunners_training,parameters)
             count_t4+=1
         end
     end
-    println("> control Post-Processing: number of runners with time loss in [0,", t1,"] is ", count_t1)
-    println("> control Post-Processing: number of runners with time loss in ]",t1,",", t2,"] is ", count_t2)
-    println("> control Post-Processing: number of runners with time loss in ]",t2,",", t3,"] is ", count_t3)
-    println("> control Post-Processing: number of runners with time loss >",t3, " is", count_t4)
+    println(">control Post-Processing: number of runners with time loss in [0,", t1,"] is ", count_t1)
+    println(">control Post-Processing: number of runners with time loss in ]",t1,",", t2,"] is ", count_t2)
+    println(">control Post-Processing: number of runners with time loss in ]",t2,",", t3,"] is ", count_t3)
+    println(">control Post-Processing: number of runners with time loss > ",t3, " is", count_t4)
 
     errorspen .+= w0 .* starttimes
     negerrors=findall(x->(x<0.0),errorspen)
@@ -266,8 +268,6 @@ function timesvisuals(times,allrunners,allrunners_training,parameters)
     println(">control Post-Processing: debug: warning: runners with negative penalized errors:", negerrors)
 
     println(">control Post-Processing: waves description: errors computation for metric")
-    println(dump(par.waves))
-    println(">control Post-Processing: *************************************************")
     r0=1
     r1=1
      for j in range(2,size(par.waves)[1])
@@ -308,7 +308,7 @@ function timesvisuals(times,allrunners,allrunners_training,parameters)
     open(outfile, "a") do f
         println(f,"start*************")
         println(f,now())
-         println(f,"")
+        println(f,"")
         writedlm(f,par.waves)
         println(f,"")
         println(f,l1error)
@@ -334,11 +334,11 @@ end
 
 
 times, allrunners, allrunners_training,parameters, track, ninwaves=load_objects()
-# snapshot(1000,allrunners,parameters,track,ninwaves)
-# runnersidxs=rand(1:allrunners.nrunners,30)
-# speedsvisuals(runnersidxs,allrunners,parameters,track)
-# phasevisuals(runnersidxs,allrunners)
-# rhosvisuals(runnersidxs,allrunners)
+snapshot(1000,allrunners,parameters,track,ninwaves)
+runnersidxs=rand(1:allrunners.nrunners,30)
+speedsvisuals(runnersidxs,allrunners,parameters,track)
+phasevisuals(runnersidxs,allrunners)
+rhosvisuals(runnersidxs,allrunners)
 
 
 timesvisuals(times,allrunners,allrunners_training,parameters)
@@ -348,5 +348,4 @@ timesvisuals(times,allrunners,allrunners_training,parameters)
 # parameters=Nothing
 # track=Nothing
 # ninwaves=Nothing
-# GC.gc()
 end
