@@ -8,8 +8,8 @@ using CubicSplines
 
 
 
-function RhoVL(R::Vector{Float32},VL::Vector{Float32},X,V::Vector{Float32},
-               allrunners,par,track::Main.RunModel.Race.PreProcessing.Track.Tracks,training::Bool)
+function RhoVL(R::Vector{Float32},VL::Vector{Float32},X::Vector{Float32},V::Vector{Float32},
+               allrunners,par::Main.RunModel.Race.PreProcessing.Settings.Parameters,track::Main.RunModel.Race.PreProcessing.Track.Tracks,training::Bool)
     nrunners=allrunners.nrunners
     minrho=par.minrho
     maxrho=par.maxrho
@@ -72,7 +72,7 @@ end
 # Index i for time stepping
 
 # Velocity function dx/dt=F(...)
-function F(t::Float32,X,V::Vector{Float32},allrunners,par,track,training::Bool)
+function F(t::Float32,X::Vector{Float32},V::Vector{Float32},allrunners,par,track,training::Bool)
     ## Some alias to simplify
     spline=track.cspline_elev
     nrunners=allrunners.nrunners
@@ -169,7 +169,7 @@ function rk2(allrunners,parameters,track,training::Bool)
             if (j+1 == obsnsteps) break end
             j+=1
         end
-        X0=X1
+        X0[:] .= X1[:]
     end
 
     return times, positions,velocities, rhos

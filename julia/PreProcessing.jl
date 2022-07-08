@@ -43,7 +43,7 @@ function inversepseudosigmoid( )
     wavedelays=par.waves[:,nwaves+1]
     waveinitspeeds=par.waves[:,nwaves+2]
 
-    partitions=zeros(size(mixwaves)[1]+1)
+    partitions=zeros(Float32,size(mixwaves)[1]+1)
     for part in range(1,nwaves)
         partitions[part+1]=partitions[part]+sum(mixwaves[:,part])/nrunners
     end
@@ -56,7 +56,7 @@ function inversepseudosigmoid( )
     we=1
 
     for wave in range(1, nwaves)
-        parts=zeros(sum(mixwaves[wave, 1 : nwaves]))
+        parts=zeros(Float32,sum(mixwaves[wave, 1 : nwaves]))
         pb=1
         pe=1
         for part in range(1, nwaves)
@@ -85,13 +85,13 @@ function inversepseudosigmoid( )
     println(">Control PreProcessing:: number of runners =",size(AvgTimes))
     #sort!(AvgTimes) # The Fastest are in the first Lines
 
-    InitPositions=zeros(nrunners)
-    WaveDelays=zeros(nrunners)
-    WaveInitSpeeds=zeros(nrunners)
+    InitPositions=zeros(Float32,nrunners)
+    WaveDelays=zeros(Float32,nrunners)
+    WaveInitSpeeds=zeros(Float32,nrunners)
     SlopeFactors=rand(Uniform(-13.0,-3.0),nrunners)
 
     # Position along the start line
-    NinWaves=Int.(zeros(nwaves))
+    NinWaves=Int.(zeros(Float32,nwaves))
     for wave in range(1,nwaves)
         NinWaves[wave]=sum(mixwaves[wave, 1: nwaves])
     end
