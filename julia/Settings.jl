@@ -4,7 +4,7 @@ export par
 
 # TODO: ORGANIZATION
 
-logplot=true
+logplot=false
 
 racedistance=10000.0 #in meters
 

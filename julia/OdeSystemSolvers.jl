@@ -8,7 +8,8 @@ using CubicSplines
 
 
 
-function RhoVL(R,VL,X,V,allrunners,par,track,training)
+function RhoVL(R::Vector{Float32},VL::Vector{Float32},X,V::Vector{Float32},
+               allrunners,par,track::Main.RunModel.Race.PreProcessing.Track.Tracks,training::Bool)
     nrunners=allrunners.nrunners
     minrho=par.minrho
     maxrho=par.maxrho
@@ -20,7 +21,7 @@ function RhoVL(R,VL,X,V,allrunners,par,track,training)
     sortedargs=sortperm(X)
     # rho definition (density container)
     #For VL calculation. average of the  slowest in front of the runner
-    foresightarea=zeros(nrunners)
+    foresightarea=zeros(Float32,nrunners)
 
     # First step: counting the number of runner in the frontview  area
     for (arg_idx, arg) in enumerate(sortedargs)
@@ -71,14 +72,14 @@ end
 # Index i for time stepping
 
 # Velocity function dx/dt=F(...)
-function F(t,X,V, allrunners,par,track,training)
+function F(t::Float32,X,V::Vector{Float32},allrunners,par,track,training::Bool)
     ## Some alias to simplify
     spline=track.cspline_elev
     nrunners=allrunners.nrunners
-    VL=zeros(nrunners)
+    VL=zeros(Float32,nrunners)
     racedistance=par.racedistance
     epsm=100
-    R=zeros(nrunners)
+    R=zeros(Float32,nrunners)
 
     if training==true
         # Race for timing reports
@@ -92,7 +93,7 @@ function F(t,X,V, allrunners,par,track,training)
         end
     elseif training==false
 
-        R, VL =RhoVL(R,VL,X,V,allrunners,par,track,training)
+        R, VL = RhoVL(R,VL,X,V,allrunners,par,track,training)
 
         for r in 1:nrunners
             if (t <= allrunners.wavedelays[r]) || (X[r]>=racedistance+epsm)
@@ -113,7 +114,7 @@ end
 
 
 
-function rk2(allrunners,parameters,track,training)
+function rk2(allrunners,parameters,track,training::Bool)
     println(">Control OdeSystemSolvers: Entering rk2_solver")
 
     nrunners=allrunners.nrunners
@@ -127,7 +128,7 @@ function rk2(allrunners,parameters,track,training)
 
     println(">Control OdeSystemSolvers: number of runners = ", nrunners)
     # Container for the solutions
-    times=zeros(obsnsteps)
+    times=zeros(Float32,obsnsteps)
 
     # Internal Copy of allrunners.positions
     positions=allrunners.pos
@@ -135,23 +136,24 @@ function rk2(allrunners,parameters,track,training)
     println(">control OdeSystemSolvers: initial positions= ", positions[nrunners-10:nrunners,1])
 
     #println(typeof(positions))
-    velocities=zeros(nrunners,obsnsteps)
-    rhos=zeros(nrunners,obsnsteps)
+    velocities=zeros(Float32,nrunners,obsnsteps)
+    rhos=zeros(Float32,nrunners,obsnsteps)
 
     X1=positions[:,1] #rk Updated positions
     X0=positions[:,1] #rk old positions
     V=velocities[:,1] # useless since it is 0
 
-    K1=zeros(nrunners)
-    K2=zeros(nrunners)
+    K1=zeros(Float32,nrunners)
+    K2=zeros(Float32,nrunners)
+    R =zeros(Float32,nrunners)
     #k3=zeros(nrunners)
     #k4=zeros(nrunners)
     j=0
     for i in ProgressBar(0:nsteps-1)
         t=dt*i
-        V, R = F(t, X0, V, allrunners,parameters,track,training) #update velocities
+        V, R = F(t,X0, V, allrunners,parameters,track,training) #update velocities
         K1=dt .* V
-        V, R = F(t+dt, X0 .+ K1, V, allrunners,parameters,track,training) #update velocities
+        V, R = F(t+dt, X0 .+ K1, V,  allrunners,parameters,track,training) #update velocities
         K2=dt .* V
         X1=X0 .+ 0.5 .* (K1 .+ K2) # update positions
 
