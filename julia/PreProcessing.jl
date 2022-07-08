@@ -51,7 +51,7 @@ function inversepseudosigmoid( )
     println(">Control PreProcessing: partitions ", partitions)
     println(">Control PreProcessing: number of waves",  nwaves)
 
-    waves=zeros(nrunners)
+    waves=zeros(Float32,nrunners)
     wb=1
     we=1
 
