@@ -9,7 +9,9 @@ using CubicSplines
 
 
 function RhoVL(R::Vector{Float32},VL::Vector{Float32},X::Vector{Float32},V::Vector{Float32},
-               allrunners,par::Main.RunModel.Race.PreProcessing.Settings.Parameters,track::Main.RunModel.Race.PreProcessing.Track.Tracks,training::Bool)
+               allrunners::Main.RunModel.Race.Frunnerclass.Runners,
+               par::Main.RunModel.Race.PreProcessing.Settings.Parameters,
+               track::Main.RunModel.Race.PreProcessing.Track.Tracks,training::Bool)
     nrunners=allrunners.nrunners
     minrho=par.minrho
     maxrho=par.maxrho
@@ -72,7 +74,10 @@ end
 # Index i for time stepping
 
 # Velocity function dx/dt=F(...)
-function F(t::Float32,X::Vector{Float32},V::Vector{Float32},allrunners,par,track,training::Bool)
+function F(t::Float32,X::Vector{Float32},V::Vector{Float32},
+           allrunners::Main.RunModel.Race.Frunnerclass.Runners,
+           par::Main.RunModel.Race.PreProcessing.Settings.Parameters,
+           track::Main.RunModel.Race.PreProcessing.Track.Tracks,training::Bool)
     ## Some alias to simplify
     spline=track.cspline_elev
     nrunners=allrunners.nrunners
@@ -114,7 +119,9 @@ end
 
 
 
-function rk2(allrunners,parameters,track,training::Bool)
+function rk2(allrunners::Main.RunModel.Race.Frunnerclass.Runners,
+             parameters::Main.RunModel.Race.PreProcessing.Settings.Parameters,
+             track::Main.RunModel.Race.PreProcessing.Track.Tracks,training::Bool)
     println(">Control OdeSystemSolvers: Entering rk2_solver")
 
     nrunners=allrunners.nrunners
