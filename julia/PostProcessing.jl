@@ -14,58 +14,62 @@ using Dates
 using DelimitedFiles
 Random.seed!(1234)
 
-function snapshot(step,allrunners,parameters,track,ninwaves)
+
+function snapshot(steps,allrunners,parameters,track,ninwaves)
     nrunners=allrunners.nrunners
-    time=step*parameters.observertimestep
     xs = range(start=minimum(track.x_data), stop=maximum(track.x_data), length=1000)
     ys=track.cspline_elev(xs)
     ws=track.cspline_width(xs)
     yws=ys .+ ws
 
-    X=allrunners.pos[:, step]
-    YWS=zeros(nrunners)
-    for r in 1:nrunners
-        YWS[r]=rand(Uniform(0,1))*track.cspline_width(X[r])+track.cspline_elev(X[r])
+    println(length(steps))
+    for step in steps
+        time=Int(step*parameters.observertimestep)
+        X=allrunners.pos[:, step]
+        YWS=zeros(nrunners)
+        for r in 1:nrunners
+            YWS[r]=rand(Uniform(0,1))*track.cspline_width(X[r])+track.cspline_elev(X[r])
+        end
+
+
+        colors=["orange","cyan","green","purple","brown","pink","gray","azure","olive","blue"]
+        nwaves=size(ninwaves)[1]
+
+
+        plot(xs, ys,title="Race Snapshot t=$time (s)",label="Elevation")
+        xlabel!("Track length (m)")
+        ylabel!("Track elevation (m)")
+        plot!(xs,yws,label="Width")
+        wb=1
+        we=0
+        n=0
+        for (color,counter) in zip(colors[1:nwaves],ninwaves)
+            n+=1
+            we+=counter
+            plot!(X[wb:we],YWS[wb:we],seriestype = :scatter,
+                  markersize=0.3,
+                  markeralpha = 1.0,
+                  markerstrokecolor =color,
+                  label="wave $n")
+            wb=we+1
+        end
+        plot!(size=(800,400))
+        tm=lpad(time,4,"0")
+        savefig("./reports/pngs/snapshot$tm.png")
     end
-
-
-    colors=["orange","cyan","green","purple","brown","pink","gray","azure","olive","blue"]
-    nwaves=size(ninwaves)[1]
-
-
-    plot(xs, ys,title="Race Snapshot t=$time (s)",label="Elevation")
-    xlabel!("Track length (m)")
-    ylabel!("Track elevation (m)")
-    plot!(xs,yws,label="Width")
-    wb=1
-    we=0
-    n=0
-    for (color,counter) in zip(colors[1:nwaves],ninwaves)
-        n+=1
-        we+=counter
-        plot!(X[wb:we],YWS[wb:we],seriestype = :scatter,
-              markersize=0.3,
-              markeralpha = 1.0,
-              markerstrokecolor =color,
-              label="wave $n")
-        wb=we+1
-    end
-    plot!(size=(800,400))
-    savefig("snapshot$time.pdf")
-    gui()
+    #gui()
 end
 
 
-function race_visuals(times,allrunners,parameters,track)
-    xs = range(start=minimum(track.x_data), stop=maximum(track.x_data), length=1000)
-    ys=track.cspline_elev(xs)
-    ws=track.cspline_width(xs)
-    yws=ys .+ ws
-
-    plot(xs, ys,reuse=false)
-    plot!(xs,yws)
-    gui()
-
+function histsnapshot(steps,allrunners,parameters)
+    for step in steps
+        bins=0:round(Int,parameters.frontviewdistance):round(Int,parameters.racedistance)
+        histogram(allrunners.pos[:,step],bins=bins,label=false)
+        xlabel!("Road (m)")
+        ylabel!("Runners per 4 (m)")
+        tm=lpad(time,4,"0")
+        savefig("./reports/pngs/hist$tm.png")
+    end
 end
 
 
@@ -81,10 +85,10 @@ function speedsvisuals(runnersidxs,allrunners,parameters,track)
     ylabel!("Speed (m/s)")
 
     for runner in runnersidxs #range(group.size):
-        plot!(t,allrunners.vels[runner,:],lw=0.5,label="")
+        plot!(t,allrunners.vels[runner,:],lw=0.5,label=false)
     end
     plot!(size=(800,400))
-    savefig("speeds_profile.pdf")
+    savefig("./reports/pdfs/speeds_profile.pdf")
     gui()
 end
 
@@ -99,7 +103,7 @@ function phasevisuals(runnersidxs,allrunners)
         plot!(allrunners.pos[runner,:],allrunners.vels[runner,:],lw=0.5,label="")
     end
     plot!(size=(800,400))
-    savefig("Phases.pdf")
+    savefig("./reports/pdfs/Phases.pdf")
     gui()
 end
 
@@ -119,7 +123,7 @@ function rhosvisuals(runnersidxs,allrunners)
         plot!(t,allrunners.rhos[runner,:],lw=0.5,label="")
     end
     plot!(size=(800,400))
-    savefig("rhos.pdf")
+    savefig("./reports/pdfs/rhos.pdf")
     gui()
 end
 
@@ -205,7 +209,7 @@ function timesvisuals(times,allrunners,allrunners_training,parameters)
     ylabel!("Time in seconds")
     xlabel!("Runner index")
     gui()
-    savefig("./reports/personaltimings.png")
+    savefig("./reports/pngs/personaltimings.png")
 
     errors=runnertimes-runnertimes_training
     println(">control Post-Processing: debug:  length of  negative errors: ",length(findall(x->(x<0.0),errors)))
@@ -302,7 +306,7 @@ function timesvisuals(times,allrunners,allrunners_training,parameters)
     plot!(1:nrunners,errorspen,ms=0.5,label="Metric score",seriestype = :scatter, markerstrokecolor = "blue",)
     ylabel!("Time in seconds (total race time: "*string(ceil(Int,racetime))*")")
     xlabel!("Runner index")
-    savefig("./reports/errors_report.png")
+    savefig("./reports/pngs/errors_report.png")
     gui()
 
     outfile = "./reports/simpletex.txt"
@@ -335,18 +339,26 @@ end
 
 
 times, allrunners, allrunners_training,parameters, track, ninwaves=load_objects()
-snapshot(1000,allrunners,parameters,track,ninwaves)
-runnersidxs=rand(1:allrunners.nrunners,30)
-speedsvisuals(runnersidxs,allrunners,parameters,track)
-phasevisuals(runnersidxs,allrunners)
-rhosvisuals(runnersidxs,allrunners)
+#snapshot(1:30:7001,allrunners,parameters,track,ninwaves)  #requires include("Track.jl")
+histsnapshot(2000,allrunners,parameters)
+# runnersidxs=rand(1:allrunners.nrunners,30)
+# speedsvisuals(runnersidxs,allrunners,parameters,track)
+# phasevisuals(runnersidxs,allrunners)
+# rhosvisuals(runnersidxs,allrunners)
 
 
-timesvisuals(times,allrunners,allrunners_training,parameters)
+#timesvisuals(times,allrunners,allrunners_training,parameters)
 # times=Nothing
-# allrunners=Nothing
-# allrunners_training=Nothing
-# parameters=Nothing
-# track=Nothing
-# ninwaves=Nothing
+#allrunners=Nothing
+#allrunners_training=Nothing
+#parameters=Nothing
+#track=Nothing
+#ninwaves=Nothing
+#GC.gc()
 end
+
+
+# convert png series to gif
+# convert -delay 2 -loop 0 *.png -scale 480x270 sheban.gif
+# convert png series to mp4
+# ffmpeg -framerate 1 -i happy%d.jpg -c:v libx264 -r 30 output.mp4
