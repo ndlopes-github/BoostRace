@@ -15,7 +15,6 @@ include("OdeSystemSolvers.jl")
 using .OdeSystemSolvers
 solver=rk2
 
-
 using JLD2
 
 
@@ -78,6 +77,5 @@ function training()
     save_object("./training_results/allrunners.jld2",  allrunners)
 
 end
-
 
 end
