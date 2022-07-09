@@ -26,7 +26,7 @@ function RhoVL(R::Vector{Float32},VL::Vector{Float32},X::Vector{Float32},V::Vect
     foresightarea=zeros(Float32,nrunners)
 
     # First step: counting the number of runner in the frontview  area
-    for (arg_idx, arg) in enumerate(sortedargs)
+     for (arg_idx, arg) in enumerate(sortedargs)
         if X[arg]< 0.0 continue end #start counting only after crossing the starting line
         if X[arg] > racedistance - fvdist continue end #stop near the crossing the finish line
         foresightarea[arg]=track.foresightarea_data[ceil(Int,X[arg])+1]
@@ -42,7 +42,7 @@ function RhoVL(R::Vector{Float32},VL::Vector{Float32},X::Vector{Float32},V::Vect
 
         rhocounter=1.0
         argsofguysinfront=sortedargs[arg_idx+1:min(arg_idx+maxn,nrunners)]
-        for arg_i in argsofguysinfront
+         for arg_i in argsofguysinfront
             if X[arg_i]-X[arg]>fvdist continue
             else rhocounter+=1.0
             end
@@ -88,7 +88,7 @@ function F(t::Float32,X::Vector{Float32},V::Vector{Float32},
 
     if training==true
         # Race for timing reports
-        for r in 1:nrunners
+         for r in 1:nrunners
             # Stop epsm=100m after the finishing line
             if (t <= allrunners.wavedelays[r]) || (X[r]>=racedistance+epsm)
                 V[r]=0.0
@@ -100,7 +100,7 @@ function F(t::Float32,X::Vector{Float32},V::Vector{Float32},
 
         R, VL = RhoVL(R,VL,X,V,allrunners,par,track,training)
 
-        for r in 1:nrunners
+         for r in 1:nrunners
             if (t <= allrunners.wavedelays[r]) || (X[r]>=racedistance+epsm)
                 V[r]=0.0
             elseif X[r]<0 # This Condition can be improved! (wave propagation in lanes)
