@@ -4,8 +4,8 @@ using Plots
 # with import .PostProcessing prefix is necessary.
 export times, allrunners,parameters, track, ninwaves, runnersidx
 export snapshot,speedsvisuals,phasevisuals,rhosvisuals,histsnapshot#,timesvisuals
-#pyplot()
-plotlyjs()
+pyplot()
+#plotlyjs()
 using JLD2
 using Random
 using Distributions
@@ -54,7 +54,7 @@ function snapshot(steps,allrunners,parameters,track,ninwaves)
                   label="wave $n")
             wb=we+1
         end
-        plot!(size=(2000,400))
+        plot!(size=(1600,400))
         tm=lpad(time,4,"0")
         savefig("./reports/pngs/snapshot$tm.png")
     end
@@ -66,7 +66,7 @@ function histsnapshot(steps,allrunners,parameters)
     println("Control PostProcessing: number of histsnapshots ", length(steps))
     for step in steps
         bins=0:round(Int,parameters.frontviewdistance):round(Int,parameters.racedistance)
-        histogram(allrunners.pos[:,step],bins=bins,label=false,ylims=(0,100),size=(1200,400))
+        histogram(allrunners.pos[:,step],bins=bins,label=false,ylims=(0,100),size=(900,300))
         xlabel!("Road (m)")
         ylabel!("Runners per 4 (m)")
         time=Int(step*parameters.observertimestep)
