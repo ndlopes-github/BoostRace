@@ -3,7 +3,7 @@ using Plots
 # To be available directly with "using .PostProcessing" (no prefix required)
 # with import .PostProcessing prefix is necessary.
 export times, allrunners,parameters, track, ninwaves, runnersidx
-export snapshot,speedsvisuals,phasevisuals,rhosvisuals#,timesvisuals
+export snapshot,speedsvisuals,phasevisuals,rhosvisuals,histsnapshot#,timesvisuals
 #pyplot()
 plotlyjs()
 using JLD2
@@ -12,6 +12,7 @@ using Distributions
 using LinearAlgebra
 using Dates
 using DelimitedFiles
+using CubicSplines
 Random.seed!(1234)
 
 
@@ -22,7 +23,7 @@ function snapshot(steps,allrunners,parameters,track,ninwaves)
     ws=track.cspline_width(xs)
     yws=ys .+ ws
 
-    println(length(steps))
+    println("Control PostProcessing: number of snapshots ", length(steps))
     for step in steps
         time=Int(step*parameters.observertimestep)
         X=allrunners.pos[:, step]
@@ -53,7 +54,7 @@ function snapshot(steps,allrunners,parameters,track,ninwaves)
                   label="wave $n")
             wb=we+1
         end
-        plot!(size=(800,400))
+        plot!(size=(2000,400))
         tm=lpad(time,4,"0")
         savefig("./reports/pngs/snapshot$tm.png")
     end
@@ -62,11 +63,13 @@ end
 
 
 function histsnapshot(steps,allrunners,parameters)
+    println("Control PostProcessing: number of histsnapshots ", length(steps))
     for step in steps
         bins=0:round(Int,parameters.frontviewdistance):round(Int,parameters.racedistance)
-        histogram(allrunners.pos[:,step],bins=bins,label=false)
+        histogram(allrunners.pos[:,step],bins=bins,label=false,ylims=(0,100),size=(1200,400))
         xlabel!("Road (m)")
         ylabel!("Runners per 4 (m)")
+        time=Int(step*parameters.observertimestep)
         tm=lpad(time,4,"0")
         savefig("./reports/pngs/hist$tm.png")
     end
@@ -339,8 +342,8 @@ end
 
 
 times, allrunners, allrunners_training,parameters, track, ninwaves=load_objects()
-#snapshot(1:30:7001,allrunners,parameters,track,ninwaves)  #requires include("Track.jl")
-histsnapshot(2000,allrunners,parameters)
+snapshot(1:30:7001,allrunners,parameters,track,ninwaves)  #requires include("Track.jl")
+histsnapshot(1:30:7001,allrunners,parameters)
 # runnersidxs=rand(1:allrunners.nrunners,30)
 # speedsvisuals(runnersidxs,allrunners,parameters,track)
 # phasevisuals(runnersidxs,allrunners)
