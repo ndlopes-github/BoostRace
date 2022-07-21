@@ -344,10 +344,10 @@ end
 times, allrunners, allrunners_training,parameters, track, ninwaves=load_objects()
 snapshot(1:30:7001,allrunners,parameters,track,ninwaves)  #requires include("Track.jl")
 histsnapshot(1:30:7001,allrunners,parameters)
-# runnersidxs=rand(1:allrunners.nrunners,30)
-# speedsvisuals(runnersidxs,allrunners,parameters,track)
-# phasevisuals(runnersidxs,allrunners)
-# rhosvisuals(runnersidxs,allrunners)
+runnersidxs=rand(1:allrunners.nrunners,30)
+speedsvisuals(runnersidxs,allrunners,parameters,track)
+phasevisuals(runnersidxs,allrunners)
+rhosvisuals(runnersidxs,allrunners)
 
 
 #timesvisuals(times,allrunners,allrunners_training,parameters)
