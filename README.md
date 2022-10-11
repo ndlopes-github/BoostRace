@@ -2,6 +2,8 @@
 An integrated Jupyter notebook with a fully functional standalone Julia version of BoostRace.
 (Optimizations in progress)
 
+-- TODO: migrate to DrWatson Workflow
+
 - Some post-processing example images:
 
 ## A snapshot of the race at time 2000(s)
