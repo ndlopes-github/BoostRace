@@ -19,9 +19,8 @@ The paper presents a comprehensive mathematical model for simulating 10km urban 
 
 ## Implementation
 
-### Julia Version
+### Julia 
 `JLRace.ipynb` - An integrated Jupyter notebook with a fully functional standalone Julia version of BoostRace.
-(Optimizations in progress)
 
 
 ## Example Outputs
