@@ -7,8 +7,10 @@ A computational model for simulating urban running races, implementing a mathema
 This software was used to produce the results presented in:
 
 **"The modelling of urban running races"**  
-Authors: Ricardo Enguiça and Nuno D. Lopes  
-Published in: *Journal of Mathematics in Industry* (2023)  
+Authors: 
+Ricardo Enguiça ORCID: https://orcid.org/0000-0002-3407-7757
+Nuno D. Lopes  ORCID: https://orcid.org/0000-0001-9577-0347
+Published in: *Journal of Mathematics in Industry* (August 2023)  
 DOI: [10.1186/s13362-023-00136-3](https://doi.org/10.1186/s13362-023-00136-3)
 
 The paper presents a comprehensive mathematical model for simulating 10km urban running races with 10,000 participants, analyzing factors such as:
@@ -106,11 +108,13 @@ Note: the notebook implements the same logic inline; prefer `JLRace.ipynb` for e
 - If plots or displays don't render in Jupyter, verify the IJulia kernel is using the same Julia environment (`using Pkg; Pkg.status()` will show installed packages).
 - Long run times: reduce `nrunners` or shorten `endtime` while testing, or increase `timestep`/`observertimestep` to collect fewer samples.
 
-7) Suggested next steps (optional enhancements)
 
+<!--
+7) Suggested next steps (optional enhancements)
 - Add a `Manifest.toml` to pin working package versions for reproducibility.
 - Provide a small example notebook or script that runs a very-small problem (e.g., 100 runners) for quick smoke testing.
 - Add a short shell script (`run_example.sh`) that sets up the environment and launches the notebook for new users.
+-->
 
 
 ## Example Outputs
@@ -122,3 +126,15 @@ Some post-processing visualization examples:
 
 ### Histogram for the number of bursts along the race
 ![Histogram for the number of bursts along the race](readme_images/hist.png?raw=true "Histogram of bursts")
+
+# Contributing
+
+We welcome contributions to this project! If you find any issues or have suggestions for improvements, please feel free to open an issue or submit a pull request. We appreciate your involvement in making this implementation more robust and accurate.
+
+# License
+
+This project is currently under MIT license. Please refer to the LICENSE file for more information.
+
+# Contact
+
+If you have any questions or inquiries regarding this codebase or the associated paper, please contact: [nuno(dot)lopes(at)isel(dot)pt]
