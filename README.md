@@ -5,6 +5,7 @@ A computational model for simulating urban running races, implementing a mathema
 ## Publication
 
 This software was used to produce the results presented in:
+Release v0.3.0 [![DOI](https://zenodo.org/badge/349385511.svg)](https://doi.org/10.5281/zenodo.17654963)
 
 **"The modelling of urban running races"**  
 Authors: <br>
