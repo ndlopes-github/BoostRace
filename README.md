@@ -8,8 +8,8 @@ This software was used to produce the results presented in:
 
 **"The modelling of urban running races"**  
 Authors: 
-Ricardo Enguiça ORCID: https://orcid.org/0000-0002-3407-7757
-Nuno D. Lopes  ORCID: https://orcid.org/0000-0001-9577-0347
+Ricardo Enguiça ORCID: https://orcid.org/0000-0002-3407-7757 <\br>
+Nuno D. Lopes  ORCID: https://orcid.org/0000-0001-9577-0347 <\br>
 Published in: *Journal of Mathematics in Industry* (August 2023)  
 DOI: [10.1186/s13362-023-00136-3](https://doi.org/10.1186/s13362-023-00136-3)
 
