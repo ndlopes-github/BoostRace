@@ -7,6 +7,7 @@ A computational model for simulating urban running races, implementing a mathema
 This software was used to produce the results presented in:
 
 **"The modelling of urban running races"**  
+Authors: Ricardo Enguiça and Nuno D. Lopes  
 Published in: *Journal of Mathematics in Industry* (2023)  
 DOI: [10.1186/s13362-023-00136-3](https://doi.org/10.1186/s13362-023-00136-3)
 
@@ -18,18 +19,10 @@ The paper presents a comprehensive mathematical model for simulating 10km urban 
 
 ## Implementation
 
-### Python/C++ Version (Main Implementation)
-Located in `deprecated/PyC++Code/`, this version uses:
-- **C++** with Boost odeint library for high-performance ODE integration
-- **Python** for pre-processing and post-processing
-- **pybind11** for Python-C++ bindings
-- Adams-Bashforth-Moulton method (2nd-order) for numerical integration
-
 ### Julia Version
 `JLRace.ipynb` - An integrated Jupyter notebook with a fully functional standalone Julia version of BoostRace.
 (Optimizations in progress)
 
--- TODO: migrate to DrWatson Workflow
 
 ## Example Outputs
 
