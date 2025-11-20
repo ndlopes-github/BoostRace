@@ -2,7 +2,7 @@
 
 A computational model for simulating urban running races, implementing a mathematical framework for analyzing the effects of race configuration, course design, and runner distribution on race performance.
 <br>
-*Release v0.3.0* [![DOI](https://zenodo.org/badge/349385511.svg)](https://doi.org/10.5281/zenodo.17654963)
+*Release v0.3.0 / 2025-11-19* [![DOI](https://zenodo.org/badge/349385511.svg)](https://doi.org/10.5281/zenodo.17654963)
 
 ## Publication
 
